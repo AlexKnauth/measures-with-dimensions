@@ -15,6 +15,8 @@
 
 @defmodule[(submod typed/measures-with-dimensions untyped)]
 
+source code: @url["https://github.com/AlexKnauth/measures-with-dimensions"]
+
 This module provides structs to represent measures, units, and dimensions,
 and functions and macros to manipulate these.
 
