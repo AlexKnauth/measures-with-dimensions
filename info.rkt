@@ -7,7 +7,6 @@
                "typed-racket-more"
                "rackjure"
                "math-lib"
-               "plot-lib"
                "htdp-lib"
                ))
 

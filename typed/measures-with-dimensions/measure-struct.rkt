@@ -5,8 +5,6 @@
 (require racket/splicing
          math/bigfloat
          (except-in racket/list second)
-         (only-in plot/typed/utils
-                  [v* plot:v*])
          "dimension-struct.rkt"
          "dimension-operations.rkt"
          "unit-struct.rkt"
@@ -201,13 +199,13 @@
                                                 [m2.dimension : Dimension (Unit-dimension m2.unit)])
                                            (and (= m.number*u.scalar m2.number*u2.scalar)
                                                 (dimension=? m.dimension m2.dimension)))))))]
-          [(vector? m.number) (let: ([m.number*u.scalar : (Vectorof Real) (plot:v* m.number (Unit-scalar m.unit))])
+          [(vector? m.number) (let: ([m.number*u.scalar : (Vectorof Real) (v* (Unit-scalar m.unit) m.number)])
                                 (for/and: : Boolean ([m2 : Measureish (in-list rst)])
                                   (let* ([m2 : Measure (->measure m2)]
                                          [m2.number : (U Number (Vectorof Real)) (Measure-number m2)]
                                          [m2.unit : Unit (Measure-unit m2)])
                                     (and (vector? m2.number)
-                                         (let: ([m2.number*u2.scalar : (Vectorof Real) (plot:v* m2.number (Unit-scalar m2.unit))]
+                                         (let: ([m2.number*u2.scalar : (Vectorof Real) (v* (Unit-scalar m2.unit) m2.number)]
                                                 [m2.dimension : Dimension (Unit-dimension m2.unit)])
                                            (and (v=? m.number*u.scalar m2.number*u2.scalar)
                                                 (dimension=? m.dimension m2.dimension)))))))]
@@ -238,8 +236,9 @@
                                              (Measure-sig-figs m)))]
              [else (let: ([num : (Vectorof Real) (cast (Measure-number m) (Vectorof Real))]
                           [u1 : Unit (Measure-unit m)])
-                     (measure (plot:v* num (/ (unit-scalar u1)
-                                              (unit-scalar u2)))
+                     (measure (v* (/ (unit-scalar u1)
+                                     (unit-scalar u2))
+                                  num)
                               u2
                               (Measure-sig-figs m)))]))]
     [([n : (U Number (Vectorof Real))] [u1 : Unitish] u2)

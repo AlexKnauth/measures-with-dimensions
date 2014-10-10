@@ -15,6 +15,11 @@
            (for/and: : Boolean ([v2 : (Vectorof Real) (in-list rst)])
              (= v-i (vector-ref_0 v2 i))))))))
 
+(: v* : [Real (Vectorof Real) -> (Vectorof Real)])
+(define (v* n v)
+  (for/vector : (Vectorof Real) #:length (vector-length v) ([v-i : Real (in-vector v)])
+    (* n v-i)))
+
 
 (: vector-ref_0 : [(Vectorof Real) Natural -> Real])
 (define (vector-ref_0 v i)
