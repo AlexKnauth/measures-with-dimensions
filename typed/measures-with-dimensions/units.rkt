@@ -177,6 +177,8 @@
   [pound-mass (u* #e0.45359237 kilogram)]
   [ounce-mass (u/ pound-mass 16)]
   [ton (u* 2000 pound-mass)]
+  [atomic-mass-unit (u* #i1.6605402e-27 kilogram)]
+  [planck-mass (u* #i2.17651e-8 kilogram)]
   )
 
 ;; Length:
@@ -190,6 +192,11 @@
   [inch (u/ foot 12)]
   [yard (u* foot 3)]
   [mile (u* 5280 foot)]
+  [astronomical-unit (u* 149597870700 meter)]
+  [angstrom (u* 1e-10 meter)]
+  [light-year (u* 9.4607304725808e15 meter)]
+  [nautical-mile (u* 1852 meter)]
+  [planck-length (u* #i1.616199e-35 meter)]
   )
 
 ;; Time:
@@ -209,17 +216,20 @@
   [millisecond (milli second)]
   [microsecond (micro second)]
   [nanosecond (nano second)]
+  [planck-time (u* #i5.39106e-44 second)]
   )
 
 ;; Charge:
 (define-units/type Charge-Unit
   [coulomb (make-Unit 'coulomb 1 charge-dimension)]
+  [planck-charge (u* #i1.875545956e-18 coulomb)]
   )
 
 ;; Absolute Temperature:
 (define-units/type Absolute-Temperature-Unit
   [kelvin (make-Unit 'kelvin 1 temperature-dimension)]
   [rankine (u* 5/9 kelvin)]
+  [plank-temperature (u* #i1.416833e32 kelvin)]
   )
 
 ;; Area:
@@ -230,6 +240,7 @@
   [square-inch (usqr inch)]
   [square-mile (usqr mile)]
   [acre (u* 43560 square-foot)]
+  [planck-area (usqr planck-length)]
   )
 
 ;; Volume:
@@ -245,6 +256,9 @@
   [pint (u/ quart 2)]
   [cup (u/ pint 2)]
   [fluid-ounce (u/ cup 8)]
+  [tablespoon (u* 2 fluid-ounce)]
+  [teaspoon (u/ tablespoon 3)]
+  [planck-volume (uexpt planck-length 3)]
   )
 
 ;; Velocity/Speed:
@@ -252,6 +266,9 @@
   [m/s (make-Unit 'm/s 1 velocity-dimension)]
   [mph (u/ mile hour)]
   [fps (u/ foot second)]
+  [c-unit (u* 299792458 m/s)]
+  [knot (u/ nautical-mile hour)]
+  [planck-velocity c-unit]
   )
 
 ;; Acceleration
@@ -284,6 +301,7 @@
   [foot-pound (u* foot pound-force)]
   [british-thermal-unit (u* #e1055.05585262 joule)]
   [kilowatt-hour (u* kilowatt hour)]
+  [electron-volt (u* #i1.60217733e-19 joule)]
   )
 
 ;; Pressure:
@@ -338,6 +356,7 @@
 ;; Magnetic-Field:
 (define-units/type Magnetic-Field-Unit
   [tesla (make-Unit 'tesla 1 magnetic-field-dimension)]
+  [gauss (u* 1e-4 tesla)]
   )
 
 ;; Inductance:
