@@ -434,6 +434,7 @@ functions for the SI prefixes.
   @deftype[Acceleration-Unit]
   @defthing[acceleration-dimension Acceleration-Dimension]
   @defthing[m/s^2 Acceleration-Unit]
+  @defthing[g-unit Acceleration-Unit]
 ]]
 
 @subsection{Force Units}
