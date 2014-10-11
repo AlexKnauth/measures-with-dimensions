@@ -211,8 +211,7 @@
   [average-year (u* #e365.25 day)]
   [average-month (u/ average-year 12)]
   [average-decade (u* 10 average-year)]
-  [average-century (u* 100 average-year)]
-  [century average-century]
+  [century (u* 100 average-year)]
   [millisecond (milli second)]
   [microsecond (micro second)]
   [nanosecond (nano second)]
@@ -222,6 +221,7 @@
 ;; Charge:
 (define-units/type Charge-Unit
   [coulomb (make-Unit 'coulomb 1 charge-dimension)]
+  [elementary-charge-unit (u* #i1.602176565e-19 coulomb)]
   [planck-charge (u* #i1.875545956e-18 coulomb)]
   )
 
@@ -274,6 +274,7 @@
 ;; Acceleration
 (define-units/type Acceleration-Unit
   [m/s^2 (make-Unit 'm/s^2 1 acceleration-dimension)]
+  [g-unit (u* #e9.80665 m/s^2)]
   )
 
 ;; Force:
@@ -301,7 +302,7 @@
   [foot-pound (u* foot pound-force)]
   [british-thermal-unit (u* #e1055.05585262 joule)]
   [kilowatt-hour (u* kilowatt hour)]
-  [electron-volt (u* #i1.60217733e-19 joule)]
+  [electron-volt (u* elementary-charge-unit voltage-dimension)]
   )
 
 ;; Pressure:
@@ -311,6 +312,8 @@
   [atmosphere (u* #e101325 pascal)]
   [bar (u* #e100000 pascal)]
   [millibar (milli bar)]
+  [torr (u/ atmosphere #e760)]
+  [millimeter-of-mercury (u* #e13.5951 #e9.80665 pascal)]
   )
 
 ;; Entropy:
@@ -347,6 +350,7 @@
 
 ;; Resistivity:
 (define-units/type Resistivity-Unit
+  [ohm-meter (u* ohm meter)]
   )
 
 ;; Conductivity:

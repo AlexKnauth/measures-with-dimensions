@@ -41,6 +41,7 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
   (m 1 meter - 50 centimeter)
   (m 1 meter ^ 2)
   (m 1 meter ^ 2 + 100 centimeter ^ 2)
+  (m 1 foot + 3 inch)
 ]}
 
 @defproc[(m+ [m Measureish] ...) Measure]{
@@ -48,7 +49,8 @@ adds the measures together.
 }
 
 @defproc[(m- [m Measureish]) Measure]{
-negates a measure.
+negates a measure.  To do subtraction, either use the @racket[m] macro or use a pattern like
+@racket[(m+ a (m- b))].
 }
 
 @defproc[(m* [m Measureish] ...) Measure]{
@@ -56,46 +58,70 @@ multiplies the measures.
 }
 
 @defproc[(m1/ [m Measureish]) Measure]{
-takes the multiplicative inverse of the measure.
+takes the multiplicative inverse of the measure.  To do division, either use the @racket[m] macro or
+use a pattern like @racket[(m* a (m1/ b))].
 }
 
 @defproc[(mexpt [m1 Measureish] [m2 Measureish]) Measure]{
 takes @racket[m1] to the exponent of @racket[m2].
 }
 
+@defproc*[([(convert [m Measure] [u Unitish]) Measure]
+           [(convert [n (U Number (Vectorof Real))] [u1 Unitish] [u2 Unitish]) Measure])]{
+The first form converts the measure @racket[m] to the unit @racket[u].
+The second form converts the number or vector @racket[n] from @racket[u1] to @racket[u2].
+
+@examples[
+  (require typed/racket)
+  (require typed/measures-with-dimensions/measure-struct
+           typed/measures-with-dimensions/units)
+  (convert (make-measure 1 meter) centimeter)
+  (convert 1 meter centimeter)
+]}
+
+@defproc[(measure=? [m1 Measureish] [m Measureish] ...) Boolean]{
+returns true if the measures represent the same quantities.
+
+@examples[
+  (require typed/racket)
+  (require typed/measures-with-dimensions/measure-struct
+           typed/measures-with-dimensions/units)
+  (measure=? (make-measure 1 meter)
+             (make-measure 100 centimeter))
+  (measure=? (make-measure 1 meter)
+             (make-measure 1 kilogram))
+  (measure=? (make-measure 1 radian)
+             (make-measure 1 degree))
+]}
+
+@defproc[(->measure [m Measureish]) Measure]{
+converts from something "measureish" to a @racket[Measure].
+}
+
 @subsection{Operations on Units and Dimensions}
 
-@defproc[(u* [u Unitish] ...) Unit]{
-multiplies the units.
+@deftogether[[
+  @defproc[(u* [u Unitish] ...) Unit]
+  @defproc[(u1/ [u Unitish]) Unit]
+  @defproc[(u/ [u1 Unitish] [u Unitish] ...+) Unit]
+  @defproc[(uexpt [u Unitish] [n Exact-Rational]) Unit]
+  @defproc[(->unit [u Unitish]) Unit]
+  @defproc[(unit=? [u1 Unitish] [u Unitish] ...) Boolean]
+]]{
+operations on units
 }
 
-@defproc[(u1/ [u Unitish]) Unit]{
-takes the multiplicative inverse of @racket[u].
+@deftogether[[
+  @defproc[(d* [u Dimension] ...) Dimension]
+  @defproc[(d1/ [d Dimension]) Dimension]
+  @defproc[(d/ [d1 Dimension] [d Dimension] ...+) Dimension]
+  @defproc[(dexpt [d Dimension] [n Exact-Rational]) Dimension]
+  @defproc[(dimension=? [d1 Dimension] [d Dimension] ...) Boolean]
+]]{
+operations on dimensions
 }
 
-@defproc[(u/ [u1 Unitish] [u Unitish] ...+) Unit]{
-divides @racket[u1] by the @racket[u]s.
-}
 
-@defproc[(uexpt [u Unitish] [n Exact-Rational]) Unit]{
-takes @racket[u] to the exponent of @racket[n].
-}
-
-@defproc[(d* [u Dimension] ...) Dimension]{
-multiplies the dimensions.
-}
-
-@defproc[(d1/ [d Dimension]) Dimension]{
-takes the multiplicative inverse of @racket[d].
-}
-
-@defproc[(d/ [d1 Dimension] [d Dimension] ...+) Dimension]{
-divides @racket[d1] by the @racket[d]s.
-}
-
-@defproc[(dexpt [d Dimension] [n Exact-Rational]) Dimension]{
-takes @racket[d] to the exponent of @racket[n].
-}
 
 @section{Types and Structs}
 
@@ -103,40 +129,89 @@ takes @racket[d] to the exponent of @racket[n].
    (syntax-parser
      [@deftype[id:id stuff:expr ...]
       #'@defidform[#:kind "type" id stuff ...]]
-     [@deftype[(id:id . args:expr) stuff:expr ...]
-      #'@defform[#:kind "type" (id . args) stuff ...]]))
+     [@deftype[(~and form-dat (id:id . args:expr)) stuff:expr ...]
+      #'@defform[#:kind "type" form-dat stuff ...]]))
 
-@deftype[Measure]
+@deftype[Measure]{
+equivalent to @racket[(Measureof (U Number (Vectorof Real)) Unit)].
+}
+
+@deftype[(Measureof n u)]{
+equivalent to @racket[(measure n u Sig-Figs)].
+}
+
+@deftype[Number-Measure]{
+equivalent to @racket[(Number-Measureof Unit)].
+}
+
+@deftype[Vector-Measure]{
+equivalent to @racket[(Vector-Measureof Unit)].
+}
+
+@deftype[(Number-Measureof u)]{
+equivalent to @racket[(Measureof Number u)].
+}
+
+@deftype[(Vector-Measureof u)]{
+equivalent to @racket[(Measureof (Vectorof Real) u)].
+}
 
 @deftype[Measureish]
 
-@deftype[Unit]
+@deftype[Unit]{
+equivalent to @racket[(Unitof Dimension)].
+}
+
+@deftype[(Unitof d)]{
+the type for a unit with the dimension @racket[d].
+}
 
 @deftype[Unitish]
 
-@deftype[Dimension]
+@deftype[Dimension]{
+equivalent to the type @racket[(dimension Integer Integer Integer Integer Integer)].
+}
 
 @deftype[Sig-Figs]{
 equivalent to @racket[(U Positive-Integer +inf.0)].
 }
 
-@defstruct*[dimension ([M-expt Integer]
-                       [L-expt Integer]
-                       [T-expt Integer]
-                       [Q-expt Integer]
-                       [Θ-expt Integer])]{
+@deftogether[[
+  @defstruct*[dimension ([M-expt Integer]
+                         [L-expt Integer]
+                         [T-expt Integer]
+                         [Q-expt Integer]
+                         [Θ-expt Integer])]
+  @defproc[(make-dimension [#:M^ M-expt Integer]
+                           [#:L^ L-expt Integer]
+                           [#:T^ T-expt Integer]
+                           [#:Q^ Q-expt Integer]
+                           [#:Θ^ Θ-expt Integer])
+           Dimension]
+]]{
 a struct representing a dimension.
 }
 
-@defstruct*[unit ([name Any] [scalar Positive-Real] [dimension Dimension])]{
+@deftogether[[
+  @defstruct*[unit ([name Any] [scalar Positive-Real] [dimension Dimension])]
+]]{
 a struct representing a unit.
 }
 
-@defstruct*[measure ([number (U Number (Vectorof Real))]
-                     [unit Unit]
-                     [sig-figs Sig-Figs])]{
+@deftogether[[
+  @defstruct*[measure ([number (U Number (Vectorof Real))]
+                       [unit Unit]
+                       [sig-figs Sig-Figs])]
+  @defproc[(make-measure [number (U Number (Vectorof Real))]
+                         [unit Unit]
+                         [sig-figs Sig-Figs +inf.0])
+           Measure]
+  @defproc[(measure-dimension [m Measure]) Dimension]
+]]{
 a struct representing a measure.
 }
+
+
 
 @section{Units}
 
@@ -149,12 +224,20 @@ a struct representing a measure.
   @defproc[(micro [u Unitish]) Unit]
   @defproc[(nano [u Unitish]) Unit]
   @defproc[(pico [u Unitish]) Unit]
+  @defproc[(femto [u Unitish]) Unit]
+  @defproc[(atto [u Unitish]) Unit]
+  @defproc[(zepto [u Unitish]) Unit]
+  @defproc[(yocto [u Unitish]) Unit]
   @defproc[(deca [u Unitish]) Unit]
   @defproc[(hecto [u Unitish]) Unit]
   @defproc[(kilo [u Unitish]) Unit]
   @defproc[(mega [u Unitish]) Unit]
   @defproc[(giga [u Unitish]) Unit]
   @defproc[(tera [u Unitish]) Unit]
+  @defproc[(peta [u Unitish]) Unit]
+  @defproc[(exa [u Unitish]) Unit]
+  @defproc[(zetta [u Unitish]) Unit]
+  @defproc[(yotta [u Unitish]) Unit]
 ]]{
 functions for the SI prefixes.
 }
@@ -169,10 +252,14 @@ functions for the SI prefixes.
   @deftype[Dimensionless-Unit]
   @defthing[dimensionless-dimension Dimensionless-Dimension]
   @defthing[1-unit Dimensionless-Unit]
+  @defthing[thing Dimensionless-Unit]
   @defthing[mol Dimensionless-Unit]
   @defthing[radian Dimensionless-Unit]
   @defthing[turn Dimensionless-Unit]
+  @defthing[revolution Dimensionless-Unit]
+  @defthing[cycle Dimensionless-Unit]
   @defthing[degree Dimensionless-Unit]
+  @defthing[° Dimensionless-Unit]
   @defthing[percent Dimensionless-Unit]
 ]]
 
@@ -188,6 +275,8 @@ functions for the SI prefixes.
   @defthing[pound-mass Mass-Unit]
   @defthing[ounce-mass Mass-Unit]
   @defthing[ton Mass-Unit]
+  @defthing[atomic-mass-unit Mass-Unit]
+  @defthing[planck-mass Mass-Unit]
 ]]
 
 @subsection{Length Units}
@@ -208,6 +297,11 @@ functions for the SI prefixes.
   @defthing[inch Length-Unit]
   @defthing[yard Length-Unit]
   @defthing[mile Length-Unit]
+  @defthing[astronomical-unit Length-Unit]
+  @defthing[angstrom Length-Unit]
+  @defthing[light-year Length-Unit]
+  @defthing[nautical-mile Length-Unit]
+  @defthing[planck-length Length-Unit]
 ]]
 
 @subsection{Time Units}
@@ -223,12 +317,15 @@ functions for the SI prefixes.
   @defthing[day Time-Unit]
   @defthing[week Time-Unit]
   @defthing[average-year Time-Unit]
+  @defthing[common-year Time-Unit]
+  @defthing[leap-year Time-Unit]
   @defthing[average-month Time-Unit]
   @defthing[average-decade Time-Unit]
   @defthing[century Time-Unit]
   @defthing[millisecond Time-Unit]
   @defthing[microsecond Time-Unit]
   @defthing[nanosecond Time-Unit]
+  @defthing[planck-time Time-Unit]
 ]]
 
 @subsection{Charge Units}
@@ -239,6 +336,8 @@ functions for the SI prefixes.
   @deftype[Charge-Unit]
   @defthing[charge-dimension Charge-Dimension]
   @defthing[coulomb Charge-Unit]
+  @defthing[elementary-charge-unit Charge-Unit]
+  @defthing[planck-charge Charge-Unit]
 ]]
 
 @subsection{Absolute-Temperature Units}
@@ -250,6 +349,7 @@ functions for the SI prefixes.
   @defthing[temperature-dimension Temperature-Dimension]
   @defthing[kelvin Absolute-Temperature-Unit]
   @defthing[rankine Absolute-Temperature-Unit]
+  @defthing[planck-temperature Absolute-Temperature-Unit]
 ]]
 
 @subsection{Area Units}
@@ -285,6 +385,8 @@ functions for the SI prefixes.
   @defthing[pint Volume-Unit]
   @defthing[cup Volume-Unit]
   @defthing[fluid-ounce Volume-Unit]
+  @defthing[tablespoon Volume-Unit]
+  @defthing[teaspoon Volume-Unit]
 ]]
 
 @subsection{Density Units}
@@ -317,6 +419,10 @@ functions for the SI prefixes.
   @defthing[speed-dimension Speed-Dimension]
   @defthing[m/s Velocity-Unit]
   @defthing[mph Velocity-Unit]
+  @defthing[fps Velocity-Unit]
+  @defthing[knot Velocity-Unit]
+  @defthing[c-unit Velocity-Unit]
+  @defthing[planck-velocity Velocity-Unit]
 ]]
 
 @subsection{Acceleration Units}
@@ -372,6 +478,9 @@ functions for the SI prefixes.
   @defthing[newton-meter Work-Unit]
   @defthing[calorie Energy-Unit]
   @defthing[foot-pound Work-Unit]
+  @defthing[british-thermal-unit Energy-Unit]
+  @defthing[kilowatt-hour Energy-Unit]
+  @defthing[electron-volt Energy-Unit]
 ]]
 
 @subsection{Power Units}
@@ -398,6 +507,8 @@ functions for the SI prefixes.
   @defthing[atmosphere Pressure-Unit]
   @defthing[bar Pressure-Unit]
   @defthing[millibar Pressure-Unit]
+  @defthing[torr Pressure-Unit]
+  @defthing[millimeter-of-mercury Pressure-Unit]
 ]]
 
 @subsection{Entropy}
@@ -472,13 +583,14 @@ functions for the SI prefixes.
   @deftype[Resistivity-Dimension]
   @deftype[Resistivity-Unit]
   @defthing[resistivity-dimension Resistivity-Dimension]
+  @defthing[ohm-meter Resistivity-Unit]
 ]]
 
 @deftogether[[
   @deftype[Conductivity]
   @deftype[Conductivity-Dimension]
   @deftype[Conductivity-Unit]
-  @defthing[curductivity-dimension Conductivity-Dimension]
+  @defthing[conductivity-dimension Conductivity-Dimension]
 ]]
 
 @subsection{Magnetic Field Units}
@@ -490,6 +602,7 @@ functions for the SI prefixes.
   @deftype[Magnetic-Field-Unit]
   @defthing[magnetic-field-dimension Magnetic-Field-Dimension]
   @defthing[tesla Magnetic-Field-Unit]
+  @defthing[gauss Magnetic-Field-Unit]
 ]]
 
 @subsection{Inductance Units}
@@ -503,6 +616,17 @@ functions for the SI prefixes.
 ]]
 
 
+
+@section{Physical Constants}
+
+@deftogether[[
+  @defthing[0-measure (Measureof 0 Dimensionless-Unit)]
+  @defthing[1-measure (Measureof 1 Dimensionless-Unit)]
+  @defthing[g Acceleration]
+  @defthing[G Number-Measure]
+  @defthing[c Speed]
+  @defthing[elementary-charge Charge]
+]]
 
 
 

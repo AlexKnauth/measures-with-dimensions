@@ -20,7 +20,7 @@
 
 (: g : Acceleration)
 (define g  ; the acceleration due to gravity on earth
-  (measure #e9.80665 m/s^2 +inf.0))
+  (measure 1 g-unit +inf.0))
 
 (: G : Number-Measure)
 (define G  ; Newton's universal gravitational constant, 
@@ -32,7 +32,11 @@
 
 (: c : Speed)
 (define c  ; the speed of light in a vacuum
-  (measure #e299792458 m/s +inf.0))
+  (measure 1 c-unit +inf.0))
+
+(: elementary-charge : Charge)
+(define elementary-charge
+  (measure 1 elementary-charge-unit +inf.0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
