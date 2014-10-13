@@ -44,9 +44,20 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
   (m 1 foot + 3 inch)
 ]}
 
-@defproc[(m+ [m Measureish] ...) Measure]{
+@defproc[(m+ [m Measure] ...) Measure]{
 adds the measures together.
-}
+
+@examples[
+  (require typed/racket)
+  (require typed/measures-with-dimensions/measure-struct
+           typed/measures-with-dimensions/unit-struct
+           typed/measures-with-dimensions/units
+           typed/measures-with-dimensions/typed-operations)
+  (ann (m+) (Measureof 0 Dimensionless-Unit))
+  (m+ (make-measure 1 meter))
+  (m+ (make-measure 1 meter) (make-measure 50 centimeter))
+  (m+ (make-measure 1 foot) (make-measure 3 inch))
+]}
 
 @defproc[(m- [m Measureish]) Measure]{
 negates a measure.  To do subtraction, either use the @racket[m] macro or use a pattern like

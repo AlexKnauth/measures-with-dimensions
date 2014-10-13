@@ -8,6 +8,7 @@
          (submod "unit-operations.rkt" untyped)
          (submod "measure-struct.rkt" untyped)
          (submod "physical-constants.rkt" untyped)
+         (submod "typed-operations.rkt" untyped)
          (only-in typed/racket/base assert)
          (for-syntax racket/base
                      syntax/parse))
@@ -93,75 +94,7 @@
            (sig-fig-min (Measure-sig-figs nm)
                         (Measure-sig-figs vm))))
 
-;; m+ : [Measureish * -> Measure]
-(define m+
-  (case-lambda
-    [() 0-measure]
-    [(m) (->measure m)]
-    [args
-     (let* ([args (map ->measure args)]
-            [m1 (first args)]
-            [rst (rest args)])
-       (define n1 (Measure-number m1))
-       (define u (Measure-unit m1))
-       (define d (Unit-dimension u))
-       (cond [(number? n1)
-              (apply m+/scalar m1 rst)]
-             [else
-              (apply m+/vector m1 rst)]))]))
 
-;; m+/scalar : [Number-Measure Number-Measure * -> Number-Measure]
-(define (m+/scalar m1 . rst)
-  (define u (Measure-unit m1))
-  (define d (Unit-dimension u))
-  ;; FIXME: How to calculate sig-figs correctly according to the addition rules?
-  (define sig-figs (apply sig-fig-min
-                          (Measure-sig-figs m1)
-                          (map Measure-sig-figs rst)))
-  (define n
-    (for/sum ([m (in-list (cons m1 rst))])
-      (unless (dimension=? (Measure-dimension m) d)
-        (error 'm+ (string-append
-                    "can't add two measures with different dimensions" "\n"
-                    "  given ~v and ~v") m1 m))
-      (define mc (convert m u))
-      (define n (Measure-number mc))
-      (unless (number? n)
-        (error 'm+ (string-append "can't add a number and a vector" "\n"
-                                  "  given ~v and ~v") m1 mc))
-      n))
-  (measure n u sig-figs))
-
-;; m+/vector : [Vector-Measure Vector-Measure * -> Vector-Measure]
-(define (m+/vector m1 . rst)
-  (define u (Measure-unit m1))
-  (define d (Unit-dimension u))
-  ;; FIXME: How to calculate sig-figs correctly according to the addition rules?
-  (define sig-figs (apply sig-fig-min
-                          (Measure-sig-figs m1)
-                          (map Measure-sig-figs rst)))
-  ;; vs : (Listof (Vectorof Real))
-  (define vs
-    (for/list ([m (in-list (cons m1 rst))])
-      (unless (dimension=? (Measure-dimension m) d)
-        (error 'm+ (string-append
-                    "can't add two measures with different dimensions" "\n"
-                    "  given ~v and ~v") m1 m))
-      (define mc (convert m u))
-      (define v (Measure-number mc))
-      (unless (vector? v)
-        (error 'm+ (string-append "can't add a number and a vector" "\n"
-                                  "  given ~v and ~v") m1 mc))
-      v))
-  (define length
-    (apply max (map vector-length vs)))
-  (measure (vector->immutable-vector
-            (for/vector #:length length #:fill 0 ([i (in-range length)])
-              (for/sum ([v (in-list vs)])
-                (if (<= (sub1 (vector-length v)) i)
-                    (vector-ref v i)
-                    0))))
-           u sig-figs))
 
 ;; mexpt : [Number-Measureish Number-Measureish -> Number-Measure]
 (define (mexpt b e)
