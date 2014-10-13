@@ -170,7 +170,11 @@ equivalent to @racket[(Measureof Number u)].
 equivalent to @racket[(Measureof (Vectorof Real) u)].
 }
 
-@deftype[Measureish]
+@deftogether[[
+  @deftype[Measureish]
+  @deftype[Number-Measureish]
+  @deftype[Vector-Measureish]
+]]
 
 @deftype[Unit]{
 equivalent to @racket[(Unitof Dimension)].
