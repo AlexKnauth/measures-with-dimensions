@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+ m- m1/)
+(provide m+ m- m1/ mexpt)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -9,6 +9,7 @@
          "measure-struct.rkt"
          "physical-constants.rkt"
          "vector-operations.rkt"
+         "preds.rkt"
          "untyped-utils.rkt")
 
 (: m+ : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
@@ -119,17 +120,31 @@
         [else
          (measure (v* -1 n) u sig-figs)]))
 
-(: m1/ : [-> Number-Measure Number-Measure])
+(: m1/ : [-> Number-Measureish Number-Measure])
 (define (m1/ m)
-  (: u : Unit)
-  (define u (measure-unit m))
-  (: n : Number)
-  (define n (measure-number m))
-  (: sig-figs : Sig-Figs)
-  (define sig-figs (measure-sig-figs m))
-  (measure (/ n)
-           (u1/ u)
-           sig-figs))
+  (let ([m (assert (->measure m) number-measure?)])
+    (: u : Unit)
+    (define u (measure-unit m))
+    (: n : Number)
+    (define n (measure-number m))
+    (: sig-figs : Sig-Figs)
+    (define sig-figs (measure-sig-figs m))
+    (measure (/ n)
+             (u1/ u)
+             sig-figs)))
+
+(: mexpt : [-> Number-Measureish Number-Measureish Number-Measure])
+(define (mexpt b e)
+  (let ([b (assert (->measure b) number-measure?)]
+        [e (assert (->measure e) number-measure?)])
+    (: n : Number)
+    (define n
+      (assert (measure-number (convert e 1-unit))
+              number?))
+    (measure (expt (measure-number b) n)
+             (uexpt (Measure-unit b) (assert (inexact->exact n) exact-rational?))
+             (sig-fig-min (Measure-sig-figs b)
+                          (Measure-sig-figs e)))))
 
 
 

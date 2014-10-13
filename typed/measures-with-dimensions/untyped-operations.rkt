@@ -96,19 +96,6 @@
 
 
 
-;; mexpt : [Number-Measureish Number-Measureish -> Number-Measure]
-(define (mexpt b e)
-  (let ([b (assert (->measure b) number-measure?)]
-        [e (assert (->measure e) number-measure?)])
-    (define n
-      (Measure-number (convert e 1-unit)))
-    (measure (expt (Measure-number b) n)
-             (uexpt (Measure-unit b) (inexact->exact n))
-             (sig-fig-min (Measure-sig-figs b)
-                          (Measure-sig-figs e)))))
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (module+ test

@@ -71,12 +71,12 @@ negates a measure.  To do subtraction, either use the @racket[m] macro or use a 
 multiplies the measures.
 }
 
-@defproc[(m1/ [m Number-Measure]) Number-Measure]{
+@defproc[(m1/ [m Number-Measureish]) Number-Measure]{
 takes the multiplicative inverse of the measure.  To do division, either use the @racket[m] macro or
 use a pattern like @racket[(m* a (m1/ b))].
 }
 
-@defproc[(mexpt [m1 Measureish] [m2 Measureish]) Measure]{
+@defproc[(mexpt [m1 Number-Measureish] [m2 Number-Measureish]) Number-Measure]{
 takes @racket[m1] to the exponent of @racket[m2].
 }
 
