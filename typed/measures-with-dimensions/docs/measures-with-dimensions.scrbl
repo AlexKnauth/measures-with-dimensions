@@ -56,7 +56,7 @@ adds the measures together.
   (m (make-measure 1 foot) + (make-measure 3 inch))
 ]}
 
-@defproc[(m- [m Measureish]) Measure]{
+@defproc[(m- [m Measure]) Measure]{
 negates a measure.  To do subtraction, either use the @racket[m] macro or use a pattern like
 @racket[(m+ a (m- b))].
 
@@ -71,7 +71,7 @@ negates a measure.  To do subtraction, either use the @racket[m] macro or use a 
 multiplies the measures.
 }
 
-@defproc[(m1/ [m Measureish]) Measure]{
+@defproc[(m1/ [m Number-Measure]) Number-Measure]{
 takes the multiplicative inverse of the measure.  To do division, either use the @racket[m] macro or
 use a pattern like @racket[(m* a (m1/ b))].
 }

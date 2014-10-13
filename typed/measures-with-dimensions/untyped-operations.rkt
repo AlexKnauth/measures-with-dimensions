@@ -107,11 +107,9 @@
              (sig-fig-min (Measure-sig-figs b)
                           (Measure-sig-figs e)))))
 
-;; m1/ : [Measure -> Measure]
-;; only the one-argument case, which takes the multiplicative inverse
-(define (m1/ m)
-  (mexpt m -1))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (module+ test
   (define-check (check-m=? m1 m2)

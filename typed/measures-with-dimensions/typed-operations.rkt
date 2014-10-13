@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+ m-)
+(provide m+ m- m1/)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -111,10 +111,6 @@
 (define (m- m)
   (: u : u)
   (define u (measure-unit m))
-  (: u-Unit : Unit)
-  (define u-Unit (assert u Unit?))
-  (: d : Dimension)
-  (define d (unit-dimension u-Unit))
   (define n (measure-number m))
   (: sig-figs : Sig-Figs)
   (define sig-figs (measure-sig-figs m))
@@ -122,6 +118,18 @@
          (measure (- n) u sig-figs)]
         [else
          (measure (v* -1 n) u sig-figs)]))
+
+(: m1/ : [-> Number-Measure Number-Measure])
+(define (m1/ m)
+  (: u : Unit)
+  (define u (measure-unit m))
+  (: n : Number)
+  (define n (measure-number m))
+  (: sig-figs : Sig-Figs)
+  (define sig-figs (measure-sig-figs m))
+  (measure (/ n)
+           (u1/ u)
+           sig-figs))
 
 
 
