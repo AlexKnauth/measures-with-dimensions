@@ -9,7 +9,7 @@
          "dimension-operations.rkt"
          "unit-struct.rkt"
          "unit-operations.rkt"
-         "vector-opperations.rkt"
+         "vector-operations.rkt"
          "preds.rkt"
          "untyped-utils.rkt"
          )

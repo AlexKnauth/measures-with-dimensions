@@ -107,11 +107,6 @@
              (sig-fig-min (Measure-sig-figs b)
                           (Measure-sig-figs e)))))
 
-;; m- : [Measure -> Measure]
-;; only the one-argument case, which multiplies it by -1
-(define (m- m)
-  (m* -1 m))
-
 ;; m1/ : [Measure -> Measure]
 ;; only the one-argument case, which takes the multiplicative inverse
 (define (m1/ m)

@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+)
+(provide m+ m-)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -8,6 +8,7 @@
          "unit-operations.rkt"
          "measure-struct.rkt"
          "physical-constants.rkt"
+         "vector-operations.rkt"
          "untyped-utils.rkt")
 
 (: m+ : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
@@ -102,6 +103,29 @@
                     (vector-ref v i)
                     0)))))
   (measure v u sig-figs))
+
+
+
+(: m- : (All (u) [-> (Measureof (U Number (Vectorof Real)) u)
+                     (Measureof (U Number (Vectorof Real)) u)]))
+(define (m- m)
+  (: u : u)
+  (define u (measure-unit m))
+  (: u-Unit : Unit)
+  (define u-Unit (assert u Unit?))
+  (: d : Dimension)
+  (define d (unit-dimension u-Unit))
+  (define n (measure-number m))
+  (: sig-figs : Sig-Figs)
+  (define sig-figs (measure-sig-figs m))
+  (cond [(number? n)
+         (measure (- n) u sig-figs)]
+        [else
+         (measure (v* -1 n) u sig-figs)]))
+
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
