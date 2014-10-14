@@ -17,8 +17,10 @@
 
 (: v* : [Real (Vectorof Real) -> (Vectorof Real)])
 (define (v* n v)
-  (for/vector : (Vectorof Real) #:length (vector-length v) ([v-i : Real (in-vector v)])
-    (* n v-i)))
+  (vector->immutable-vector
+   (for/vector : (Vectorof Real) #:length (vector-length v) #:fill 0
+     ([v-i : Real (in-vector v)])
+     (* n v-i))))
 
 
 (: vector-ref_0 : [(Vectorof Real) Natural -> Real])

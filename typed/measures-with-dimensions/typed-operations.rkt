@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+ m- m1/ mexpt)
+(provide m+ m- m1/ mexpt m*/scalar m*/vector)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -145,6 +145,34 @@
              (uexpt (Measure-unit b) (assert (inexact->exact n) exact-rational?))
              (sig-fig-min (Measure-sig-figs b)
                           (Measure-sig-figs e)))))
+
+
+
+(: m*/scalar : [Number-Measure * -> Number-Measure])
+;; Note: accepts Number-Measure, not Number-Measureish
+(define (m*/scalar . args)
+  (define-values (ns us sfs)
+    (for/lists ([ns : (Listof Number)] [us : (Listof Unit)] [sfs : (Listof Sig-Figs)])
+      ([m : Number-Measure (in-list args)])
+      (values (measure-number m)
+              (measure-unit m)
+              (measure-sig-figs m))))
+  (measure (apply * ns)
+           (apply u* us)
+           (apply sig-fig-min sfs)))
+
+(: m*/vector : [Number-Measure Vector-Measure -> Vector-Measure])
+;; Note: accepts _-Measure, not _-Measureish
+(define (m*/vector nm vm)
+  (: vm.v : (Vectorof Real))
+  (define vm.v (measure-number vm))
+  (: nm.n : Real)
+  (define nm.n (assert (measure-number nm) real?))
+  (measure (v* nm.n vm.v)
+           (u* (Measure-unit nm)
+               (Measure-unit vm))
+           (sig-fig-min (Measure-sig-figs nm)
+                        (Measure-sig-figs vm))))
 
 
 

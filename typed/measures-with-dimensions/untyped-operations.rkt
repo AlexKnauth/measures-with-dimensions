@@ -72,28 +72,6 @@
                "  given: ~v")
               vectors)])))
 
-;; m*/scalar : [Number-Measure * -> Number-Measure]
-;; Note: accepts Number-Measure, not Number-Measureish
-(define (m*/scalar . args)
-  (match-define (list (measure ns us sfs) ...) args)
-  (measure (apply * ns)
-           (apply u* us)
-           (apply sig-fig-min sfs)))
-
-;; m*/vector : [Number-Measure Vector-Measure -> Vector-Measure]
-;; Note: accepts _-Measure, not _-Measureish
-(define (m*/vector nm vm)
-  (define vm.v (Measure-number vm))
-  (define nm.n (assert (Measure-number nm) real?))
-  (measure (vector->immutable-vector
-            (for/vector #:length (vector-length vm.v) #:fill 0
-              ([v-i (in-vector vm.v)])
-              (* nm.n v-i)))
-           (u* (Measure-unit nm)
-               (Measure-unit vm))
-           (sig-fig-min (Measure-sig-figs nm)
-                        (Measure-sig-figs vm))))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
