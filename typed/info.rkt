@@ -1,4 +1,4 @@
 #lang info
 
-(define scribblings '(["measures-with-dimensions/docs/measures-with-dimensions.scrbl" ()]))
+(define scribblings '(["measures-with-dimensions/docs/measures-with-dimensions.scrbl" (multi-page)]))
 
