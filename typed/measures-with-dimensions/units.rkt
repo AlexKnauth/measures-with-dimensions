@@ -221,6 +221,9 @@
 ;; Charge:
 (define-units/type Charge-Unit
   [coulomb (make-Unit 'coulomb 1 charge-dimension)]
+  [microcoulomb (micro coulomb)]
+  [nanocoulomb (nano coulomb)]
+  [picocoulomb (pico coulomb)]
   [elementary-charge-unit (u* #i1.602176565e-19 coulomb)]
   [planck-charge (u* #i1.875545956e-18 coulomb)]
   )
@@ -263,24 +266,24 @@
 
 ;; Velocity/Speed:
 (define-units/type Velocity-Unit
-  [m/s (make-Unit 'm/s 1 velocity-dimension)]
-  [mph (u/ mile hour)]
-  [fps (u/ foot second)]
-  [c-unit (u* 299792458 m/s)]
+  [meter-per-second (make-Unit 'meter-per-second 1 velocity-dimension)]
+  [mile-per-hour (u/ mile hour)]
+  [foot-per-second (u/ foot second)]
+  [speed-of-light-unit (u* 299792458 meter-per-second)]
   [knot (u/ nautical-mile hour)]
-  [planck-velocity c-unit]
+  [planck-velocity speed-of-light-unit]
   )
 
 ;; Acceleration
 (define-units/type Acceleration-Unit
-  [m/s^2 (make-Unit 'm/s^2 1 acceleration-dimension)]
-  [g-unit (u* #e9.80665 m/s^2)]
+  [meter-per-second-squared (make-Unit 'meter-per-second-squared 1 acceleration-dimension)]
+  [gravitational-acceleration-unit (u* #e9.80665 meter-per-second-squared)]
   )
 
 ;; Force:
 (define-units/type Force-Unit
   [newton (make-Unit 'newton 1 force-dimension)]
-  [pound-force (u* (u* #e9.80665 (u/ meter (usqr second))) pound-mass)]
+  [pound-force (u* gravitational-acceleration-unit pound-mass)]
   )
 
 ;; Momentum:
@@ -308,7 +311,7 @@
 ;; Pressure:
 (define-units/type Pressure-Unit
   [pascal (make-Unit 'pascal 1 pressure-dimension)]
-  [psi (u/ pound-force square-inch)]
+  [pound-per-square-inch (u/ pound-force square-inch)]
   [atmosphere (u* #e101325 pascal)]
   [bar (u* #e100000 pascal)]
   [millibar (milli bar)]

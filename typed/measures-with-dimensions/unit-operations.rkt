@@ -24,12 +24,11 @@
                (dimension=? u.dimension (unit-dimension u2))))))))
 
 
-(: unit-rename : (Unitish Any -> Unit))
+(: unit-rename : (All (d) [(Unitof d) Any -> (Unitof d)]))
 (define (unit-rename u name)
-  (let ([u : Unit (->unit u)])
-    (make-Unit name
-               (unit-scalar u)
-               (unit-dimension u))))
+  (unit name
+        (unit-scalar u)
+        (unit-dimension u)))
 
 (define-simple-macro (define-unit u:id (~literal :) t:expr val:expr)
   (begin

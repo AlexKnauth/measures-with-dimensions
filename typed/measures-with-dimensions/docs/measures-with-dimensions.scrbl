@@ -120,6 +120,7 @@ converts from something "measureish" to a @racket[Measure].
   @defproc[(u/ [u1 Unitish] [u Unitish] ...+) Unit]
   @defproc[(uexpt [u Unitish] [n Exact-Rational]) Unit]
   @defproc[(->unit [u Unitish]) Unit]
+  @defproc[(unit-rename [u Unit] [n Any]) Unit]
   @defproc[(unit=? [u1 Unitish] [u Unitish] ...) Boolean]
 ]]{
 operations on units
@@ -435,11 +436,11 @@ functions for the SI prefixes.
   @deftype[Speed-Unit]
   @defthing[velocity-dimension Velocity-Dimension]
   @defthing[speed-dimension Speed-Dimension]
-  @defthing[m/s Velocity-Unit]
-  @defthing[mph Velocity-Unit]
-  @defthing[fps Velocity-Unit]
+  @defthing[meter-per-second Velocity-Unit]
+  @defthing[mile-per-hour Velocity-Unit]
+  @defthing[foot-per-second Velocity-Unit]
   @defthing[knot Velocity-Unit]
-  @defthing[c-unit Velocity-Unit]
+  @defthing[speed-of-light-unit Velocity-Unit]
   @defthing[planck-velocity Velocity-Unit]
 ]]
 
@@ -451,8 +452,8 @@ functions for the SI prefixes.
   @deftype[Acceleration-Dimension]
   @deftype[Acceleration-Unit]
   @defthing[acceleration-dimension Acceleration-Dimension]
-  @defthing[m/s^2 Acceleration-Unit]
-  @defthing[g-unit Acceleration-Unit]
+  @defthing[meter-per-second-squared Acceleration-Unit]
+  @defthing[gravitational-acceleration-unit Acceleration-Unit]
 ]]
 
 @subsection{Force Units}
@@ -522,7 +523,7 @@ functions for the SI prefixes.
   @deftype[Pressure-Unit]
   @defthing[pressure-dimension Pressure-Dimension]
   @defthing[pascal Pressure-Unit]
-  @defthing[psi Pressure-Unit]
+  @defthing[pound-per-square-inch Pressure-Unit]
   @defthing[atmosphere Pressure-Unit]
   @defthing[bar Pressure-Unit]
   @defthing[millibar Pressure-Unit]
