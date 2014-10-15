@@ -11,7 +11,7 @@
           "deftype.rkt"
           )
 
-@title{measures-with-dimensions}
+@title[#:style '(toc)]{measures-with-dimensions}
 
 @defmodule[(submod typed/measures-with-dimensions untyped)]
 
@@ -27,4 +27,6 @@ and functions and macros to manipulate these.
 @include-section["units-and-dimensions.scrbl"]
 
 @include-section["physical-constants.scrbl"]
+
+@include-section["short-names.scrbl"]
 

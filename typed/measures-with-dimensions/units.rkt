@@ -311,6 +311,7 @@
 ;; Pressure:
 (define-units/type Pressure-Unit
   [pascal (make-Unit 'pascal 1 pressure-dimension)]
+  [kilopascal (kilo pascal)]
   [pound-per-square-inch (u/ pound-force square-inch)]
   [atmosphere (u* #e101325 pascal)]
   [bar (u* #e100000 pascal)]
