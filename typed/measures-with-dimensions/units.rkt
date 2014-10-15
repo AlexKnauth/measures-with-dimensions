@@ -232,7 +232,7 @@
 (define-units/type Absolute-Temperature-Unit
   [kelvin (make-Unit 'kelvin 1 temperature-dimension)]
   [rankine (u* 5/9 kelvin)]
-  [plank-temperature (u* #i1.416833e32 kelvin)]
+  [planck-temperature (u* #i1.416833e32 kelvin)]
   )
 
 ;; Area:
