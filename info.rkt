@@ -8,12 +8,12 @@
                "rackjure"
                "math-lib"
                "htdp-lib"
-               ))
+               "scribble-lib"))
 
 (define build-deps '("rackunit-lib"
                      "scribble-lib"
                      "sandbox-lib"
                      "racket-doc"
                      "typed-racket-doc"
-                     ))
+                     "at-exp-lib"))
 
