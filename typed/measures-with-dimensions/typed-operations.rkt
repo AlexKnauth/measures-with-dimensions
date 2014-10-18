@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+ m- m1/ mexpt m*/scalar m*/vector)
+(provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -13,9 +13,19 @@
          "untyped-utils.rkt")
 
 (: m+ : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
-                         [-> (Measureof (U Number (Vectorof Real)) u) Measureish *
+                         [-> (Measureof (U Number (Vectorof Real)) u)
+                             (Measureof (U Number (Vectorof Real)) u) *
                              (Measureof (U Number (Vectorof Real)) u)])))
 (define m+
+  (case-lambda
+    [() 0-measure]
+    [(m1 . rst)
+     (apply (inst m+/lenient u) m1 (cast rst (Listof Measure)))]))
+
+(: m+/lenient : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
+                                 [-> (Measureof (U Number (Vectorof Real)) u) Measureish *
+                                     (Measureof (U Number (Vectorof Real)) u)])))
+(define m+/lenient
   (case-lambda
     [() 0-measure]
     [(m1 . rst)
