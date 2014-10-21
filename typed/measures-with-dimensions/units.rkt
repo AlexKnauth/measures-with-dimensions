@@ -320,8 +320,10 @@
   [millimeter-of-mercury (u* #e13.5951 #e9.80665 pascal)]
   )
 
-;; Entropy:
+;; Entropy, Energy per Temperature, and Gas Constants:
 (define-units/type Entropy-Unit
+  [ideal-gas-constant-unit (u* #i8.3144621 (u/ (u* pascal cubic-meter) (u* kelvin mol)))]
+  [bolzmann-constant-unit (u* #i1.3806488e-23 (u/ joule kelvin))]
   )
 
 ;; Electric-Field:
@@ -381,4 +383,13 @@
              (submod "unit-operations.rkt" untyped)]
  )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(module* test racket/base
+  (require rackunit
+           (submod ".." untyped)
+           (submod "dimension-operations.rkt" untyped)
+           (submod "unit-struct.rkt" untyped))
+  (check dimension=? (unit-dimension ideal-gas-constant-unit) (unit-dimension bolzmann-constant-unit))
+  (check-= (unit-scalar ideal-gas-constant-unit) (unit-scalar bolzmann-constant-unit) #i1.0e-10)
+  )

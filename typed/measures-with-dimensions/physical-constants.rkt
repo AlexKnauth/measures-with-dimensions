@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require "unit-struct.rkt"
+(require "dimension-struct.rkt"
+         "unit-struct.rkt"
          "unit-operations.rkt"
          "units.rkt"
          "measure-struct.rkt"
@@ -37,6 +38,14 @@
 (: elementary-charge : Charge)
 (define elementary-charge
   (measure 1 (unit-rename elementary-charge-unit 'e) +inf.0))
+
+(: R : (Measureof Positive-Real (Unitof (dimension 1 2 -2 0 -1))))
+(define R
+  (measure 1 (unit-rename ideal-gas-constant-unit 'R) +inf.0))
+
+(: k_B : (Measureof Positive-Real (Unitof (dimension 1 2 -2 0 -1))))
+(define k_B
+  (measure 1 (unit-rename bolzmann-constant-unit 'k_B) +inf.0))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -20,5 +20,7 @@
   @defthing[G Number-Measure]
   @defthing[c Speed]
   @defthing[elementary-charge Charge]
+  @defthing[R Number-Measure]
+  @defthing[k_B Number-Measure]
 ]]
 
