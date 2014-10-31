@@ -6,7 +6,7 @@
           typed/measures-with-dimensions/untyped-utils
           (for-label (combine-in/priority
                       typed/measures-with-dimensions/short/US
-                      (submod typed/measures-with-dimensions untyped)
+                      typed/measures-with-dimensions
                       racket
                       typed/racket))
           "../deftype.rkt"

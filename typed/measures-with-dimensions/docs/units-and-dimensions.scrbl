@@ -5,7 +5,7 @@
           racket/require
           typed/measures-with-dimensions/untyped-utils
           (for-label (combine-in/priority
-                      (submod typed/measures-with-dimensions untyped)
+                      typed/measures-with-dimensions
                       racket
                       typed/racket))
           "deftype.rkt"
