@@ -1,6 +1,6 @@
 #lang racket
 
-(provide m m+ m- m* m1/ mexpt)
+(provide m m+ m- m1/ mexpt m* m*/scalar m*/vector)
 
 (require (submod "dimension-struct.rkt" untyped)
          (submod "dimension-operations.rkt" untyped)
@@ -8,14 +8,19 @@
          (submod "unit-operations.rkt" untyped)
          (submod "measure-struct.rkt" untyped)
          (submod "physical-constants.rkt" untyped)
-         (submod "typed-operations.rkt" untyped)
+         (submod "typed-operations-1.rkt" untyped)
+         "untyped-operations-2.rkt"
+         (submod "typed-operations-3.rkt" untyped)
          (only-in typed/racket/base assert)
+         typed/untyped-utils
          (for-syntax racket/base
                      syntax/parse))
 
 (module+ test
   (require rackunit
            (submod "units.rkt" untyped)))
+
+(define-typed/untyped-identifier m* typed:m* untyped:m*)
 
 (begin-for-syntax
   (define-syntax-class mexpr #:description "non-operation expression"
@@ -51,26 +56,6 @@
 (define-syntax m
   (syntax-parser
     [(m a:msum) #'a.norm]))
-
-;; m* : [Measureish * -> Measure]
-(define (m* . args)
-  (let ([args (map ->measure args)])
-    (define (vector-measure? m)
-      (vector? (Measure-number m)))
-    (define-values (vectors scalars)
-      (partition vector-measure? args))
-    (match vectors
-      [(list)
-       (apply m*/scalar scalars)]
-      [(list v)
-       (m*/vector (apply m*/scalar scalars) v)]
-      [vectors
-       (error 'm*
-              (string-append
-               "can't multiply 2 or more vectors together" "\n"
-               "  use mdot or mcross instead" "\n"
-               "  given: ~v")
-              vectors)])))
 
 
 

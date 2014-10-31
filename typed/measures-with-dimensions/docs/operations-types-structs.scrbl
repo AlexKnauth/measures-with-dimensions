@@ -26,11 +26,24 @@ this macro lets you write measures and operations on measures using infix notati
 It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m1/], and
 @racket[mexpt] in prefix notation.
 
+@margin-note{
+Note for typed racket users: the @racket[m] macro can expand to uses of @racket[m*] even if you give
+it a literal number and a unit, and @racket[m*] currently just returns a value of type
+@racket[Measure], so if you care about the type, instead of writing something like
+@racket[(m 1 meter)] or @racket[(m 1 meter + 50 centimeter)], you should use something like
+@racket[(make-measure 1 meter)] or @racket[(m (make-measure 1 meter) + (make-measure 50 centimeter))].
+If I (or someone else) can write @racket[m*] in typed racket with a more useful type, this will be
+fixed.  
+}
+
 @examples[
-  (require (submod typed/measures-with-dimensions untyped))
+  (require typed/racket)
+  (require typed/measures-with-dimensions)
   (m 1 meter)
+  (make-measure 1 meter)
   (m 50 centimeter)
   (m 1 meter + 50 centimeter)
+  (m (make-measure 1 meter) + (make-measure 50 centimeter))
   (m 1 meter - 50 centimeter)
   (m 1 meter ^ 2)
   (m 1 meter ^ 2 + 100 centimeter ^ 2)
@@ -40,6 +53,15 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
 @defproc[(m+ [m Measure] ...) Measure]{
 adds the measures together.
 
+@margin-note{
+Note for typed racket users: when the typechecker typechecks @racket[m+], it doesn't actually check
+that its arguments have the same dimensions (it does check at runtime).  Instead it typechecks as
+returning a measure with a union of the dimensions of its arguments.  For example,
+@racket[(m+ (make-measure 1 meter) (make-measure 1 second))] typechecks as something that could have
+either the length dimension or the second dimension.  You can fix this by either requiring the type of
+the result to be what you want, or using @racket[inst] to instantiate it for a certain dimension.  
+}
+
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
@@ -47,6 +69,7 @@ adds the measures together.
   (m+ (make-measure 1 meter))
   (m+ (make-measure 1 meter) (make-measure 50 centimeter))
   (m (make-measure 1 foot) + (make-measure 3 inch))
+  ((inst m+ Length-Dimension) (make-measure 1 meter) (make-measure 50 centimeter))
 ]}
 
 @defproc[(m- [m Measure]) Measure]{
@@ -80,8 +103,7 @@ The second form converts the number or vector @racket[n] from @racket[u1] to @ra
 
 @examples[
   (require typed/racket)
-  (require typed/measures-with-dimensions/measure-struct
-           typed/measures-with-dimensions/units)
+  (require typed/measures-with-dimensions)
   (convert (make-measure 1 meter) centimeter)
   (convert 1 meter centimeter)
 ]}
@@ -91,8 +113,7 @@ returns true if the measures represent the same quantities.
 
 @examples[
   (require typed/racket)
-  (require typed/measures-with-dimensions/measure-struct
-           typed/measures-with-dimensions/units)
+  (require typed/measures-with-dimensions)
   (measure=? (make-measure 1 meter)
              (make-measure 100 centimeter))
   (measure=? (make-measure 1 meter)

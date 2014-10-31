@@ -9,7 +9,7 @@
                        "measures-with-dimensions/measure-struct.rkt"
                        "measures-with-dimensions/physical-constants.rkt"
                        "measures-with-dimensions/measure-types.rkt"
-                       "measures-with-dimensions/untyped-operations.rkt"
+                       "measures-with-dimensions/typed-operations.rkt"
                        ))
 
 (require "measures-with-dimensions/dimension-struct.rkt"
@@ -21,7 +21,7 @@
          "measures-with-dimensions/measure-struct.rkt"
          "measures-with-dimensions/physical-constants.rkt"
          "measures-with-dimensions/measure-types.rkt"
-         "measures-with-dimensions/untyped-operations.rkt"
+         "measures-with-dimensions/typed-operations.rkt"
          "measures-with-dimensions/untyped-utils.rkt"
          )
 

@@ -12,47 +12,47 @@
          "preds.rkt"
          "untyped-utils.rkt")
 
-(: m+ : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
-                         [-> (Measureof (U Number (Vectorof Real)) u)
-                             (Measureof (U Number (Vectorof Real)) u) *
-                             (Measureof (U Number (Vectorof Real)) u)])))
+(: m+ : (All (d) (case-> [-> (Measureof 0 Dimensionless-Unit)]
+                         [-> (Measureof (U Number (Vectorof Real)) (Unitof d))
+                             (Measureof (U Number (Vectorof Real)) (Unitof d)) *
+                             (Measureof (U Number (Vectorof Real)) (Unitof d))])))
 (define m+
   (case-lambda
     [() 0-measure]
     [(m1 . rst)
-     (apply (inst m+/lenient u) m1 (cast rst (Listof Measure)))]))
+     (apply (inst m+/lenient d) m1 (cast rst (Listof Measure)))]))
 
-(: m+/lenient : (All (u) (case-> [-> (Measureof 0 Dimensionless-Unit)]
-                                 [-> (Measureof (U Number (Vectorof Real)) u) Measureish *
-                                     (Measureof (U Number (Vectorof Real)) u)])))
+(: m+/lenient : (All (d) (case-> [-> (Measureof 0 Dimensionless-Unit)]
+                                 [-> (Measureof (U Number (Vectorof Real)) (Unitof d)) Measureish *
+                                     (Measureof (U Number (Vectorof Real)) (Unitof d))])))
 (define m+/lenient
   (case-lambda
     [() 0-measure]
     [(m1 . rst)
      (let* ([rst : (Listof Measure) (map ->measure rst)])
-       (: u : u)
+       (: u : (Unitof d))
        (define u (measure-unit m1))
-       (: u-Unit : Unit)
-       (define u-Unit (assert u Unit?))
-       (: d : Dimension)
-       (define d (unit-dimension u-Unit))
+       (: d : d)
+       (define d (unit-dimension u))
        (define n1 (measure-number m1))
        (cond [(number? n1)
-              (apply (inst m+/scalar u) m1 (cast rst (Listof Number-Measure)))]
+              (apply (inst m+/scalar d) m1 (cast rst (Listof Number-Measure)))]
              [else
-              (apply (inst m+/vector u) m1 (cast rst (Listof Vector-Measure)))]))]))
+              (apply (inst m+/vector d) m1 (cast rst (Listof Vector-Measure)))]))]))
 
 
 
-(: m+/scalar : (All (u) [-> (Measureof (U Number (Vectorof Real)) u) Number-Measure *
-                            (Measureof Number u)]))
+(: m+/scalar : (All (d) [-> (Measureof (U Number (Vectorof Real)) (Unitof d)) Number-Measure *
+                            (Measureof Number (Unitof d))]))
 (define (m+/scalar m1 . rst)
-  (: u : u)
+  (: u : (Unitof d))
   (define u (measure-unit m1))
   (: u-Unit : Unit)
   (define u-Unit (assert u Unit?))
-  (: d : Dimension)
-  (define d (unit-dimension u-Unit))
+  (: d : d)
+  (define d (unit-dimension u))
+  (: d-Dim : Dimension)
+  (define d-Dim (assert d Dimension?))
   (: sig-figs : Sig-Figs)
   (define sig-figs (apply sig-fig-min
                           (measure-sig-figs m1)
@@ -60,7 +60,7 @@
   (: n : Number)
   (define n
     (for/sum : Number ([m : Number-Measure (in-list (cons (assert m1 number-measure?) rst))])
-      (unless (dimension=? (measure-dimension m) d)
+      (unless (dimension=? (measure-dimension m) d-Dim)
         (error 'm+ (string-append
                     "can't add two measures with different dimensions" "\n"
                     "  given ~v and ~v") m1 m))
@@ -74,15 +74,17 @@
 
 
 
-(: m+/vector : (All (u) [-> (Measureof (U Number (Vectorof Real)) u) Vector-Measure *
-                            (Measureof (Vectorof Real) u)]))
+(: m+/vector : (All (d) [-> (Measureof (U Number (Vectorof Real)) (Unitof d)) Vector-Measure *
+                            (Measureof (Vectorof Real) (Unitof d))]))
 (define (m+/vector m1 . rst)
-  (: u : u)
+  (: u : (Unitof d))
   (define u (measure-unit m1))
   (: u-Unit : Unit)
   (define u-Unit (assert u Unit?))
-  (: d : Dimension)
-  (define d (unit-dimension u-Unit))
+  (: d : d)
+  (define d (unit-dimension u))
+  (: d-Dim : Dimension)
+  (define d-Dim (assert d Dimension?))
   (: sig-figs : Sig-Figs)
   (define sig-figs (apply sig-fig-min
                           (measure-sig-figs m1)
@@ -91,7 +93,7 @@
   (define vs
     (for/list : (Listof (Vectorof Real))
       ([m : Vector-Measure (in-list (cons (cast m1 Vector-Measure) rst))])
-      (unless (dimension=? (measure-dimension m) d)
+      (unless (dimension=? (measure-dimension m) d-Dim)
         (error 'm+ (string-append
                     "can't add two measures with different dimensions" "\n"
                     "  given ~v and ~v") m1 m))
@@ -156,34 +158,31 @@
              (sig-fig-min (Measure-sig-figs b)
                           (Measure-sig-figs e)))))
 
-
-
 (: m*/scalar : [Number-Measure * -> Number-Measure])
-;; Note: accepts Number-Measure, not Number-Measureish
-(define (m*/scalar . args)
-  (define-values (ns us sfs)
-    (for/lists ([ns : (Listof Number)] [us : (Listof Unit)] [sfs : (Listof Sig-Figs)])
-      ([m : Number-Measure (in-list args)])
-      (values (measure-number m)
-              (measure-unit m)
-              (measure-sig-figs m))))
-  (measure (apply * ns)
-           (apply u* us)
-           (apply sig-fig-min sfs)))
-
-(: m*/vector : [Number-Measure Vector-Measure -> Vector-Measure])
-;; Note: accepts _-Measure, not _-Measureish
-(define (m*/vector nm vm)
-  (: vm.v : (Vectorof Real))
-  (define vm.v (measure-number vm))
-  (: nm.n : Real)
-  (define nm.n (assert (measure-number nm) real?))
-  (measure (v* nm.n vm.v)
-           (u* (Measure-unit nm)
-               (Measure-unit vm))
-           (sig-fig-min (Measure-sig-figs nm)
-                        (Measure-sig-figs vm))))
-
+  ;; Note: accepts Number-Measure, not Number-Measureish
+  (define (m*/scalar . args)
+    (define-values (ns us sfs)
+      (for/lists ([ns : (Listof Number)] [us : (Listof Unit)] [sfs : (Listof Sig-Figs)])
+        ([m : Number-Measure (in-list args)])
+        (values (measure-number m)
+                (measure-unit m)
+                (measure-sig-figs m))))
+    (measure (apply * ns)
+             (apply u* us)
+             (apply sig-fig-min sfs)))
+  
+  (: m*/vector : [Number-Measure Vector-Measure -> Vector-Measure])
+  ;; Note: accepts _-Measure, not _-Measureish
+  (define (m*/vector nm vm)
+    (: vm.v : (Vectorof Real))
+    (define vm.v (measure-number vm))
+    (: nm.n : Real)
+    (define nm.n (assert (measure-number nm) real?))
+    (measure (v* nm.n vm.v)
+             (u* (Measure-unit nm)
+                 (Measure-unit vm))
+             (sig-fig-min (Measure-sig-figs nm)
+                          (Measure-sig-figs vm))))
 
 
 
