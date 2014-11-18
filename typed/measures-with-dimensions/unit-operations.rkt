@@ -110,7 +110,7 @@
 (: unit-simplify-name : (All (d) [(Unitof d) -> (Unitof d)]))
 (define (unit-simplify-name u)
   (match-define (unit name scalar dimension) u)
-  (cond [(unit? name) u]
+  (cond [(unit? name) (unit-simplify-name (unit-rename u (unit->name name)))]
         [(symbol? name) u]
         [(find-named-unit u)
          => (lambda (u) u)]
@@ -146,22 +146,37 @@
       (hash-ref! scalar->units (unit-scalar u) (λ () (mutable-set))))
     (set-add! units u)))
 
-(: simplify-unit-name : [Any -> Any])
-(define (simplify-unit-name name)
-  (cond [(unit? name) name]
-        [(symbol? name) name]
-        [(and (list? name) (not (empty? name))
-              (symbol? (first name))
-              (member (first name) '(usqr usqrt uexpt u* u1/ u/)))
-         (with-handlers ([exn:fail? (λ (e) name)])
-           (simplify-unit-name/op name))]
-        [else name]))
-
 (define-type (Cons a b) (Pairof a b))
 
-(: simplify-unit-name/op : [(Cons Symbol (Listof Any)) -> Any])
+(define-type Op-Sym (U 'usqr 'usqrt 'uexpt 'u* 'u1/ 'u/))
+(define-type Name/Op (Cons Op-Sym (Listof Any)))
+(define name/op? (make-predicate Name/Op))
+
+(: unit->name : [Any -> Any])
+(define (unit->name name)
+  (cond [(Unit? name) (define u name)
+                      (define u.name (unit-name u))
+                      (when (Unit? u.name)
+                        (unless (unit=? u u.name)
+                          (error 'unit->name "bad: (unit (unit ~v ~v ~v) ~v ~v)"
+                                 (unit-name u.name) (unit-scalar u.name) (unit-dimension u.name)
+                                 (unit-scalar u) (unit-dimension u))))
+                      (unit->name (unit-name name))]
+        [else name]))
+
+(: simplify-unit-name : [Any -> Any])
+(define (simplify-unit-name name)
+  (unit->name
+   (cond [(unit? name) (simplify-unit-name (unit->name name))]
+         [(symbol? name) name]
+         [(name/op? name)
+          (with-handlers ([exn:fail? (λ (e) name)])
+            (simplify-unit-name/op name))]
+         [else name])))
+
+(: simplify-unit-name/op : [Name/Op -> Any])
 (define (simplify-unit-name/op name)
-  (hash->unit-name (unit-name->hash name)))
+  (unit->name (hash->unit-name (unit-name->hash name))))        
 
 (: hash->unit-name : [(HashTable (U Symbol Unit) Exact-Rational) -> Any])
 (define (hash->unit-name hash)
@@ -180,49 +195,57 @@
             [(= expt -1) `(u1/ ,key)]
             [(negative? expt) `(u1/ ,(simplify-unit-name/single-key-expt key (- expt)))]
             [else `(uexpt ,key ,expt)]))
-    (cond [(= keys.length 0) '1-unit]
-          [(= keys.length 1) (define key (first keys))
-                             (simplify-unit-name/single-key-expt key (hash-ref hash key))]
-          [else
-           (local [(define pos-expts
-                     (for/list ([(key expt) (in-hash hash)]
-                                #:when (not (negative? expt))) : (Listof Any)
-                       (simplify-unit-name/single-key-expt key expt)))
-                   (define neg-expts
-                     (for/list ([(key expt) (in-hash hash)]
-                                #:when (negative? expt)) : (Listof Any)
-                       (simplify-unit-name/single-key-expt key (- expt))))
-                   (define pos-expts.length (length pos-expts))
-                   (define neg-expts.length (length neg-expts))]
-             (cond [(= pos-expts.length 0) (cond [(= neg-expts.length 0) '1-unit]
-                                                 [(= neg-expts.length 1) `(u1/ ,(first neg-expts))]
-                                                 [else `(u1/ (u* ,@neg-expts))])]
-                   [(= pos-expts.length 1) (cond [(= neg-expts.length 0) (first pos-expts)]
-                                                 [(= neg-expts.length 1)
-                                                  `(u* ,(first pos-expts)
-                                                       (u1/ ,(first neg-expts)))]
-                                                 [else `(u* ,(first pos-expts)
-                                                            (u1/ (u* ,@neg-expts)))])]
-                   [else (cond [(= neg-expts.length 0) `(u* ,@pos-expts)]
-                               [(= neg-expts.length 1) `(u* (u* ,@pos-expts)
-                                                            (u1/ ,(first neg-expts)))]
-                               [else `(u* (u* ,@pos-expts)
-                                          (u1/ (u* ,@neg-expts)))])]))])))
+    (unit->name
+     (cond [(= keys.length 0) '1-unit]
+           [(= keys.length 1) (define key (first keys))
+                              (simplify-unit-name/single-key-expt key (hash-ref hash key))]
+           [else
+            (local [(define pos-expts
+                      (for/list ([(key expt) (in-hash hash)]
+                                 #:when (not (negative? expt))) : (Listof Any)
+                        (simplify-unit-name/single-key-expt key expt)))
+                    (define neg-expts
+                      (for/list ([(key expt) (in-hash hash)]
+                                 #:when (negative? expt)) : (Listof Any)
+                        (simplify-unit-name/single-key-expt key (- expt))))
+                    (define pos-expts.length (length pos-expts))
+                    (define neg-expts.length (length neg-expts))]
+              (cond [(= pos-expts.length 0) (cond [(= neg-expts.length 0) '1-unit]
+                                                  [(= neg-expts.length 1) `(u1/ ,(first neg-expts))]
+                                                  [else `(u1/ (u* ,@neg-expts))])]
+                    [(= pos-expts.length 1) (cond [(= neg-expts.length 0) (first pos-expts)]
+                                                  [(= neg-expts.length 1)
+                                                   `(u* ,(first pos-expts)
+                                                        (u1/ ,(first neg-expts)))]
+                                                  [else `(u* ,(first pos-expts)
+                                                             (u1/ (u* ,@neg-expts)))])]
+                    [else (cond [(= neg-expts.length 0) `(u* ,@pos-expts)]
+                                [(= neg-expts.length 1) `(u* (u* ,@pos-expts)
+                                                             (u1/ ,(first neg-expts)))]
+                                [else `(u* (u* ,@pos-expts)
+                                           (u1/ (u* ,@neg-expts)))])]))]))))
 
 (: unit-name->hash : [Any -> (HashTable (U Symbol Unit) Exact-Rational)])
 (define (unit-name->hash name)
   (: hash : [(U Symbol Unit) Integer -> (HashTable (U Symbol Unit) Exact-Rational)])
   (define (hash a b)
     (make-immutable-hash (list (cons a b))))
-  (cond [(unit? name) (hash (assert name Unit?) 1)]
+  (cond [(unit? name) (: sub-unit-name->hash :
+                         [Any -> (U (HashTable (U Symbol Unit) Exact-Rational) #f)])
+                      (define (sub-unit-name->hash name)
+                        (cond [(symbol? name) #f]
+                              [(unit? name) (sub-unit-name->hash (unit-name name))]
+                              [(name/op? name) (unit-name->hash/op name)]
+                              [else #f]))
+                      (cond [(sub-unit-name->hash name)
+                             => (lambda (hsh) hsh)]
+                            [else (hash (assert name Unit?) 1)])]
         [(symbol? name) (hash name 1)]
-        [(and (list? name) (not (empty? name))
-              (symbol? (first name))
-              (member (first name) '(usqr usqrt uexpt u* u1/ u/)))
+        [(name/op? name)
          (unit-name->hash/op name)]
         [else (error 'simplify-unit-name "bad unit name: ~v" name)]))
 
-(: unit-name->hash/op : [(Cons Symbol (Listof Any)) -> (HashTable (U Symbol Unit) Exact-Rational)])
+(: unit-name->hash/op : [Name/Op -> (HashTable (U Symbol Unit) Exact-Rational)])
 (define (unit-name->hash/op name)
   (define sym (first name))
   (define args (rest name))
@@ -275,16 +298,30 @@
   (require (submod "dimension-struct.rkt" untyped)
            (submod "unit-struct.rkt" untyped)
            (submod ".." untyped)
-           rackunit)
+           rackunit
+           racket/match
+           )
   (check-equal? (simplify-unit-name '1-unit) '1-unit)
   (let ([sym (gensym)])
     (check-equal? (simplify-unit-name sym) sym)
-    (check-equal? (simplify-unit-name (unit sym 2 dimensionless-dimension))
-                  (unit sym 2 dimensionless-dimension)))
+    (check-equal? (simplify-unit-name (unit sym 2 dimensionless-dimension)) sym))
   (check-equal? (simplify-unit-name '(u/ a a)) '1-unit)
   (check-equal? (simplify-unit-name '(u/ a (uexpt a 2))) '(u1/ a))
   (check-equal? (simplify-unit-name '(uexpt (u/ a (uexpt b 6) (usqr a) (u1/ a)) 1/3)) '(u1/ (usqr b)))
   (check-equal? (simplify-unit-name '(u/ (usqrt a) a)) '(u1/ (usqrt a)))
+  (let* ([a (unit 'a 1 dimensionless-dimension)]
+         [b (unit 'b 1 dimensionless-dimension)]
+         [ab (u* a b)]
+         [1/a (u1/ a)]
+         [1/b (u1/ b)])
+    (check-match (unit-name ab) (or `(u* ,(== a) ,(== b))
+                                    `(u* ,(== b) ,(== a))))
+    (check-equal? (unit-name 1/a) `(u1/ ,a))
+    (check-equal? (unit-name 1/b) `(u1/ ,b))
+    (check-equal? (unit-name (u/ a a)) '1-unit)
+    (check-equal? (unit-name (u/ a b)) `(u* ,a (u1/ ,b)))
+    (check-equal? (unit-name (u* a b (u1/ a))) 'b)
+    (check-equal? (unit-name (u/ ab a)) 'b)
+    (define a2 (unit 'a 2 dimensionless-dimension))
+    (check-equal? (unit-name (u/ a a2)) `(u* ,a (u1/ ,a2))))
   )
-
-
