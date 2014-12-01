@@ -17,9 +17,10 @@
 
 @subsection{Operations on Measures}
 
-@defform[(m expr-or-op ...)
-         #:grammar ([expr-or-op expr op]
-                    [op @#,tt{+} @#,tt{-} @#,tt{*} @#,tt{/} @#,tt{^}])]{
+@defform*[[(m expr-or-op ...)
+           (m expr-or-op ... : type)]
+          #:grammar ([expr-or-op expr op]
+                     [op @#,tt{+} @#,tt{-} @#,tt{*} @#,tt{/} @#,tt{^}])]{
 this macro lets you write measures and operations on measures using infix notation with the symbols
 @tt{+}, @tt{-}, @tt{*}, @tt{/}, and @tt{^}.
 
@@ -48,6 +49,8 @@ fixed.
   (m 1 meter ^ 2)
   (m 1 meter ^ 2 + 100 centimeter ^ 2)
   (m 1 foot + 3 inch)
+  (m (make-measure 1 meter) - (make-measure 50 centimeter)
+     : (Measureof (U Number (Vectorof Real)) Length-Unit))
 ]}
 
 @defproc[(m+ [m Measure] ...) Measure]{

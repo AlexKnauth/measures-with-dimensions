@@ -11,10 +11,12 @@
          (submod "typed-operations-1.rkt" untyped)
          "untyped-operations-2.rkt"
          (submod "typed-operations-3.rkt" untyped)
-         (only-in typed/racket/base assert)
+         (only-in typed/racket/base assert : ann)
          typed/untyped-utils
          (for-syntax racket/base
-                     syntax/parse))
+                     syntax/parse
+                     typed/untyped-utils
+                     ))
 
 (module+ test
   (require rackunit
@@ -55,6 +57,7 @@
 
 (define-syntax m
   (syntax-parser
+    [(m a:msum (~literal :) t:expr) #:when (syntax-local-typed-context?) #'(ann a.norm t)]
     [(m a:msum) #'a.norm]))
 
 
