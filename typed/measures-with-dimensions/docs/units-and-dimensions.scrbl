@@ -310,13 +310,25 @@ functions for the SI prefixes.
   @defthing[millimeter-of-mercury Pressure-Unit]
 ]]
 
-@section{Entropy}
+@section{Entropy, Heat Capacity, and Specific Heat}
 
 @deftogether[[
   @deftype[Entropy]
+  @deftype[Heat-Capacity]
+  @deftype[Specific-Heat]
+  @deftype[Molar-Specific-Heat]
   @deftype[Entropy-Dimension]
+  @deftype[Heat-Capacity-Dimension]
+  @deftype[Specific-Heat-Dimension]
+  @deftype[Molar-Specific-Heat-Dimension]
   @deftype[Entropy-Unit]
+  @deftype[Heat-Capacity-Unit]
+  @deftype[Specific-Heat-Unit]
+  @deftype[Molar-Specific-Heat-Unit]
   @defthing[entropy-dimension Entropy-Dimension]
+  @defthing[heat-capacity-dimension Heat-Capacity-Dimension]
+  @defthing[specific-heat-dimension Specific-Heat-Dimension]
+  @defthing[molar-specific-heat-dimension Molar-Specific-Heat-Dimension]
 ]]
 
 @section{Electric Field}

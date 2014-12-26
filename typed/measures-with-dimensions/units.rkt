@@ -76,6 +76,12 @@
 
 (define-type Entropy-Unit
   (Unitof Entropy-Dimension))
+(define-type Heat-Capacity-Unit
+  (Unitof Heat-Capacity-Dimension))
+(define-type Specific-Heat-Unit
+  (Unitof Specific-Heat-Dimension))
+(define-type Molar-Specific-Heat-Unit
+  (Unitof Molar-Specific-Heat-Dimension))
 
 (define-type Electric-Field-Unit
   (Unitof Electric-Field-Dimension))

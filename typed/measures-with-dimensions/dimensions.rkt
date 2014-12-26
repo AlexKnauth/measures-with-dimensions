@@ -188,6 +188,9 @@
   [pressure-dimension (d/ force-dimension area-dimension)]
   
   [entropy-dimension (d/ energy-dimension temperature-dimension)]
+  [heat-capacity-dimension entropy-dimension]
+  [specific-heat-dimension (d/ heat-capacity-dimension mass-dimension)]
+  [molar-specific-heat-dimension heat-capacity-dimension]
   
   [electric-field-dimension (d/ force-dimension charge-dimension)]
   [electric-potential-dimension (d/ energy-dimension charge-dimension)]

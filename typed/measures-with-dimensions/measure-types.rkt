@@ -2,116 +2,154 @@
 
 (provide (all-defined-out))
 
-(require "unit-struct.rkt"
+(require syntax/parse/define
+         "unit-struct.rkt"
          "unit-operations.rkt"
          "units.rkt"
          "measure-struct.rkt"
          "untyped-utils.rkt"
-         )
+         (for-syntax racket/base
+                     ))
 
-(define-type Dimensionless
-  (Measureof (U Real (Vectorof Real)) Dimensionless-Unit))
-(define-type Dimensionless-Number
-  (Measureof Real Dimensionless-Unit))
-(define-type Dimensionless-Vector
-  (Measureof (Vectorof Real) Dimensionless-Unit))
+(define-type Num||Vec (U Number (Vectorof Real)))
+(define-type Real||Vec (U Real (Vectorof Real)))
 
-(define-type Mass
-  (Measureof Nonnegative-Real Mass-Unit))
-(define-type Position
-  (Measureof (U Real (Vectorof Real)) Length-Unit))
-(define-type Length
-  (Measureof Nonnegative-Real Length-Unit))
-(define-type Position-Vector
-  (Measureof (Vectorof Real) Length-Unit))
-(define-type Time
-  (Measureof Real Time-Unit))
-(define-type Charge
-  (Measureof Real Charge-Unit))
-(define-type Absolute-Temperature
-  (Measureof Nonnegative-Real Absolute-Temperature-Unit))
+(define-simple-macro
+  (defmulti-types [id:id ty:expr] ...)
+  (begin (define-type id ty) ...))
 
-(define-type Area
-  (Measureof Nonnegative-Real Area-Unit))
-(define-type Volume
-  (Measureof Nonnegative-Real Volume-Unit))
+(define-simple-macro
+  (defmulti-types/Measureof unit-ty:expr
+    [id:id num-ty:expr] ...)
+  (defmulti-types [id (Measureof num-ty unit-ty)] ...))
 
-(define-type Mass-Density
-  (Measureof Nonnegative-Real Mass-Density-Unit))
-(define-type Charge-Density
-  (Measureof Real Charge-Density-Unit))
+(defmulti-types/Measureof Dimensionless-Unit
+  [Dimensionless Num||Vec]
+  [Dimensionless-Number Number]
+  [Dimensionless-Real Real]
+  [Dimensionless-Vector (Vectorof Real)])
+(define-type Dimensionless-Mesarue Dimensionless)
 
-(define-type Velocity
-  (Measureof (U Real (Vectorof Real)) Velocity-Unit))
-(define-type Speed
-  (Measureof Nonnegative-Real Speed-Unit))
-(define-type Velocity-Vector
-  (Measureof (Vectorof Real) Velocity-Unit))
-(define-type Acceleration
-  (Measureof (U Real (Vectorof Real)) Acceleration-Unit))
-(define-type Acceleration-Vector
-  (Measureof (Vectorof Real) Acceleration-Unit))
-(define-type Force
-  (Measureof (U Real (Vectorof Real)) Force-Unit))
-(define-type Force-Vector
-  (Measureof (Vectorof Real) Force-Unit))
-(define-type Momentum
-  (Measureof (U Real (Vectorof Real)) Momentum-Unit))
-(define-type Momentum-Vector
-  (Measureof (Vectorof Real) Momentum-Unit))
+(defmulti-types/Measureof Mass-Unit
+  [Mass Nonnegative-Real]
+  [Mass-Measure Num||Vec])
+(defmulti-types/Measureof Length-Unit
+  [Position Real||Vec]
+  [Length Nonnegative-Real]
+  [Position-Vector (Vectorof Real)]
+  [Length-Measure Num||Vec])
+(defmulti-types/Measureof Time-Unit
+  [Time Real]
+  [Time-Measure Num||Vec])
+(defmulti-types/Measureof Charge-Unit
+  [Charge Real]
+  [Charge-Measure Num||Vec])
+(defmulti-types/Measureof Absolute-Temperature-Unit
+  [Absolute-Temperature Nonnegative-Real]
+  [Temperature-Measure Num||Vec])
 
-(define-type Energy
-  (Measureof Real Energy-Unit))
-(define-type Work Energy)
-(define-type Torque
-  (Measureof (U Real (Vectorof Real)) Torque-Unit))
-(define-type Torque-Vector
-  (Measureof (Vectorof Real) Torque-Unit))
-(define-type Power
-  (Measureof Real Power-Unit))
+(defmulti-types/Measureof Area-Unit
+  [Area Nonnegative-Real]
+  [Area-Measure Num||Vec])
+(defmulti-types/Measureof Volume-Unit
+  [Volume Nonnegative-Real]
+  [Volume-Measure Num||Vec])
 
-(define-type Pressure
-  (Measureof Nonnegative-Real Pressure-Unit))
+(defmulti-types/Measureof Mass-Density-Unit
+  [Mass-Density Nonnegative-Real]
+  [Mass-Density-Measure Num||Vec])
+(defmulti-types/Measureof Charge-Density-Unit
+  [Charge-Density Real]
+  [Change-Density-Measure Num||Vec])
 
-(define-type Entropy
-  (Measureof Real Entropy-Unit))
+(defmulti-types/Measureof Velocity-Unit
+  [Velocity Real||Vec]
+  [Speed Nonnegative-Real]
+  [Velocity-Vector (Vectorof Real)]
+  [Velocity-Measure Num||Vec])
+(defmulti-types/Measureof Acceleration-Unit
+  [Acceleration Real||Vec]
+  [Acceleration-Vector (Vectorof Real)]
+  [Acceleration-Measure Num||Vec])
+(defmulti-types/Measureof Force-Unit
+  [Force Real||Vec]
+  [Force-Vector (Vectorof Real)]
+  [Force-Measure Num||Vec])
+(defmulti-types/Measureof Momentum-Unit
+  [Momentum Real||Vec]
+  [Momentum-Vector (Vectorof Real)]
+  [Momentum-Measure Num||Vec])
 
-(define-type Electric-Field
-  (Measureof (U Real (Vectorof Real)) Electric-Field-Unit))
-(define-type Electric-Field-Vector
-  (Measureof (Vectorof Real) Electric-Field-Unit))
-(define-type Electric-Potential
-  (Measureof Real Electric-Potential-Unit))
-(define-type Voltage Electric-Potential)
-(define-type Emf Voltage)
-(define-type Capacitance
-  (Measureof Nonnegative-Real Capacitance-Unit))
+(defmulti-types/Measureof Energy-Unit
+  [Energy Real]
+  [Work Energy]
+  [Energy/Work/Torqe-Measure Num||Vec])
+(defmulti-types/Measureof Torque-Unit
+  [Torque Real||Vec]
+  [Torque-Vector (Vectorof Real)])
+(defmulti-types/Measureof Power-Unit
+  [Power Real]
+  [Power-Measure Num||Vec])
 
-(define-type Current
-  (Measureof Real Current-Unit))
-(define-type Current-Density
-  (Measureof (U Real (Vectorof Real)) Current-Density-Unit))
-(define-type Current-Density-Vector
-  (Measureof (Vectorof Real) Current-Density-Unit))
-(define-type Resistance
-  (Measureof Nonnegative-Real Resistance-Unit))
-(define-type Resistivity
-  (Measureof Nonnegative-Real Resistivity-Unit))
-(define-type Conductivity
-  (Measureof Nonnegative-Real Conductivity-Unit))
+(defmulti-types/Measureof Pressure-Unit
+  [Pressure Nonnegative-Real]
+  [Pressure-Measure Num||Vec])
 
-(define-type Magnetic-Field
-  (Measureof (U Real (Vectorof Real)) Magnetic-Field-Unit))
-(define-type Magnetic-Field-Vector
-  (Measureof (Vectorof Real) Magnetic-Field-Unit))
+(defmulti-types/Measureof Entropy-Unit
+  [Entropy Real]
+  [Heat-Capacity Nonnegative-Real]
+  [Molar-Specific-Heat Nonnegative-Real]
+  [Entropy/Heat-Capacity/Molar-Specific-Heat-Measure Num||Vec])
+(defmulti-types/Measureof Specific-Heat-Unit
+  [Specific-Heat Nonnegative-Real]
+  [Specific-Heat-Measure Num||Vec])
 
-(define-type Electric-Flux
-  (Measureof Real Electric-Flux-Unit))
-(define-type Magnetic-Flux
-  (Measureof Real Magnetic-Flux-Unit))
+(defmulti-types/Measureof Electric-Field-Unit
+  [Electric-Field Real||Vec]
+  [Electric-Field-Vector (Vectorof Real)]
+  [Electric-Field-Measure Num||Vec])
+(defmulti-types/Measureof Electric-Potential-Unit
+  [Electric-Potential Real]
+  [Electric-Potential-Measure Num||Vec])
+(defmulti-types
+  [Voltage Electric-Potential]
+  [Emf Voltage])
+(defmulti-types/Measureof Capacitance-Unit
+  [Capacitance Nonnegative-Real]
+  [Capacitance-Measure Num||Vec])
 
-(define-type Inductance
-  (Measureof Nonnegative-Real Inductance-Unit))
+(defmulti-types/Measureof Current-Unit
+  [Current Real]
+  [Current-Measure Num||Vec])
+(defmulti-types/Measureof Current-Density-Unit
+  [Current-Density Real||Vec]
+  [Current-Density-Vector (Vectorof Real)]
+  [Current-Density-Measure Num||Vec])
+(defmulti-types/Measureof Resistance-Unit
+  [Resistance Nonnegative-Real]
+  [Resistance-Measure Num||Vec])
+(defmulti-types/Measureof Resistivity-Unit
+  [Resistivity Nonnegative-Real]
+  [Resistivity-Measure Num||Vec])
+(defmulti-types/Measureof Conductivity-Unit
+  [Conductivity Nonnegative-Real]
+  [Conductivity-Measure Num||Vec])
+
+(defmulti-types/Measureof Magnetic-Field-Unit
+  [Magnetic-Field Real||Vec]
+  [Magnetic-Field-Vector (Vectorof Real)]
+  [Magnetic-Field-Measure Num||Vec])
+
+(defmulti-types/Measureof Electric-Flux-Unit
+  [Electric-Flux Real]
+  [Electric-Flux-Measure Num||Vec])
+(defmulti-types/Measureof Magnetic-Flux-Unit
+  [Magnetic-Flux Real]
+  [Magnetic-Flux-Measure Num||Vec])
+
+(defmulti-types/Measureof Inductance-Unit
+  [Inductance Nonnegative-Real]
+  [Inductance-Measure Num||Vec])
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
