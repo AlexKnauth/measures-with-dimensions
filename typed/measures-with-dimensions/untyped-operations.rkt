@@ -9,8 +9,6 @@
          (submod "measure-struct.rkt" untyped)
          (submod "physical-constants.rkt" untyped)
          (submod "typed-operations-1.rkt" untyped)
-         "untyped-operations-2.rkt"
-         (submod "typed-operations-3.rkt" untyped)
          (only-in typed/racket/base assert : ann)
          typed/untyped-utils
          (for-syntax racket/base
@@ -21,8 +19,6 @@
 (module+ test
   (require rackunit
            (submod "units.rkt" untyped)))
-
-(define-typed/untyped-identifier m* typed:m* untyped:m*)
 
 (begin-for-syntax
   (define-syntax-class mexpr #:description "non-operation expression"

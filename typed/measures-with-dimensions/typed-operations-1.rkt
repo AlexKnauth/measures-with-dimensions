@@ -1,6 +1,6 @@
 #lang typed/racket
 
-(provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector)
+(provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m*)
 
 (require "dimension-struct.rkt"
          "dimension-operations.rkt"
@@ -159,37 +159,80 @@
                           (Measure-sig-figs e)))))
 
 (: m*/scalar : [Number-Measure * -> Number-Measure])
-  ;; Note: accepts Number-Measure, not Number-Measureish
-  (define (m*/scalar . args)
-    (define-values (ns us sfs)
-      (for/lists ([ns : (Listof Number)] [us : (Listof Unit)] [sfs : (Listof Sig-Figs)])
-        ([m : Number-Measure (in-list args)])
-        (values (measure-number m)
-                (measure-unit m)
-                (measure-sig-figs m))))
-    (measure (apply * ns)
-             (apply u* us)
-             (apply sig-fig-min sfs)))
-  
-  (: m*/vector : [Number-Measure Vector-Measure -> Vector-Measure])
-  ;; Note: accepts _-Measure, not _-Measureish
-  (define (m*/vector nm vm)
-    (: vm.v : (Vectorof Real))
-    (define vm.v (measure-number vm))
-    (: nm.n : Real)
-    (define nm.n (assert (measure-number nm) real?))
-    (measure (v* nm.n vm.v)
-             (u* (Measure-unit nm)
-                 (Measure-unit vm))
-             (sig-fig-min (Measure-sig-figs nm)
-                          (Measure-sig-figs vm))))
+;; Note: accepts Number-Measure, not Number-Measureish
+(define (m*/scalar . args)
+  (define-values (ns us sfs)
+    (for/lists ([ns : (Listof Number)] [us : (Listof Unit)] [sfs : (Listof Sig-Figs)])
+      ([m : Number-Measure (in-list args)])
+      (values (measure-number m)
+              (measure-unit m)
+              (measure-sig-figs m))))
+  (measure (apply * ns)
+           (apply u* us)
+           (apply sig-fig-min sfs)))
 
+(: m*/vector : [Number-Measure Vector-Measure -> Vector-Measure])
+;; Note: accepts _-Measure, not _-Measureish
+(define (m*/vector nm vm)
+  (: vm.v : (Vectorof Real))
+  (define vm.v (measure-number vm))
+  (: nm.n : Real)
+  (define nm.n (assert (measure-number nm) real?))
+  (measure (v* nm.n vm.v)
+           (u* (Measure-unit nm)
+               (Measure-unit vm))
+           (sig-fig-min (Measure-sig-figs nm)
+                        (Measure-sig-figs vm))))
+
+(: m*/no-special-case : (case-> [Number-Measure * -> Number-Measure]
+                                [Measureish * -> Measure]))
+(define (m*/no-special-case . args)
+  (let ([args (map ->measure args)])
+    (: vector-measure? : [Measure -> Boolean])
+    (define (vector-measure? m)
+      (vector? (measure-number m)))
+    (define-values (vectors scalars)
+      (partition vector-measure? args))
+    (define scalars*
+      (for/list : (Listof Number-Measure) ([scalar (in-list scalars)])
+        (assert scalar number-measure?)))
+    (match vectors
+      [(list)
+       (apply m*/scalar scalars*)]
+      [(list v)
+       (when (andmap number-measureish? args) (error 'm* "this should never happen"))
+       (m*/vector (apply m*/scalar scalars*) (cast v Vector-Measure))]
+      [vectors
+       (error 'm*
+              (string-append
+               "can't multiply 2 or more vectors together" "\n"
+               "  use mdot or mcross instead" "\n"
+               "  given: ~v")
+              vectors)])))
+
+(: m* : (All (d) (case-> [Number (Unitof d) -> (Measureof Number (Unitof d))]
+                         [(Vectorof Real) (Unitof d) -> (Measureof (Vectorof Real) (Unitof d))]
+                         [Number-Measure * -> Number-Measure]
+                         [Measureish * -> Measure])))
+(define m*
+  (case-lambda
+    [(n u)
+     (cond [(unit? u)
+            (cond [(number? n) (make-measure n u)]
+                  [(vector? n)
+                   (make-measure (cast n (Vectorof Real)) u)]
+                  [else
+                   (m*/no-special-case n (assert u Unit?))])]
+           [else (m*/no-special-case n u)])]
+    [args (apply m*/no-special-case args)]))
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
+ [#:begin (require "measure-struct.rkt")]
+ [m* [Measureish * -> Measure]]
  )
 
 
