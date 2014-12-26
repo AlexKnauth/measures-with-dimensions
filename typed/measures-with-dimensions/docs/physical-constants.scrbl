@@ -14,7 +14,7 @@
 @title{Physical Constants}
 
 @deftogether[[
-  @defthing[0-measure (Measureof 0 Dimensionless-Unit)]
+  @defthing[0-measure Zero-Measure]
   @defthing[1-measure (Measureof 1 Dimensionless-Unit)]
   @defthing[g Acceleration]
   @defthing[G Number-Measure]

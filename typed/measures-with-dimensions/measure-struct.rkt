@@ -25,8 +25,12 @@
           (cond [(equal? x +inf.0) +inf.0]
                 [else (cast (inexact->exact x) Sig-Figs)])]))
 
+(define-type Vec (Vectorof Real))
+(define-type Num/Vec (U Number Vec))
+(define-type Real/Vec (U Real Vec))
+
 (define-type Measure
-  (Measureof (U Number (Vectorof Real)) Unit))
+  (Measureof Num/Vec Unit))
 
 (define-type (Measureof n u)
   (measure n u Sig-Figs))
@@ -34,14 +38,23 @@
 (define-type (Number-Measureof u)
   (Measureof Number u))
 
+(define-type (Real-Measureof u)
+  (Measureof Real u))
+
 (define-type Number-Measure
   (Number-Measureof Unit))
 
+(define-type Real-Measure
+  (Real-Measureof Unit))
+
 (define-type (Vector-Measureof u)
-  (Measureof (Vectorof Real) u))
+  (Measureof Vec u))
 
 (define-type Vector-Measure
   (Vector-Measureof Unit))
+
+(define-type Zero-Measure
+  (Measureof Zero Dimensionless-Unit))
 
 (define-type Measureish
   (U Measure
@@ -53,6 +66,12 @@
 (define-type Number-Measureish
   (U Number-Measure
      Number
+     Unitish
+     Dimension))
+
+(define-type Real-Measureish
+  (U Real-Measure
+     Real
      Unitish
      Dimension))
 
@@ -95,6 +114,9 @@
 
 (define number-measure? (make-predicate Number-Measure))
 (define number-measureish? (make-predicate Number-Measureish))
+(define real-measure? (make-predicate Real-Measure))
+(define real-measureish? (make-predicate Real-Measureish))
+(define zero-measure? (make-predicate Zero-Measure))
 
 
 
@@ -129,7 +151,7 @@
   (: v.length : Index)
   (define v.length (vector-length v))
   (cond [(zero? v.length)
-         (measure (ann #() (Vectorof Real)) 1-unit +inf.0)]
+         (measure (ann #() Vec) 1-unit +inf.0)]
         [else
          (let* ([ms : (Listof Measure)
                     (for/list : (Listof Measure) ([m : Any (in-vector v)])
@@ -146,7 +168,7 @@
                (unless (real? n)
                  (error 'vector->measure "vector contains a non-real number in: ~v" n))
                n))
-           (: new-v : (Vectorof Real))
+           (: new-v : Vec)
            (define new-v
              (apply (inst vector-immutable Real) ns))
            (: sig-figs : Sig-Figs)
@@ -155,23 +177,23 @@
 
 
 
-(: measure-dimension : (All (d) [(measure (U Number (Vectorof Real)) (Unitof d) Sig-Figs) -> d]))
+(: measure-dimension : (All (d) [(measure Num/Vec (Unitof d) Sig-Figs) -> d]))
 (define (measure-dimension m)
   (unit-dimension (measure-unit m)))
 
-(: Measure-number : [Measure -> (U Number (Vectorof Real))])
+(: Measure-number : [Measure -> Num/Vec])
 (: Measure-unit : [Measure -> Unit])
 (: Measure-dimension : [Measure -> Dimension])
 (: Measure-sig-figs : [Measure -> Sig-Figs])
 
-(: make-Measure : (All (d) (case-> (-> (U Number (Vectorof Real)) (Unitof d)
-                                       (Measureof (U Number (Vectorof Real)) (Unitof d)))
-                                   (-> (U Number (Vectorof Real)) (Unitof d) Sig-Figs
-                                       (Measureof (U Number (Vectorof Real)) (Unitof d)))
+(: make-Measure : (All (d) (case-> (-> Num/Vec (Unitof d)
+                                       (Measureof Num/Vec (Unitof d)))
+                                   (-> Num/Vec (Unitof d) Sig-Figs
+                                       (Measureof Num/Vec (Unitof d)))
                                    (-> Number Unitish Number-Measure)
-                                   (-> (Vectorof Real) Unitish Vector-Measure)
-                                   (-> (U Number (Vectorof Real)) Unitish Measure)
-                                   (-> (U Number (Vectorof Real)) Unitish Sig-Figs Measure))))
+                                   (-> Vec Unitish Vector-Measure)
+                                   (-> Num/Vec Unitish Measure)
+                                   (-> Num/Vec Unitish Sig-Figs Measure))))
 (define (make-Measure num u [sf +inf.0])
   (measure num (->unit u) sf))
 (define (Measure-number m)
@@ -186,26 +208,26 @@
 (: measure=? : [Measureish Measureish * -> Boolean])
 (define (measure=? m . rst)
   (let* ([m : Measure (->measure m)]
-         [m.number : (U Number (Vectorof Real)) (measure-number m)]
+         [m.number : Num/Vec (measure-number m)]
          [m.unit : Unit (measure-unit m)]
          [m.dimension : Dimension (unit-dimension m.unit)])
     (cond [(number? m.number) (let: ([m.number*u.scalar : Number (* m.number (Unit-scalar m.unit))])
                                 (for/and: : Boolean ([m2 : Measureish (in-list rst)])
                                   (let* ([m2 : Measure (->measure m2)]
-                                         [m2.number : (U Number (Vectorof Real)) (Measure-number m2)]
+                                         [m2.number : Num/Vec (Measure-number m2)]
                                          [m2.unit : Unit (Measure-unit m2)])
                                     (and (number? m2.number)
                                          (let: ([m2.number*u2.scalar : Number (* m2.number (Unit-scalar m2.unit))]
                                                 [m2.dimension : Dimension (Unit-dimension m2.unit)])
                                            (and (= m.number*u.scalar m2.number*u2.scalar)
                                                 (dimension=? m.dimension m2.dimension)))))))]
-          [(vector? m.number) (let: ([m.number*u.scalar : (Vectorof Real) (v* (Unit-scalar m.unit) m.number)])
+          [(vector? m.number) (let: ([m.number*u.scalar : Vec (v* (Unit-scalar m.unit) m.number)])
                                 (for/and: : Boolean ([m2 : Measureish (in-list rst)])
                                   (let* ([m2 : Measure (->measure m2)]
-                                         [m2.number : (U Number (Vectorof Real)) (Measure-number m2)]
+                                         [m2.number : Num/Vec (Measure-number m2)]
                                          [m2.unit : Unit (Measure-unit m2)])
                                     (and (vector? m2.number)
-                                         (let: ([m2.number*u2.scalar : (Vectorof Real) (v* (Unit-scalar m2.unit) m2.number)]
+                                         (let: ([m2.number*u2.scalar : Vec (v* (Unit-scalar m2.unit) m2.number)]
                                                 [m2.dimension : Dimension (Unit-dimension m2.unit)])
                                            (and (v=? m.number*u.scalar m2.number*u2.scalar)
                                                 (dimension=? m.dimension m2.dimension)))))))]
@@ -216,11 +238,11 @@
 
 (: convert : (All (d)
                   (case->
-                   [Measure (Unitof d) -> (Measureof (U Number (Vectorof Real)) (Unitof d))]
-                   [(U Number (Vectorof Real)) Unitish (Unitof d) -> (Measureof (U Number (Vectorof Real)) (Unitof d))]
+                   [Measure (Unitof d) -> (Measureof Num/Vec (Unitof d))]
+                   [Num/Vec Unitish (Unitof d) -> (Measureof Num/Vec (Unitof d))]
                    [Number-Measure Unitish -> Number-Measure]
                    [Measure Unitish -> Measure]
-                   [(U Number (Vectorof Real)) Unitish Unitish -> Measure])))
+                   [Num/Vec Unitish Unitish -> Measure])))
 (define convert
   (case-lambda
     [(m u2)
@@ -234,14 +256,14 @@
                                                        (unit-scalar u2)))
                                              u2
                                              (Measure-sig-figs m)))]
-             [else (let: ([num : (Vectorof Real) (cast (Measure-number m) (Vectorof Real))]
+             [else (let: ([num : Vec (cast (Measure-number m) Vec)]
                           [u1 : Unit (Measure-unit m)])
                      (measure (v* (/ (unit-scalar u1)
                                      (unit-scalar u2))
                                   num)
                               u2
                               (Measure-sig-figs m)))]))]
-    [([n : (U Number (Vectorof Real))] [u1 : Unitish] u2)
+    [([n : Num/Vec] [u1 : Unitish] u2)
      (convert (make-Measure n u1) u2)]))
 
 
@@ -250,10 +272,10 @@
 
 (untyped-module*
  [#:begin (require "unit-struct.rkt")]
- [make-Measure (->* [(U Number (Vectorof Real)) Unitish] [Sig-Figs] Measure)]
+ [make-Measure (->* [Num/Vec Unitish] [Sig-Figs] Measure)]
  [->measure (-> Measureish Measure)]
  [convert (case-> [-> Measure Unitish Measure]
-                  [-> (U Number (Vectorof Real)) Unitish Unitish Measure])]
+                  [-> Num/Vec Unitish Unitish Measure])]
  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

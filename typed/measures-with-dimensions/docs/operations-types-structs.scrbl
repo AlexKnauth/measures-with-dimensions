@@ -37,7 +37,7 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
   (m 1 meter ^ 2)
   (m 1 meter ^ 2 + 100 centimeter ^ 2)
   (m 1 foot + 3 inch)
-  (m 1 meter - 50 centimeter : (Measureof (U Number (Vectorof Real)) Length-Unit))
+  (m 1 meter - 50 centimeter : Length-Real-Measure)
 ]}
 
 @defproc[(m+ [m Measure] ...) Measure]{
@@ -55,7 +55,7 @@ the result to be what you want, or using @racket[inst] to instantiate it for a c
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
-  (ann (m+) (Measureof 0 Dimensionless-Unit))
+  (ann (m+) Zero-Measure)
   (m+ (m 1 meter))
   (m+ (m 1 meter) (m 50 centimeter))
   (m 1 foot + 3 inch)
