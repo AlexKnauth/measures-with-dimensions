@@ -238,6 +238,9 @@
 
 (: convert : (All (d)
                   (case->
+                   [Real-Measure (Unitof d) -> (Real-Measureof (Unitof d))]
+                   [Number-Measure (Unitof d) -> (Number-Measureof (Unitof d))]
+                   [Vector-Measure (Unitof d) -> (Vector-Measureof (Unitof d))]
                    [Measure (Unitof d) -> (Measureof Num/Vec (Unitof d))]
                    [Num/Vec Unitish (Unitof d) -> (Measureof Num/Vec (Unitof d))]
                    [Number-Measure Unitish -> Number-Measure]
@@ -250,7 +253,7 @@
            [u2 (->unit u2)])
        (unless (dimension=? (Measure-dimension m) (assert (Unit-dimension u2) Dimension?))
          (error 'convert "cannot convert between dimensions, given: (convert ~v ~v)" m u2))
-       (cond [(number-measure? m) (let: ([num : Number (cast (Measure-number m) Number)]
+       (cond [(number-measure? m) (let: ([num (measure-number m)]
                                          [u1 : Unit (Measure-unit m)])
                                     (measure (* num (/ (unit-scalar u1)
                                                        (unit-scalar u2)))

@@ -29,5 +29,7 @@ and functions and macros to manipulate these.
 
 @include-section["physical-constants.scrbl"]
 
+@include-section["temperature.scrbl"]
+
 @include-section["short-names.scrbl"]
 

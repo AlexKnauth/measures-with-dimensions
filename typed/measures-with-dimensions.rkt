@@ -10,6 +10,7 @@
                        "measures-with-dimensions/physical-constants.rkt"
                        "measures-with-dimensions/measure-types.rkt"
                        "measures-with-dimensions/typed-operations.rkt"
+                       "measures-with-dimensions/temperature.rkt"
                        ))
 
 (require "measures-with-dimensions/dimension-struct.rkt"
@@ -22,6 +23,7 @@
          "measures-with-dimensions/physical-constants.rkt"
          "measures-with-dimensions/measure-types.rkt"
          "measures-with-dimensions/typed-operations.rkt"
+         "measures-with-dimensions/temperature.rkt"
          "measures-with-dimensions/untyped-utils.rkt"
          )
 
@@ -35,5 +37,6 @@
              (submod "measures-with-dimensions/measure-struct.rkt" untyped)
              (submod "measures-with-dimensions/physical-constants.rkt" untyped)
              (submod "measures-with-dimensions/measure-types.rkt" untyped)
+             (submod "measures-with-dimensions/temperature.rkt" untyped)
              "measures-with-dimensions/untyped-operations.rkt"
              ])
