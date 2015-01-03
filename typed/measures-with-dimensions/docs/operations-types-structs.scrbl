@@ -48,7 +48,7 @@ Note for typed racket users: when the typechecker typechecks @racket[m+], it doe
 that its arguments have the same dimensions (it does check at runtime).  Instead it typechecks as
 returning a measure with a union of the dimensions of its arguments.  For example,
 @racket[(m+ (make-measure 1 meter) (make-measure 1 second))] typechecks as something that could have
-either the length dimension or the second dimension.  You can fix this by either requiring the type of
+either the length dimension or the time dimension.  You can fix this by either requiring the type of
 the result to be what you want, or using @racket[inst] to instantiate it for a certain dimension.  
 }
 
