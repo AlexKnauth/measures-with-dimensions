@@ -14,7 +14,8 @@
 @title[#:style '(toc)]{measures-with-dimensions}
 
 @defmodule[#:multi [typed/measures-with-dimensions
-                    (submod typed/measures-with-dimensions untyped)]]
+                    (submod typed/measures-with-dimensions untyped)
+                    measures-with-dimensions]]
 
 source code: @url["https://github.com/AlexKnauth/measures-with-dimensions"]
 
