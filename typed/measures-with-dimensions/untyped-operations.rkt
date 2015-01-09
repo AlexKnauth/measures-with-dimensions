@@ -22,9 +22,21 @@
 
 (begin-for-syntax
   (define-syntax-class mexpr #:description "non-operation expression"
-    #:attributes (norm) #:datum-literals (+ - * / ^)
-    [pattern (~and expr:expr (~not (~or + - * / ^)))
+    #:attributes (norm) #:literals (:) #:datum-literals (+ - * / ^ =)
+    [pattern (~and expr:expr (~not (~or + - * / ^ = :)))
              #:with norm #'expr])
+  (define-splicing-syntax-class mwith #:description "a math expression"
+    #:attributes (norm) #:datum-literals (=)
+    [pattern (~seq #:with a:m-ann #:as id:id (~optional #:in) b:mwith)
+             #:with norm #'(let ([id a.norm]) b.norm)]
+    [pattern (~seq #:let id:id = a:m-ann #:in b:mwith)
+             #:with norm #'(let ([id a.norm]) b.norm)]
+    [pattern (~seq a:m-ann) #:with norm #'a.norm])
+  (define-splicing-syntax-class m-ann #:description "a math expression"
+    #:attributes (norm) #:literals (:)
+    [pattern (~seq a:msum : t:expr) #:when (syntax-local-typed-context?)
+             #:with norm #'(ann a.norm : t)]
+    [pattern (~seq a:msum) #:with norm #'a.norm])
   (define-splicing-syntax-class msum #:description "a math expression"
     #:attributes (norm)
     [pattern (~seq (~or a:mproduct a:+-mproduct)) #:with norm #'a.norm]
@@ -53,8 +65,7 @@
 
 (define-syntax m
   (syntax-parser
-    [(m a:msum (~literal :) t:expr) #:when (syntax-local-typed-context?) #'(ann a.norm t)]
-    [(m a:msum) #'a.norm]))
+    [(m a:mwith) #'a.norm]))
 
 
 
@@ -73,5 +84,13 @@
   (check-m=? (m (m 2 meter) ^ 2) (m 4 square-meter))
   (check-m=? (m 1 kilogram meter / second ^ 2) (m 1 newton))
   (check-m=? (m 1 newton meter) (m 1 joule))
+  (check-m=? (m #:with 1 meter + 2 meter #:as a
+                #:with 3 meter + 4 meter #:as b
+                a + b)
+             (m 10 meter))
+  (check-m=? (m #:with 1 meter + 2 meter #:as a
+                #:let b = 3 meter + 4 meter #:in
+                a + b)
+             (m 10 meter))
   
   )
