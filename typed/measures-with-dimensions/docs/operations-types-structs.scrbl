@@ -40,7 +40,7 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
   (m 1 meter - 50 centimeter : Length-Real-Measure)
 ]}
 
-@defproc[(m+ [m Measure] ...) Measure]{
+@defproc[(m+ [m Measureish] ...) Measure]{
 adds the measures together.
 
 @margin-note{
@@ -62,7 +62,7 @@ the result to be what you want, or using @racket[inst] to instantiate it for a c
   ((inst m+ Length-Dimension) (m 1 meter) (m 50 centimeter))
 ]}
 
-@defproc[(m- [m Measure]) Measure]{
+@defproc[(m- [m Measureish]) Measure]{
 negates a measure.  To do subtraction, either use the @racket[m] macro or use a pattern like
 @racket[(m+ a (m- b))].
 

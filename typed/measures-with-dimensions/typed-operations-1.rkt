@@ -34,6 +34,7 @@
                          [-> Number Number * (Measureof Number Dimensionless-Unit)]
                          [-> VectorTop VectorTop * Vector-Measure]
                          [-> Measureish Measureish * Measure]
+                         [-> Measureish * Measure]
                          )))
 (define m+
   (case-lambda
@@ -51,7 +52,9 @@
             (apply m+/lenient (->measure (->unit m1)) rst*)]
            [(measure? m1*)
             (apply m+/lenient m1 rst*)]
-           [else (error 'm+ "expected Measure, given ~v" m1)])]))
+           [else (error 'm+ "expected Measure, given ~v" m1)])]
+    [ms (cond [(empty? ms) 0-measure]
+              [else (apply m+ (first ms) (rest ms))])]))
 
 (: m+/lenient : (All (d) (case-> [-> (Measureof 0 Dimensionless-Unit)]
                                  [-> (Measureof Real (Unitof d)) Measureish *
@@ -159,16 +162,36 @@
 
 
 
-(: m- : (All (u) (case-> [-> (Measureof Real u)
-                             (Measureof Real u)]
-                         [-> (Measureof Number u)
-                             (Measureof Number u)]
-                         [-> (Measureof Vec u)
-                             (Measureof Vec u)]
-                         [-> (Measureof Num/Vec u)
-                             (Measureof Num/Vec u)])))
+(: m- : (All (d) (case-> [-> (U (Measureof Real (Unitof d)) (Unitof d))
+                             (Measureof Real (Unitof d))]
+                         [-> (U (Measureof Number (Unitof d)) (Unitof d))
+                             (Measureof Number (Unitof d))]
+                         [-> (Measureof Vec (Unitof d))
+                             (Measureof Vec (Unitof d))]
+                         [-> (U (Measureof Num/Vec (Unitof d)) (Unitof d))
+                             (Measureof Num/Vec (Unitof d))]
+                         [-> Real (Measureof Real Dimensionless-Unit)]
+                         [-> Number (Measureof Number Dimensionless-Unit)]
+                         [-> Vec Vector-Measure]
+                         [-> Measureish Measure]
+                         )))
 (define (m- m)
-  (: u : u)
+  (cond [(measure? m) (m-/measure m)]
+        [(unit? m)    (m-/measure (->measure m))]
+        [(number? m)  (m-/measure (number->measure m))]
+        [(vector? m)  (m-/measure (vector->measure m))]
+        [else         (m-/measure (->measure m))]))
+
+(: m-/measure : (All (d) (case-> [-> (Measureof Real (Unitof d))
+                                     (Measureof Real (Unitof d))]
+                                 [-> (Measureof Number (Unitof d))
+                                     (Measureof Number (Unitof d))]
+                                 [-> (Measureof Vec (Unitof d))
+                                     (Measureof Vec (Unitof d))]
+                                 [-> (Measureof Num/Vec (Unitof d))
+                                     (Measureof Num/Vec (Unitof d))])))
+(define (m-/measure m)
+  (: u : (Unitof d))
   (define u (measure-unit m))
   (define n (measure-number m))
   (: sig-figs : Sig-Figs)
@@ -278,10 +301,8 @@
 (untyped-module*
  [#:begin (require "unit-struct.rkt" "measure-struct.rkt")]
  [m* [Measureish * -> Measure]]
- [m+ (case-> [-> Zero-Measure]
-             [-> Measureish Measureish * Measure])]
- [m- [-> (Measureof Num/Vec Unit)
-         (Measureof Num/Vec Unit)]]
+ [m+ [Measureish * -> Measure]]
+ [m- [Measureish -> Measure]]
  )
 
 
