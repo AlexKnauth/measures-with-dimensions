@@ -84,13 +84,13 @@
   (check-m=? (m (m 2 meter) ^ 2) (m 4 square-meter))
   (check-m=? (m 1 kilogram meter / second ^ 2) (m 1 newton))
   (check-m=? (m 1 newton meter) (m 1 joule))
-  (check-m=? (m #:with 1 meter + 2 meter #:as a
-                #:with 3 meter + 4 meter #:as b
+  (check-m=? (m #:with 1 + 2 #:as a
+                #:with 3 + 4 #:as b
                 a + b)
-             (m 10 meter))
-  (check-m=? (m #:with 1 meter + 2 meter #:as a
-                #:let b = 3 meter + 4 meter #:in
+             10)
+  (check-m=? (m #:with 1 + 2 #:as a
+                #:let b = 3 + 4 #:in
                 a + b)
-             (m 10 meter))
+             10)
   
   )

@@ -125,6 +125,8 @@
                              -> (measure n (Unitof d) sfs)]
                             [(Unitof d)
                              -> (measure 1 (Unitof d) +inf.0)]
+                            [Real -> (Measureof Real Dimensionless-Unit)]
+                            [Number -> (Measureof Number Dimensionless-Unit)]
                             [Number-Measure -> Number-Measure]
                             [Vector-Measure -> Vector-Measure]
                             [Measureish -> Measure])))
@@ -138,11 +140,13 @@
         ;[else (error '->measure "could not convert to a measure. given: ~v" m)]
         ))
 
-(: number->measure : [Number -> Number-Measure])
+(: number->measure : (All (n) (case-> [n -> (Measureof n Dimensionless-Unit)]
+                                      [Number -> Number-Measure])))
 (define (number->measure n)
-  (cond [(exact? n) (measure n 1-unit +inf.0)]
-        [(double-flonum? n) (measure n 1-unit 53)] ; FIXME: shouldn't count end zeros
-        [(single-flonum? n) (measure n 1-unit 52/2)] ; what should this be?
+  (define n* : Number (assert n number?))
+  (cond [(exact? n*) (measure n 1-unit +inf.0)]
+        [(double-flonum? n*) (measure n 1-unit 53)] ; FIXME: shouldn't count end zeros
+        [(single-flonum? n*) (measure n 1-unit 52/2)] ; what should this be?
         [else (measure n 1-unit +inf.0)]))
 
 

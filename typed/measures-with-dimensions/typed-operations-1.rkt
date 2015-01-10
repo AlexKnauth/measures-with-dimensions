@@ -18,23 +18,40 @@
                [number (assert (measure-number m) real?)]))
 
 (: m+ : (All (d) (case-> [-> (Measureof 0 Dimensionless-Unit)]
-                         [-> (Measureof Real (Unitof d))
-                             (Measureof Real (Unitof d)) *
+                         [-> (U (Measureof Real (Unitof d)) (Unitof d))
+                             (U (Measureof Real (Unitof d)) (Unitof d)) *
                              (Measureof Real (Unitof d))]
-                         [-> (Measureof Number (Unitof d))
-                             (Measureof Number (Unitof d)) *
+                         [-> (U (Measureof Number (Unitof d)) (Unitof d))
+                             (U (Measureof Number (Unitof d)) (Unitof d)) *
                              (Measureof Number (Unitof d))]
                          [-> (Measureof Vec (Unitof d))
                              (Measureof Vec (Unitof d)) *
                              (Measureof Vec (Unitof d))]
                          [-> (Measureof Num/Vec (Unitof d))
                              (Measureof Num/Vec (Unitof d)) *
-                             (Measureof Num/Vec (Unitof d))])))
+                             (Measureof Num/Vec (Unitof d))]
+                         [-> Real Real * (Measureof Real Dimensionless-Unit)]
+                         [-> Number Number * (Measureof Number Dimensionless-Unit)]
+                         [-> VectorTop VectorTop * Vector-Measure]
+                         [-> Measureish Measureish * Measure]
+                         )))
 (define m+
   (case-lambda
     [() 0-measure]
     [(m1 . rst)
-     (apply (inst m+/lenient d) m1 (cast rst (Listof Measure)))]))
+     (define m1* : Measureish (cast m1 Measureish))
+     (define rst* (cast rst (Listof Measureish)))
+     (cond [(number? m1)
+            (apply (inst m+/lenient Dimensionless-Dimension) (number->measure m1) rst*)]
+           [(vector? m1)
+            (apply m+/lenient (vector->measure m1) rst*)]
+           [(unit? m1)
+            (apply m+/lenient (->measure m1) rst*)]
+           [(dimension? m1)
+            (apply m+/lenient (->measure (->unit m1)) rst*)]
+           [(measure? m1*)
+            (apply m+/lenient m1 rst*)]
+           [else (error 'm+ "expected Measure, given ~v" m1)])]))
 
 (: m+/lenient : (All (d) (case-> [-> (Measureof 0 Dimensionless-Unit)]
                                  [-> (Measureof Real (Unitof d)) Measureish *
@@ -256,19 +273,15 @@
            [else (m*/no-special-case n u)])]
     [args (apply m*/no-special-case args)]))
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
  [#:begin (require "unit-struct.rkt" "measure-struct.rkt")]
  [m* [Measureish * -> Measure]]
- [m+ (All (d) (case-> [-> Zero-Measure]
-                      [-> (Measureof Num/Vec (Unitof d))
-                          (Measureof Num/Vec (Unitof d)) *
-                          (Measureof Num/Vec (Unitof d))]))]
- [m- (All (u) [-> (Measureof Num/Vec u)
-                  (Measureof Num/Vec u)])]
+ [m+ (case-> [-> Zero-Measure]
+             [-> Measureish Measureish * Measure])]
+ [m- [-> (Measureof Num/Vec Unit)
+         (Measureof Num/Vec Unit)]]
  )
 
 

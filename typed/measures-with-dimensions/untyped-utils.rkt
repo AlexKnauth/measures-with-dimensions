@@ -29,12 +29,13 @@
         (~or [#:begin stuff ...]
              [id:id type:expr]
              [id2:id #:from from-module-path:expr]
+             [id3 type3:expr #:as id4]
              [#:all-from all-from-module-path:expr ...])
         ...
         )
        #'(module* untyped racket/base
            (provide (all-from-out (submod "..") all-from-module-path ... ...)
-                    id ... id2 ...)
+                    id ... id2 ... (rename-out [id3 id4] ...))
            (require racket/require
                     typed/measures-with-dimensions/untyped-utils
                     typed/untyped-utils
@@ -44,7 +45,7 @@
                                 (combine-in all-from-module-path ... ...
                                             (only-in from-module-path id2) ...)
                                 (submod ".."))
-                               id ...))
+                               id ... id3 ...))
            stuff ... ...
            (require/untyped-contract
             (begin (require typed/measures-with-dimensions/untyped-utils
@@ -52,9 +53,9 @@
                                         (combine-in all-from-module-path ... ...
                                                     (only-in from-module-path id2) ...)
                                         (submod ".." ".."))
-                                       id ...))
+                                       id ... id3 ...))
                    stuff ... ...)
             (submod ".." "..")
-            [id type] ...))
+            [id type] ... [id3 type3] ...))
        ])))
 
