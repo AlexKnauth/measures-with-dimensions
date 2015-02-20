@@ -265,7 +265,7 @@
   [pint (u/ quart 2)]
   [cup (u/ pint 2)]
   [fluid-ounce (u/ cup 8)]
-  [tablespoon (u* 2 fluid-ounce)]
+  [tablespoon (u/ fluid-ounce 2)]
   [teaspoon (u/ tablespoon 3)]
   [planck-volume (uexpt planck-length 3)]
   )
