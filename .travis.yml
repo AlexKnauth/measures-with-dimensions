@@ -1,8 +1,6 @@
 language: racket
 
 env:
- - RACKET_VERSION=6.0.1
- - RACKET_VERSION=6.1
  - RACKET_VERSION=6.1.1
  - RACKET_VERSION=HEAD
 
