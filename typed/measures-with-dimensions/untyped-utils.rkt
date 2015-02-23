@@ -39,12 +39,12 @@
            (require racket/require
                     typed/measures-with-dimensions/untyped-utils
                     typed/untyped-utils
-                    (subtract-in typed/racket/base
-                                 racket/base))
-           (require (except-in (combine-in/priority
+                    (except-in (combine-in/priority
                                 (combine-in all-from-module-path ... ...
                                             (only-in from-module-path id2) ...)
-                                (submod ".."))
+                                (submod "..")
+                                (subtract-in typed/racket/base
+                                             racket/base))
                                id ... id3 ...))
            stuff ... ...
            (require/untyped-contract

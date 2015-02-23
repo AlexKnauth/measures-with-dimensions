@@ -12,6 +12,7 @@
          "../typed-operations.rkt"
          "element-struct.rkt"
          "compound.rkt"
+         "../untyped-utils.rkt"
          )
 
 (: molar-mass : [(Un Element Compound) -> Molar-Mass])
@@ -29,8 +30,15 @@
       Molar-Mass)]
     ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(untyped-module*
+ )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (module* test racket/base
-  (require (submod "..")
+  (require (submod ".." untyped)
            rackunit
            "../untyped-operations.rkt"
            "elements.rkt"
