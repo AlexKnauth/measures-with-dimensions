@@ -9,6 +9,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
+ [#:all-from (submod "typed-operations-1.rkt" untyped)
+             "untyped-operations.rkt"]
  )
 
 
