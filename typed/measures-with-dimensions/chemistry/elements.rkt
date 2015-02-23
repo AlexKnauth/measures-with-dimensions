@@ -31,9 +31,6 @@
              ))
          ))
 
-(provide g/mol)
-(define-unit g/mol : Mass-Unit (u/ gram mol))
-
 (: pos-real->molar-mass : [Positive-Real -> Mass])
 (define (pos-real->molar-mass m)
   (make-measure m g/mol))

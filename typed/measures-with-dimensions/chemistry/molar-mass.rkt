@@ -11,11 +11,8 @@
          "../measure-types.rkt"
          "../typed-operations.rkt"
          "element-struct.rkt"
-         "elements.rkt"
          "compound.rkt"
          )
-
-(define-type Molar-Mass Mass)
 
 (: molar-mass : [(Un Element Compound) -> Molar-Mass])
 (define (molar-mass comp)
