@@ -8,6 +8,8 @@
                "rackjure"
                "math-lib"
                "htdp-lib"
+               "predicates"
+               "git://github.com/AlexKnauth/colon-match"
                "scribble-lib"))
 
 (define build-deps '("rackunit-lib"
