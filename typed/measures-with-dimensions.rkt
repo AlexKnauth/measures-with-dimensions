@@ -37,6 +37,7 @@
              (submod "measures-with-dimensions/measure-struct.rkt" untyped)
              (submod "measures-with-dimensions/physical-constants.rkt" untyped)
              (submod "measures-with-dimensions/measure-types.rkt" untyped)
+             (submod "measures-with-dimensions/typed-operations.rkt" untyped)
              (submod "measures-with-dimensions/temperature.rkt" untyped)
              "measures-with-dimensions/untyped-operations.rkt"
              ])
