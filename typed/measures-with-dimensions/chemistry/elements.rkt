@@ -25,10 +25,10 @@
             (list (cons num Sym) ...)))
          (: ->element : [(Un Element Symbol Positive-Integer) -> Element])
          (define (->element x)
-           (match x
-             [(? element?) x]
-             [(? symbol?) (hash-ref elements/sym x)]
-             [(? exact-positive-integer?) (hash-ref elements/n x)]
+           (cond
+             [(element? x) x]
+             [(symbol? x) (hash-ref elements/sym x)]
+             [(exact-positive-integer? x) (hash-ref elements/n x)]
              ))
          ))
 
