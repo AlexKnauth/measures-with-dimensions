@@ -65,4 +65,5 @@
 
 (module+ test
   (check-equal? (compound: H2O) (compound [H 2] [O 1]))
+  (check-equal? (format "~v" (compound: H2O)) "H2O")
   )

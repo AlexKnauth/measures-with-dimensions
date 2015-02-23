@@ -6,14 +6,22 @@
          g/mol
          )
 
-(require "../unit-operations.rkt"
+(require racket/match
+         (only-in typed/racket/base [U Un])
+         "../unit-operations.rkt"
          "../units.rkt"
          "../measure-types.rkt"
          )
 
 (struct (Sym) element
   ([atomic-number : Positive-Integer] [symbol : Sym] [atomic-mass : Mass])
-  #:transparent)
+  #:transparent
+  #:property prop:custom-write
+  (lambda ([e : (element Any)] [out : Output-Port] [mode : (Un 0 1 #t #f)])
+    (match mode
+      [(or 0 #f) (fprintf out "~a" (element-symbol e))]
+      [(or 1 #t) (fprintf out "#<element:~a>" (element-symbol e))]))
+  )
 
 (define-type Element (element Symbol))
 
