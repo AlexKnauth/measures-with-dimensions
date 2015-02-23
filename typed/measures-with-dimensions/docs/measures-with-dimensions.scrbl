@@ -34,3 +34,5 @@ and functions and macros to manipulate these.
 
 @include-section["short-names.scrbl"]
 
+@include-section["chemistry.scrbl"]
+
