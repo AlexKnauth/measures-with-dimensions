@@ -3,6 +3,7 @@
 (provide (struct-out element)
          Element
          Molar-Mass
+         Molar-Mass-Unit
          g/mol
          )
 
@@ -15,7 +16,7 @@
          )
 
 (struct (Sym) element
-  ([atomic-number : Positive-Integer] [symbol : Sym] [atomic-mass : Mass])
+  ([atomic-number : Positive-Integer] [symbol : Sym] [atomic-mass : Molar-Mass])
   #:transparent
   #:property prop:custom-write
   (lambda ([e : (element Any)] [out : Output-Port] [mode : (Un 0 1 #t #f)])
@@ -28,7 +29,9 @@
 
 (define-type Molar-Mass Mass)
 
-(define-unit g/mol : Mass-Unit (u/ gram mol))
+(define-type Molar-Mass-Unit Mass-Unit)
+
+(define-unit g/mol : Molar-Mass-Unit (u/ gram mol))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
