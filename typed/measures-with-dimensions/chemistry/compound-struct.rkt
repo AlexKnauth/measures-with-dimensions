@@ -30,22 +30,23 @@
 
 (: ->compound : [(Un Compound Element Symbol) -> Compound])
 (define (->compound x)
-  (match x
-    [(? compound?) x]
-    [(? element?) (compound (list (cons x 1)))]
-    [(? symbol?) (->compound (->element x))]
+  (cond
+    [(compound? x) x]
+    [(element? x) (compound (list (cons x 1)))]
+    [(symbol? x) (->compound (->element x))]
     ))
 
 (: display-compound : [Compound Output-Port -> Void])
 (define (display-compound comp out)
   (for ([p (in-list (compound-alist comp))])
     (match-define (cons sub n) p)
-    (match sub
-      [(? element?) (match n
-                      [0 (void)]
-                      [1 (fprintf out "~a" (element-symbol sub))]
-                      [_ (fprintf out "~a~a" (element-symbol sub) n)])]
-      [(? compound?) (match n
-                       [0 (void)]
-                       [1 (fprintf out "(~a)" sub)]
-                       [_ (fprintf out "(~a)~a" sub n)])])))
+    (cond
+      [(element? sub) (match n
+                        [0 (void)]
+                        [1 (fprintf out "~a" (element-symbol sub))]
+                        [_ (fprintf out "~a~a" (element-symbol sub) n)])]
+      [(compound? sub) (match n
+                         [0 (void)]
+                         [1 (fprintf out "(~a)" sub)]
+                         [_ (fprintf out "(~a)~a" sub n)])]
+      [else (error 'display-compound "sub: ~v" sub)])))
