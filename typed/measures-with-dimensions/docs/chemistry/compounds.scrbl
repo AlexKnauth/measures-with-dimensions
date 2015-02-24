@@ -46,3 +46,10 @@ A macro that constructs a compound from an identifier representing its formula.
 A type and a predicate for compounds.
 }
 
+@deftogether[[
+  @defproc[(make-compound [alist (Listof (Pairof (Un Element Compound) Natural))]) Compound]
+  @defproc[(compound-alist [compound Compound]) (Listof (Pairof (Un Element Compound) Natural))]]]{
+A constructor that creates a compound from an association list, and an accessor
+to get a compound's association list.  
+}
+

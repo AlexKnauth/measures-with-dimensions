@@ -9,6 +9,7 @@
          (only-in typed/racket/base [U Un])
          "element-struct.rkt"
          "elements.rkt"
+         "../untyped-utils.rkt"
          )
 
 (struct compound
@@ -50,3 +51,8 @@
                          [1 (fprintf out "(~a)" sub)]
                          [_ (fprintf out "(~a)~a" sub n)])]
       [else (error 'display-compound "sub: ~v" sub)])))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(untyped-module*
+ )

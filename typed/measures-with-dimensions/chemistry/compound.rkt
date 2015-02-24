@@ -4,12 +4,14 @@
          compound:
          Compound
          compound?
+         make-compound
+         compound-alist
          )
 
 (require racket/match
          "element-struct.rkt"
          "elements.rkt"
-         (rename-in "compound-struct.rkt" [compound -compound])
+         (rename-in "compound-struct.rkt" [compound make-compound])
          (for-syntax racket/base
                      syntax/parse
                      racket/match
@@ -31,10 +33,10 @@
 (define-match-expander compound
   (syntax-parser
     [(compound :compound-match-exp-clause ...)
-     #'(app ->compound (-compound (list-no-order norm ...)))])
+     #'(app ->compound (make-compound (list-no-order norm ...)))])
   (syntax-parser
     [(compound [sub n] ...)
-     #'(-compound (list (cons sub n) ...))]))
+     #'(make-compound (list (cons sub n) ...))]))
 
 (begin-for-syntax
   (define-:match-class cau (and? char-alphabetic? char-upper-case?))
