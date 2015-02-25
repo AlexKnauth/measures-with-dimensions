@@ -61,6 +61,11 @@ A struct and a type for elements.
  [Fr Ra Ac Th Pa U  Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Uut Fl Uup Lv Uus Uuo]
 ]
 
+@margin-note{
+Note: The element @racket[U] conflicts with the type constructor for unions.  To work around this, you
+can import it as @racket[Un] using @racket[(require (only-in typed/racket/base [U Un]))].
+}
+
 @deftogether[[
   @deftype[Molar-Mass]
   @deftype[Molar-Mass-Unit]]]{
