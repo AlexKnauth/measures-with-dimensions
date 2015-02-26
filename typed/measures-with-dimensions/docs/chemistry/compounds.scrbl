@@ -19,7 +19,7 @@
 @title{Compounds}
 
 @defform[(compound [sub n] ...)
-         #:contracts ([sub (U Element Compound)] [n Natural])]{
+         #:contracts ([sub (Un Element Compound)] [n Natural])]{
 A macro that constructs a compound, and a match-expander that deconstructs a compound.
 
 @examples[
