@@ -116,6 +116,18 @@ returns true if the measures represent the same quantities.
 converts from something "measureish" to a @racket[Measure].
 }
 
+@deftogether[[
+  @defproc[(measure->num/vec [m Measureish]) (U Number (Vectorof Real))]
+  @defproc[(measure->number [m Number-Measureish]) Number]
+  @defproc[(measure->real [m Real-Measureish]) Real]
+  @defproc[(measure->vector [m Vector-Measureish]) (Vectorof Real)]]]{
+Functions for converting dimensionless measures to numbers or vectors.
+For measures that have a unit with a scalar, it converts to @racket[1-unit]
+first.  So @racket[mol]s will be multiplied my approx. 6.02*10^23,
+@racket[percent]s will be divided by 100, @racket[degree]s will be multiplied by
+2π/360, etc. 
+}
+
 @subsection{Operations on Units and Dimensions}
 
 @deftogether[[

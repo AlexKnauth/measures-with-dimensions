@@ -275,6 +275,30 @@
 
 
 
+(: measure->num/vec : [Measureish -> Num/Vec])
+(define (measure->num/vec m)
+  (cond [(number? m) m]
+        [else (measure-number (convert (->measure m) 1-unit))]))
+
+(: measure->number : [Number-Measureish -> Number])
+(define (measure->number m)
+  (cond [(number? m) m]
+        [else (assert (measure-number (convert (->measure m) 1-unit)) number?)]))
+
+(: measure->real : [Real-Measureish -> Real])
+(define (measure->real m)
+  (cond [(real? m) m]
+        [else (assert (measure-number (convert (->measure m) 1-unit)) real?)]))
+
+(: measure->vector : [Vector-Measureish -> Vec])
+(define (measure->vector m)
+  (define vec (assert (measure-number (convert (->measure m) 1-unit)) vector?))
+  (apply (inst vector-immutable Real)
+         (for/list ([x (in-vector vec)]) : (Listof Real)
+           (assert x real?))))
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
