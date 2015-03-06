@@ -160,5 +160,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(untyped-module*
- )
+(module* untyped racket/base
+  (require (submod ".."))
+  (provide (all-from-out (submod ".."))))
