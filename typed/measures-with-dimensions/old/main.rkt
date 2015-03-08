@@ -9,7 +9,7 @@
          (only-in lang/htdp-intermediate-lambda =~)
          typed/measures-with-dimensions/exact-tau-pi-eta
          typed/measures-with-dimensions/preds
-         (except-in (submod typed/measures-with-dimensions untyped) define-unit))
+         (except-in "../../../measures-with-dimensions/main.rkt" define-unit))
 
 (module+ test
   (require rackunit))
