@@ -184,6 +184,7 @@ equivalent to @racket[(Measureof (Vectorof Real) u)].
   @deftype[Measureish]
   @deftype[Number-Measureish]
   @deftype[Vector-Measureish]
+  @deftype[Real-Measureish]
 ]]
 
 @deftype[Unit]{
