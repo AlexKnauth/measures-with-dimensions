@@ -15,14 +15,14 @@
 
 (module* untyped racket/base
   (provide (all-from-out
-            (submod "chemistry/element-struct.rkt" untyped)
-            (submod "chemistry/elements.rkt" untyped)
-            "chemistry/compound.rkt"
-            (submod "chemistry/molar-mass.rkt" untyped)
+            (submod typed/measures-with-dimensions/chemistry/element-struct untyped)
+            (submod typed/measures-with-dimensions/chemistry/elements untyped)
+            typed/measures-with-dimensions/chemistry/compound
+            (submod typed/measures-with-dimensions/chemistry/molar-mass untyped)
             ))
-  (require (submod "chemistry/element-struct.rkt" untyped)
-           (submod "chemistry/elements.rkt" untyped)
-           "chemistry/compound.rkt"
-           (submod "chemistry/molar-mass.rkt" untyped)
+  (require (submod typed/measures-with-dimensions/chemistry/element-struct untyped)
+           (submod typed/measures-with-dimensions/chemistry/elements untyped)
+           typed/measures-with-dimensions/chemistry/compound
+           (submod typed/measures-with-dimensions/chemistry/molar-mass untyped)
            )
   )

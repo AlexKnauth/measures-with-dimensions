@@ -33,8 +33,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [g/mol #:from (submod "element-struct.rkt" untyped)]
- [Molar-Mass #:from (submod "element-struct.rkt" untyped)]
+ [g/mol #:from (submod typed/measures-with-dimensions/chemistry/element-struct untyped)]
+ [Molar-Mass #:from (submod typed/measures-with-dimensions/chemistry/element-struct untyped)]
  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
