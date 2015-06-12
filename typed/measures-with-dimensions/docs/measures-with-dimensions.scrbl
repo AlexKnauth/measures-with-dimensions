@@ -13,7 +13,7 @@
 
 @title[#:style '(toc)]{measures-with-dimensions}
 
-@defmodule[#:multi [measures-with-dimensions typed/measures-with-dimensions]]
+@defmodule[#:multi [typed/measures-with-dimensions measures-with-dimensions]]
 
 source code: @url["https://github.com/AlexKnauth/measures-with-dimensions"]
 
