@@ -386,9 +386,9 @@
 
 (untyped-module*
  [10^ (Real -> Real)]
- [#:all-from (submod "dimensions.rkt" untyped)
-             (submod "unit-struct.rkt" untyped)
-             (submod "unit-operations.rkt" untyped)]
+ [#:all-from (submod typed/measures-with-dimensions/dimensions untyped)
+             (submod typed/measures-with-dimensions/unit-struct untyped)
+             (submod typed/measures-with-dimensions/unit-operations untyped)]
  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
