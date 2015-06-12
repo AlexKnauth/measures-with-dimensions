@@ -1,6 +1,8 @@
 #lang typed/racket/base
 
-(provide celsius
+(provide make-kelvin
+         make-rankine
+         celsius
          fahrenheit
          get-kelvin
          get-rankine
@@ -18,6 +20,8 @@
 
 (define nonnegative-real? (make-predicate Nonnegative-Real))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (: celsius->kelvin : [Real -> Nonnegative-Real])
 (define (celsius->kelvin n)
   (assert (+ n #e273.15) nonnegative-real?))
@@ -34,13 +38,25 @@
 (define (rankine->fahrenheit n)
   (- n #e459.67))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(: make-kelvin : [Nonnegative-Real -> Absolute-Temperature])
+(define (make-kelvin n)
+  (make-measure n kelvin))
+
+(: make-rankine : [Nonnegative-Real -> Absolute-Temperature])
+(define (make-rankine n)
+  (make-measure n rankine))
+
 (: celsius : [Real -> Absolute-Temperature])
 (define (celsius n)
-  (make-measure (celsius->kelvin n) kelvin))
+  (make-kelvin (celsius->kelvin n)))
 
 (: fahrenheit : [Real -> Absolute-Temperature])
 (define (fahrenheit n)
-  (make-measure (fahrenheit->rankine n) rankine))
+  (make-rankine (fahrenheit->rankine n)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (: get-kelvin : [Absolute-Temperature -> Nonnegative-Real])
 (define (get-kelvin m)
@@ -57,6 +73,8 @@
 (: get-fahrenheit : [Absolute-Temperature -> Real])
 (define (get-fahrenheit m)
   (rankine->fahrenheit (get-rankine m)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (: celsius->fahrenheit : [Real -> Real])
 (define (celsius->fahrenheit n)

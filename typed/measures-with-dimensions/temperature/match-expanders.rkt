@@ -1,6 +1,8 @@
 #lang racket/base
 
-(provide celcius:
+(provide kelvin:
+         rankine:
+         celcius:
          fahrenheit:
          )
 
@@ -10,6 +12,18 @@
                      syntax/parse
                      unstable/syntax
                      ))
+
+(define-match-expander kelvin:
+  (syntax-parser
+    [(kelvin: pat)
+     #'(app get-kelvin pat)])
+  (make-variable-like-transformer #'make-kelvin))
+
+(define-match-expander rankine:
+  (syntax-parser
+    [(rankine: pat)
+     #'(app get-rankine pat)])
+  (make-variable-like-transformer #'make-rankine))
 
 (define-match-expander celcius:
   (syntax-parser
