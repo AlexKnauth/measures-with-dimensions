@@ -17,8 +17,8 @@
 
 @subsection{Operations on Measures}
 
-@defform*[[(m expr-or-op ...)
-           (m expr-or-op ... : type)]
+@defform*[[(m: expr-or-op ...)
+           (m: expr-or-op ... : type)]
           #:grammar ([expr-or-op expr op]
                      [op @#,tt{+} @#,tt{-} @#,tt{*} @#,tt{/} @#,tt{^}])]{
 this macro lets you write measures and operations on measures using infix notation with the symbols
@@ -30,14 +30,14 @@ It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
-  (m 1 meter)
-  (m 50 centimeter)
-  (m 1 meter + 50 centimeter)
-  (m 1 meter - 50 centimeter)
-  (m 1 meter ^ 2)
-  (m 1 meter ^ 2 + 100 centimeter ^ 2)
-  (m 1 foot + 3 inch)
-  (m 1 meter - 50 centimeter : Length-Real-Measure)
+  (m: 1 meter)
+  (m: 50 centimeter)
+  (m: 1 meter + 50 centimeter)
+  (m: 1 meter - 50 centimeter)
+  (m: 1 meter ^ 2)
+  (m: 1 meter ^ 2 + 100 centimeter ^ 2)
+  (m: 1 foot + 3 inch)
+  (m: 1 meter - 50 centimeter : Length-Real-Measure)
 ]}
 
 @defproc[(m+ [m Measureish] ...) Measure]{
@@ -56,21 +56,21 @@ the result to be what you want, or using @racket[inst] to instantiate it for a c
   (require typed/racket)
   (require typed/measures-with-dimensions)
   (ann (m+) Zero-Measure)
-  (m+ (m 1 meter))
-  (m+ (m 1 meter) (m 50 centimeter))
-  (m 1 foot + 3 inch)
-  ((inst m+ Length-Dimension) (m 1 meter) (m 50 centimeter))
+  (m+ (m: 1 meter))
+  (m+ (m: 1 meter) (m: 50 centimeter))
+  (m: 1 foot + 3 inch)
+  ((inst m+ Length-Dimension) (m: 1 meter) (m: 50 centimeter))
 ]}
 
 @defproc[(m- [m Measureish]) Measure]{
-negates a measure.  To do subtraction, either use the @racket[m] macro or use a pattern like
+negates a measure.  To do subtraction, either use the @racket[m:] macro or use a pattern like
 @racket[(m+ a (m- b))].
 
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
-  (m- (m 1 meter))
-  (m 1 meter - 50 centimeter)
+  (m- (m: 1 meter))
+  (m: 1 meter - 50 centimeter)
 ]}
 
 @defproc[(m* [m Measureish] ...) Measure]{
@@ -78,7 +78,7 @@ multiplies the measures.
 }
 
 @defproc[(m1/ [m Number-Measureish]) Number-Measure]{
-takes the multiplicative inverse of the measure.  To do division, either use the @racket[m] macro or
+takes the multiplicative inverse of the measure.  To do division, either use the @racket[m:] macro or
 use a pattern like @racket[(m* a (m1/ b))].
 }
 
@@ -94,7 +94,7 @@ The second form converts the number or vector @racket[n] from @racket[u1] to @ra
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
-  (convert (m 1 meter) centimeter)
+  (convert (m: 1 meter) centimeter)
   (convert 1 meter centimeter)
 ]}
 
@@ -104,12 +104,12 @@ returns true if the measures represent the same quantities.
 @examples[
   (require typed/racket)
   (require typed/measures-with-dimensions)
-  (measure=? (m 1 meter)
-             (m 100 centimeter))
-  (measure=? (m 1 meter)
-             (m 1 kilogram))
-  (measure=? (m 1 radian)
-             (m 1 degree))
+  (measure=? (m: 1 meter)
+             (m: 100 centimeter))
+  (measure=? (m: 1 meter)
+             (m: 1 kilogram))
+  (measure=? (m: 1 radian)
+             (m: 1 degree))
 ]}
 
 @defproc[(->measure [m Measureish]) Measure]{

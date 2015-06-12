@@ -79,8 +79,8 @@
            "units.rkt"
            "untyped-operations.rkt"
            )
-  (check-equal? (get-kelvin (m 0 kelvin)) 0)
-  (check-equal? (get-celsius (m 0 kelvin)) #e-273.15)
+  (check-equal? (get-kelvin (m: 0 kelvin)) 0)
+  (check-equal? (get-celsius (m: 0 kelvin)) #e-273.15)
   (check-equal? (get-kelvin (celsius 0)) #e273.15)
   (check-equal? (fahrenheit->celsius 32) 0)
   (check-equal? (fahrenheit->celsius 212) 100)

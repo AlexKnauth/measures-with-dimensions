@@ -46,8 +46,8 @@
            "elements.rkt"
            "compound.rkt"
            )
-  (check-equal? (molar-mass H) (m 1.00794 g/mol))
-  (check-equal? (molar-mass O) (m 15.9994 g/mol))
+  (check-equal? (molar-mass H) (m: 1.00794 g/mol))
+  (check-equal? (molar-mass O) (m: 15.9994 g/mol))
   (check-equal? (+ (* 1.00794 2) 15.9994) 18.01528)
-  (check-equal? (molar-mass (compound: H2O)) (m 18.01528 g/mol))
+  (check-equal? (molar-mass (compound: H2O)) (m: 18.01528 g/mol))
   )

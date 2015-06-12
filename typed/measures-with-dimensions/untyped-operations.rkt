@@ -1,6 +1,6 @@
 #lang racket/base
 
-(provide m m+ m- m1/ mexpt m* m*/scalar m*/vector)
+(provide m: m+ m- m1/ mexpt m* m*/scalar m*/vector (rename-out [m: m]))
 
 (require (submod "dimension-struct.rkt" untyped)
          (submod "dimension-operations.rkt" untyped)
@@ -63,7 +63,7 @@
     [pattern (~seq / a:mexpt) #:with norm #'(m1/ a.norm)])
   )
 
-(define-syntax m
+(define-syntax m:
   (syntax-parser
     [(m a:mwith) #'a.norm]))
 
@@ -74,23 +74,23 @@
 (module+ test
   (define-check (check-m=? m1 m2)
     (check m=? m1 m2))
-  (check-m=? (m) 1-measure)
-  (check-m=? (m 1 meter) (make-Measure 1 meter))
-  (check-m=? (convert (m 1 meter) centimeter) (m 100 centimeter))
-  (check-m=? (m 1 meter + 50 centimeter) (m (+ 1 1/2) meter))
-  (check-m=? (m 1 meter - 50 centimeter) (m 1/2 meter))
-  (check-m=? (m 1 meter ^ 2) (m 1 square-meter))
-  (check-m=? (m 2 meter ^ 2) (m 2 square-meter))
-  (check-m=? (m (m 2 meter) ^ 2) (m 4 square-meter))
-  (check-m=? (m 1 kilogram meter / second ^ 2) (m 1 newton))
-  (check-m=? (m 1 newton meter) (m 1 joule))
-  (check-m=? (m #:with 1 + 2 #:as a
-                #:with 3 + 4 #:as b
-                a + b)
+  (check-m=? (m:) 1-measure)
+  (check-m=? (m: 1 meter) (make-Measure 1 meter))
+  (check-m=? (convert (m: 1 meter) centimeter) (m: 100 centimeter))
+  (check-m=? (m: 1 meter + 50 centimeter) (m: (+ 1 1/2) meter))
+  (check-m=? (m: 1 meter - 50 centimeter) (m: 1/2 meter))
+  (check-m=? (m: 1 meter ^ 2) (m: 1 square-meter))
+  (check-m=? (m: 2 meter ^ 2) (m: 2 square-meter))
+  (check-m=? (m: (m: 2 meter) ^ 2) (m: 4 square-meter))
+  (check-m=? (m: 1 kilogram meter / second ^ 2) (m: 1 newton))
+  (check-m=? (m: 1 newton meter) (m: 1 joule))
+  (check-m=? (m: #:with 1 + 2 #:as a
+                 #:with 3 + 4 #:as b
+                 a + b)
              10)
-  (check-m=? (m #:with 1 + 2 #:as a
-                #:let b = 3 + 4 #:in
-                a + b)
+  (check-m=? (m: #:with 1 + 2 #:as a
+                 #:let b = 3 + 4 #:in
+                 a + b)
              10)
   
   )

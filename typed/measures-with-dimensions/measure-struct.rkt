@@ -95,7 +95,7 @@
               (error 'measure "expected sig-figs? for sig-figs argument, given ~v" sig-figs))
             (values number unit sig-figs))
   #:property prop:custom-write (lambda (m out mode)
-                                 (cond [(zero? mode) (display "(m " out)
+                                 (cond [(zero? mode) (display "(m: " out)
                                                      (print (measure-number m) out)
                                                      (display " " out)
                                                      (print (measure-unit m) out)
