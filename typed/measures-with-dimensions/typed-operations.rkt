@@ -9,8 +9,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [#:all-from (submod "typed-operations-1.rkt" untyped)
-             "untyped-operations.rkt"]
+ [#:all-from (submod typed/measures-with-dimensions/typed-operations-1 untyped)
+             typed/measures-with-dimensions/untyped-operations]
  )
 
 
