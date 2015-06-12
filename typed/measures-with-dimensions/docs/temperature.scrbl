@@ -12,7 +12,7 @@
 
 @defmodule[typed/measures-with-dimensions/temperature #:no-declare]{
 
-Celsius and Fahrenheit temperatures are not represented a @racket[measure]s,
+Celsius and Fahrenheit temperatures are not represented as @racket[measure]s,
 but temperatures in an absolute temperature scale such as @racket[kelvin] or
 @racket[rankine] are. 
 
