@@ -10,7 +10,7 @@
 
 @title[#:style '(toc)]{Chemistry}
 
-@defmodule[typed/measures-with-dimensions/chemistry]
+@defmodule[#:multi [measures-with-dimensions/chemistry typed/measures-with-dimensions/chemistry]]
 
 @local-table-of-contents[]
 

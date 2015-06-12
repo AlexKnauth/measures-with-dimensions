@@ -13,14 +13,16 @@
 
 @title[#:style '(toc)]{measures-with-dimensions}
 
-@defmodule[#:multi [typed/measures-with-dimensions
-                    (submod typed/measures-with-dimensions untyped)
-                    measures-with-dimensions]]
+@defmodule[#:multi [measures-with-dimensions typed/measures-with-dimensions]]
 
 source code: @url["https://github.com/AlexKnauth/measures-with-dimensions"]
 
 This module provides structs to represent measures, units, and dimensions,
 and functions and macros to manipulate these.
+
+It was originally inspired by @url["https://github.com/Metaxal/measures"], but
+is more based on the concept of dimensions, and it also has types for
+@racketmodname[typed/racket].
 
 @local-table-of-contents[]
 

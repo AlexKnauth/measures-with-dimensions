@@ -62,15 +62,16 @@ A struct and a type for elements.
 ]
 
 @margin-note{
-Note: The element @racket[U] conflicts with the type constructor for unions.  To work around this, you
-can import it as @racket[Un] using @racket[(require (only-in typed/racket/base [U Un]))].
+Warning: The element @racket[U] conflicts with the type constructor for unions.
+To work around this, you can import it as @racket[Un] using
+@racket[(require (only-in typed/racket/base [U Un]))].
 }
 
 @deftogether[[
   @deftype[Molar-Mass]
   @deftype[Molar-Mass-Unit]]]{
-Since @racket[mol]s are dimensionless, these are equivalent to the @racket[Mass]
-and @racket[Mass-Unit] types.
+Since @racket[mol]s are dimensionless in this library, these are equivalent to
+the @racket[Mass] and @racket[Mass-Unit] types.
 }
 
 @defthing[g/mol Molar-Mass-Unit]{
