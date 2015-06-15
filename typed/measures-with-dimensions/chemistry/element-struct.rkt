@@ -9,9 +9,9 @@
 
 (require racket/match
          (only-in typed/racket/base [U Un])
-         "../unit-operations.rkt"
-         "../units.rkt"
-         "../measure-types.rkt"
+         "../units/unit-operations.rkt"
+         "../units/units.rkt"
+         "../measures/measure-types.rkt"
          "../untyped-utils.rkt"
          )
 

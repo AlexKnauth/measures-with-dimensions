@@ -3,10 +3,10 @@
 (require racket/match
          syntax/parse/define
          (only-in typed/racket/base [U Un])
-         "../unit-operations.rkt"
-         "../units.rkt"
-         "../measure-struct.rkt"
-         "../measure-types.rkt"
+         "../units/unit-operations.rkt"
+         "../units/units.rkt"
+         "../measures/measure-struct.rkt"
+         "../measures/measure-types.rkt"
          "element-struct.rkt"
          "../untyped-utils.rkt"
          )

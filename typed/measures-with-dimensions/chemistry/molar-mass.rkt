@@ -7,9 +7,7 @@
 
 (require racket/match
          (only-in typed/racket/base [U Un])
-         "../measure-struct.rkt"
-         "../measure-types.rkt"
-         "../typed-operations.rkt"
+         "../measures.rkt"
          "element-struct.rkt"
          "compound.rkt"
          "../untyped-utils.rkt"
@@ -42,8 +40,8 @@
 (module* test racket/base
   (require (submod ".." untyped)
            rackunit
-           "../untyped-operations.rkt"
-           "elements.rkt"
+           (submod "../measures.rkt" untyped)
+           (submod "elements.rkt" untyped)
            "compound.rkt"
            )
   (check-equal? (molar-mass H) (m: 1.00794 g/mol))
