@@ -11,14 +11,6 @@
          "../untyped-utils.rkt"
          )
 
-(: 0-measure : (measure 0 Dimensionless-Unit +inf.0))
-(define 0-measure
-  (measure 0 1-unit +inf.0))
-
-(: 1-measure : (measure 1 Dimensionless-Unit +inf.0))
-(define 1-measure
-  (measure 1 1-unit +inf.0))
-
 (: g : Acceleration)
 (define g  ; the acceleration due to gravity on earth
   (measure 1 (unit-rename gravitational-acceleration-unit 'g) +inf.0))

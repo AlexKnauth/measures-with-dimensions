@@ -7,7 +7,7 @@
          (submod "../units/unit-struct.rkt" untyped)
          (submod "../units/unit-operations.rkt" untyped)
          (submod "measure-struct.rkt" untyped)
-         (submod "physical-constants.rkt" untyped)
+         (submod "0-1-measures.rkt" untyped)
          (submod "typed-operations-1.rkt" untyped)
          (only-in typed/racket/base assert : ann)
          typed/untyped-utils
