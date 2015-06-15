@@ -9,10 +9,10 @@
          racket/splicing
          (except-in racket/list second)
          "unit-struct.rkt"
-         "dimension-struct.rkt"
-         "dimension-operations.rkt"
-         "preds.rkt"
-         "untyped-utils.rkt"
+         "../dimensions/dimension-struct.rkt"
+         "../dimensions/dimension-operations.rkt"
+         "../preds.rkt"
+         "../untyped-utils.rkt"
          )
 (require/typed racket/set
                [#:opaque Mutable-Set set-mutable?]
@@ -295,7 +295,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (module* test racket/base
-  (require (submod "dimension-struct.rkt" untyped)
+  (require (submod "../dimensions/dimension-struct.rkt" untyped)
            (submod "unit-struct.rkt" untyped)
            (submod ".." untyped)
            rackunit

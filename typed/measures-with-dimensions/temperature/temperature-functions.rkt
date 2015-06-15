@@ -12,9 +12,9 @@
          fahrenheit->celsius
          )
 
-(require "../units.rkt"
-         "../measure-struct.rkt"
-         "../measure-types.rkt"
+(require "../units/units.rkt"
+         "../measures/measure-struct.rkt"
+         "../measures/measure-types.rkt"
          "../untyped-utils.rkt"
          )
 
@@ -94,8 +94,8 @@
 (module* test racket/base
   (require (submod ".." untyped)
            rackunit
-           "../units.rkt"
-           "../untyped-operations.rkt"
+           (submod "../units.rkt" untyped)
+           (submod "../measures.rkt" untyped)
            )
   (check-equal? (get-kelvin (m: 0 kelvin)) 0)
   (check-equal? (get-celsius (m: 0 kelvin)) #e-273.15)

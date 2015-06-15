@@ -15,8 +15,8 @@
          )
 
 (require syntax/parse/define
-         "preds.rkt"
-         "untyped-utils.rkt"
+         "../preds.rkt"
+         "../untyped-utils.rkt"
          (for-syntax racket/base
                      syntax/parse
                      racket/struct-info

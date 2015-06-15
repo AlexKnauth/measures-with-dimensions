@@ -5,13 +5,13 @@
 (require racket/splicing
          math/bigfloat
          (except-in racket/list second)
-         "dimension-struct.rkt"
-         "dimension-operations.rkt"
-         "unit-struct.rkt"
-         "unit-operations.rkt"
-         "vector-operations.rkt"
-         "preds.rkt"
-         "untyped-utils.rkt"
+         "../dimensions/dimension-struct.rkt"
+         "../dimensions/dimension-operations.rkt"
+         "../units/unit-struct.rkt"
+         "../units/unit-operations.rkt"
+         "../vector-operations.rkt"
+         "../preds.rkt"
+         "../untyped-utils.rkt"
          )
 
 (define-type Sig-Figs (U Positive-Integer +inf.0))
@@ -302,7 +302,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [#:begin (require "unit-struct.rkt")]
+ [#:begin (require "../units/unit-struct.rkt")]
  [make-Measure (->* [Num/Vec Unitish] [Sig-Figs] Measure)]
  [->measure (-> Measureish Measure)]
  [convert (case-> [-> Measure Unitish Measure]
@@ -315,7 +315,7 @@
 
 (module* test racket/base
   (require (submod ".." untyped)
-           (submod "units.rkt" untyped))
+           (submod "../units/units.rkt" untyped))
   (require rackunit)
   (check measure=?
          (make-Measure 1    meter)

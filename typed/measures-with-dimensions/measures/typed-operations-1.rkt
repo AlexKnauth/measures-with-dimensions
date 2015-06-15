@@ -2,15 +2,15 @@
 
 (provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m*)
 
-(require "dimension-struct.rkt"
-         "dimension-operations.rkt"
-         "unit-struct.rkt"
-         "unit-operations.rkt"
+(require "../dimensions/dimension-struct.rkt"
+         "../dimensions/dimension-operations.rkt"
+         "../units/unit-struct.rkt"
+         "../units/unit-operations.rkt"
          "measure-struct.rkt"
          "physical-constants.rkt"
-         "vector-operations.rkt"
-         "preds.rkt"
-         "untyped-utils.rkt")
+         "../vector-operations.rkt"
+         "../preds.rkt"
+         "../untyped-utils.rkt")
 
 (: measure->real-measure : (All (d) [(Measureof Any (Unitof d)) -> (Measureof Real (Unitof d))]))
 (define (measure->real-measure m)
@@ -299,7 +299,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [#:begin (require "unit-struct.rkt" "measure-struct.rkt")]
+ [#:begin (require "../units/unit-struct.rkt" "measure-struct.rkt")]
  [m* [Measureish * -> Measure]]
  [m+ [Measureish * -> Measure]]
  [m- [Measureish -> Measure]]

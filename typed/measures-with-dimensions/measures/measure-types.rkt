@@ -3,11 +3,11 @@
 (provide (all-defined-out))
 
 (require syntax/parse/define
-         "unit-struct.rkt"
-         "unit-operations.rkt"
-         "units.rkt"
+         "../units/unit-struct.rkt"
+         "../units/unit-operations.rkt"
+         "../units/units.rkt"
          "measure-struct.rkt"
-         "untyped-utils.rkt"
+         "../untyped-utils.rkt"
          (for-syntax racket/base
                      ))
 

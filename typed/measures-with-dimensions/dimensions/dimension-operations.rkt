@@ -3,8 +3,8 @@
 (provide (all-defined-out))
 
 (require "dimension-struct.rkt"
-         "preds.rkt"
-         "untyped-utils.rkt")
+         "../preds.rkt"
+         "../untyped-utils.rkt")
 
 (define-type (M^ n) (dimension n 0 0 0 0) #:omit-define-syntaxes)
 (define-type (L^ n) (dimension 0 n 0 0 0) #:omit-define-syntaxes)

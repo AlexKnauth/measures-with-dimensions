@@ -15,9 +15,9 @@
          1-unit
          )
 
-(require "dimension-struct.rkt"
-         "preds.rkt"
-         "untyped-utils.rkt")
+(require "../dimensions/dimension-struct.rkt"
+         "../preds.rkt"
+         "../untyped-utils.rkt")
 
 (struct: (d) unit ([name : Any] [scalar : Positive-Real] [dimension : d])
   #:transparent
@@ -97,7 +97,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [#:begin (require "dimension-struct.rkt")]
+ [#:begin (require "../dimensions/dimension-struct.rkt")]
  [->unit (Unitish -> Unit)]
  [make-Unit (Any Positive-Real Dimension -> Unit)]
  [Unit-dimension (Unit -> Dimension)]

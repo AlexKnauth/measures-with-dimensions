@@ -2,10 +2,10 @@
 
 (provide m: m+ m- m1/ mexpt m* m*/scalar m*/vector (rename-out [m: m]))
 
-(require (submod "dimension-struct.rkt" untyped)
-         (submod "dimension-operations.rkt" untyped)
-         (submod "unit-struct.rkt" untyped)
-         (submod "unit-operations.rkt" untyped)
+(require (submod "../dimensions/dimension-struct.rkt" untyped)
+         (submod "../dimensions/dimension-operations.rkt" untyped)
+         (submod "../units/unit-struct.rkt" untyped)
+         (submod "../units/unit-operations.rkt" untyped)
          (submod "measure-struct.rkt" untyped)
          (submod "physical-constants.rkt" untyped)
          (submod "typed-operations-1.rkt" untyped)
@@ -18,7 +18,7 @@
 
 (module+ test
   (require rackunit
-           (submod "units.rkt" untyped)))
+           (submod "../units/units.rkt" untyped)))
 
 (begin-for-syntax
   (define-syntax-class mexpr #:description "non-operation expression"

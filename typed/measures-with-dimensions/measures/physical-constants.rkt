@@ -2,13 +2,13 @@
 
 (provide (all-defined-out))
 
-(require "dimension-struct.rkt"
-         "unit-struct.rkt"
-         "unit-operations.rkt"
-         "units.rkt"
+(require "../dimensions/dimension-struct.rkt"
+         "../units/unit-struct.rkt"
+         "../units/unit-operations.rkt"
+         "../units/units.rkt"
          "measure-struct.rkt"
          "measure-types.rkt"
-         "untyped-utils.rkt"
+         "../untyped-utils.rkt"
          )
 
 (: 0-measure : (measure 0 Dimensionless-Unit +inf.0))
