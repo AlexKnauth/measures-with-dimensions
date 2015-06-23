@@ -1,20 +1,33 @@
-language: racket
+language: c
+
+sudo: false
 
 env:
- - RACKET_VERSION=6.1.1
- - RACKET_VERSION=HEAD
+  global:
+   - RACKET_DIR=~/racket
+  matrix:
+   - RACKET_VERSION=6.1.1
+   - RACKET_VERSION=HEAD
+   - RACKET_VERSION=SCOPE_SNAPSHOT
+
+matrix:
+  allow_failures:
+   - env: RACKET_VERSION=HEAD
+   - env: RACKET_VERSION=SCOPE_SNAPSHOT
+  fast_finish: true
 
 before_install:
-- cd ..
-- git clone https://github.com/greghendershott/travis-racket.git
-- cat travis-racket/install-racket.sh | bash # pipe to bash not sh!
+ - cd ..
+ - git clone https://github.com/greghendershott/travis-racket.git
+ - cat travis-racket/install-racket.sh | bash # pipe to bash not sh!
+ - export PATH="${RACKET_DIR}/bin:${PATH}"
 
 install:
 
 before_script:
 
 script:
- - /usr/racket/bin/raco pkg install --deps search-auto --link measures-with-dimensions
- - /usr/racket/bin/raco test -x -p measures-with-dimensions
+ - raco pkg install --deps search-auto --link measures-with-dimensions
+ - raco test -x -p measures-with-dimensions
 
 after_script:
