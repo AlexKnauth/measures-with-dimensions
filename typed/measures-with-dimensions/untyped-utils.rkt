@@ -7,7 +7,9 @@
 (require racket/require
          racket/require-syntax
          (for-syntax racket/base
-                     syntax/parse))
+                     syntax/parse
+                     syntax/strip-context
+                     ))
 
 (define-require-syntax combine-in/priority
   (lambda (stx)
@@ -33,7 +35,9 @@
              [#:all-from all-from-module-path:expr ...])
         ...
         )
-       #'(module* untyped racket/base
+       (replace-context
+        stx
+        #'(module* untyped racket/base
            (provide (all-from-out (submod "..") all-from-module-path ... ...)
                     id ... id2 ... (rename-out [id3 id4] ...))
            (require racket/require
@@ -56,6 +60,6 @@
                                        id ... id3 ...))
                    stuff ... ...)
             (submod ".." "..")
-            [id type] ... [id3 type3] ...))
+            [id type] ... [id3 type3] ...)))
        ])))
 
