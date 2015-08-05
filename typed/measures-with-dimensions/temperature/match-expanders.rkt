@@ -10,7 +10,7 @@
          "temperature-functions.rkt"
          (for-syntax racket/base
                      syntax/parse
-                     unstable/syntax
+                     syntax/transformer
                      ))
 
 (define-match-expander kelvin:
