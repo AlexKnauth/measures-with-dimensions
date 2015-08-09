@@ -8,6 +8,7 @@
                "rackjure"
                "math-lib"
                "htdp-lib"
+               "unstable-lib"
                "predicates"
                "colon-match"
                "scribble-lib"))
