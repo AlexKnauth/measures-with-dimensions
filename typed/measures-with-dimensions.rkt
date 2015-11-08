@@ -1,17 +1,12 @@
 #lang typed/racket/base
 
-(provide (all-from-out typed/measures-with-dimensions/dimensions
-                       typed/measures-with-dimensions/units
-                       typed/measures-with-dimensions/measures
-                       typed/measures-with-dimensions/temperature
-                       ))
+(require reprovide/reprovide typed/measures-with-dimensions/untyped-utils)
 
-(require typed/measures-with-dimensions/dimensions
-         typed/measures-with-dimensions/units
-         typed/measures-with-dimensions/measures
-         typed/measures-with-dimensions/temperature
-         typed/measures-with-dimensions/untyped-utils
-         )
+(reprovide typed/measures-with-dimensions/dimensions
+           typed/measures-with-dimensions/units
+           typed/measures-with-dimensions/measures
+           typed/measures-with-dimensions/temperature
+           )
 
 (untyped-module*
  [#:all-from

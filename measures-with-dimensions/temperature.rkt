@@ -1,3 +1,2 @@
-#lang racket/base
-(require (submod typed/measures-with-dimensions/temperature untyped))
-(provide (all-from-out (submod typed/measures-with-dimensions/temperature untyped)))
+#lang reprovide
+(submod typed/measures-with-dimensions/temperature untyped)

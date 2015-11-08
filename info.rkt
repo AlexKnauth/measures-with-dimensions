@@ -10,6 +10,7 @@
                "htdp-lib"
                "unstable-lib"
                "sweet-exp"
+               "reprovide-lang"
                "predicates"
                "colon-match"
                "scribble-lib"))

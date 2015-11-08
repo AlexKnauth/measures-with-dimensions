@@ -1,16 +1,11 @@
 #lang typed/racket/base
 
-(provide (all-from-out
-          typed/measures-with-dimensions/units/unit-struct
-          typed/measures-with-dimensions/units/unit-operations
-          typed/measures-with-dimensions/units/units
-          ))
+(require reprovide/reprovide "untyped-utils.rkt")
 
-(require typed/measures-with-dimensions/units/unit-struct
-         typed/measures-with-dimensions/units/unit-operations
-         typed/measures-with-dimensions/units/units
-         "untyped-utils.rkt"
-         )
+(reprovide typed/measures-with-dimensions/units/unit-struct
+           typed/measures-with-dimensions/units/unit-operations
+           typed/measures-with-dimensions/units/units
+           )
 
 (untyped-module*
  [#:all-from

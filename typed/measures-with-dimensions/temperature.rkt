@@ -1,11 +1,9 @@
 #lang typed/racket/base
 
-(provide (all-from-out typed/measures-with-dimensions/temperature/temperature-functions
-                       typed/measures-with-dimensions/temperature/match-expanders))
+(require reprovide/reprovide typed/measures-with-dimensions/untyped-utils)
 
-(require typed/measures-with-dimensions/temperature/temperature-functions
-         typed/measures-with-dimensions/temperature/match-expanders
-         typed/measures-with-dimensions/untyped-utils)
+(reprovide typed/measures-with-dimensions/temperature/temperature-functions
+           typed/measures-with-dimensions/temperature/match-expanders)
 
 (untyped-module*
  [#:all-from
