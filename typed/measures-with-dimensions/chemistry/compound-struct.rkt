@@ -1,16 +1,16 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (struct-out compound)
-         Compound
-         ->compound
-         )
+provide (struct-out compound)
+        Compound
+        ->compound
 
-(require racket/match
-         (only-in typed/racket/base [U Un])
-         "element-struct.rkt"
-         "elements.rkt"
-         "../untyped-utils.rkt"
-         )
+
+require racket/match
+        (only-in typed/racket/base [U Un])
+        "element-struct.rkt"
+        "elements.rkt"
+        "../untyped-utils.rkt"
+
 
 (struct compound
   ([alist : (Listof (Pairof (Un Element Compound) Natural))])

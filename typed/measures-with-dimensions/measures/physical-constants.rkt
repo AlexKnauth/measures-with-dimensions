@@ -1,15 +1,15 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (all-defined-out))
+provide (all-defined-out)
 
-(require "../dimensions/dimension-struct.rkt"
-         "../units/unit-struct.rkt"
-         "../units/unit-operations.rkt"
-         "../units/units.rkt"
-         "measure-struct.rkt"
-         "measure-types.rkt"
-         "../untyped-utils.rkt"
-         )
+require "../dimensions/dimension-struct.rkt"
+        "../units/unit-struct.rkt"
+        "../units/unit-operations.rkt"
+        "../units/units.rkt"
+        "measure-struct.rkt"
+        "measure-types.rkt"
+        "../untyped-utils.rkt"
+
 
 (: g : Acceleration)
 (define g  ; the acceleration due to gravity on earth

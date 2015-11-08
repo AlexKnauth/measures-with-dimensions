@@ -1,27 +1,27 @@
-#lang racket/base
+#lang sweet-exp racket/base
 
-(provide compound
-         compound:
-         Compound
-         compound?
-         make-compound
-         compound-alist
-         )
+provide compound
+        compound:
+        Compound
+        compound?
+        make-compound
+        compound-alist
 
-(require racket/match
-         "element-struct.rkt"
-         "elements.rkt"
-         (rename-in "compound-struct.rkt" [compound make-compound])
-         (for-syntax racket/base
-                     syntax/parse
-                     racket/match
-                     (only-in colon-match :match define-:match-class)
-                     racket/list
-                     rackjure/threading
-                     predicates
-                     ))
-(module+ test
-  (require rackunit))
+
+require racket/match
+        "element-struct.rkt"
+        "elements.rkt"
+        (rename-in "compound-struct.rkt" [compound make-compound])
+        for-syntax racket/base
+                   syntax/parse
+                   racket/match
+                   (only-in colon-match :match define-:match-class)
+                   racket/list
+                   rackjure/threading
+                   predicates
+
+module+ test
+  require rackunit
 
 (begin-for-syntax
   (define-syntax-class compound-match-exp-clause

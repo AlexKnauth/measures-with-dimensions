@@ -1,11 +1,11 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide 0-measure 1-measure)
+provide 0-measure 1-measure
 
-(require "../units/unit-struct.rkt"
-         "measure-struct.rkt"
-         "../untyped-utils.rkt"
-         )
+require "../units/unit-struct.rkt"
+        "measure-struct.rkt"
+        "../untyped-utils.rkt"
+
 
 (: 0-measure : (measure 0 Dimensionless-Unit +inf.0))
 (define 0-measure

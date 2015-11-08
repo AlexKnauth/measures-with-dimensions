@@ -1,17 +1,17 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide molar-mass
-         Molar-Mass
-         g/mol
-         )
+provide molar-mass
+        Molar-Mass
+        g/mol
 
-(require racket/match
-         (only-in typed/racket/base [U Un])
-         "../measures.rkt"
-         "element-struct.rkt"
-         "compound.rkt"
-         "../untyped-utils.rkt"
-         )
+
+require racket/match
+        (only-in typed/racket/base [U Un])
+        "../measures.rkt"
+        "element-struct.rkt"
+        "compound.rkt"
+        "../untyped-utils.rkt"
+
 
 (: molar-mass : [(Un Element Compound) -> Molar-Mass])
 (define (molar-mass comp)
@@ -37,15 +37,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(module* test racket/base
-  (require (submod ".." untyped)
-           rackunit
-           (submod "../measures.rkt" untyped)
-           (submod "elements.rkt" untyped)
-           "compound.rkt"
-           )
+module* test racket/base
+  require (submod ".." untyped)
+          rackunit
+          (submod "../measures.rkt" untyped)
+          (submod "elements.rkt" untyped)
+          "compound.rkt"
   (check-equal? (molar-mass H) (m: 1.00794 g/mol))
   (check-equal? (molar-mass O) (m: 15.9994 g/mol))
   (check-equal? (+ (* 1.00794 2) 15.9994) 18.01528)
   (check-equal? (molar-mass (compound: H2O)) (m: 18.01528 g/mol))
-  )
+

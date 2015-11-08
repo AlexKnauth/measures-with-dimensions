@@ -1,19 +1,19 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (struct-out element)
-         Element
-         Molar-Mass
-         Molar-Mass-Unit
-         g/mol
-         )
+provide (struct-out element)
+        Element
+        Molar-Mass
+        Molar-Mass-Unit
+        g/mol
 
-(require racket/match
-         (only-in typed/racket/base [U Un])
-         "../units/unit-operations.rkt"
-         "../units/units.rkt"
-         "../measures/measure-types.rkt"
-         "../untyped-utils.rkt"
-         )
+
+require racket/match
+        (only-in typed/racket/base [U Un])
+        "../units/unit-operations.rkt"
+        "../units/units.rkt"
+        "../measures/measure-types.rkt"
+        "../untyped-utils.rkt"
+
 
 (struct (Sym) element
   ([atomic-number : Positive-Integer] [symbol : Sym] [atomic-mass : Molar-Mass])

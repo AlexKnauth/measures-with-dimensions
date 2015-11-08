@@ -1,15 +1,15 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(require racket/match
-         syntax/parse/define
-         (only-in typed/racket/base [U Un])
-         "../units/unit-operations.rkt"
-         "../units/units.rkt"
-         "../measures/measure-struct.rkt"
-         "../measures/measure-types.rkt"
-         "element-struct.rkt"
-         "../untyped-utils.rkt"
-         )
+require racket/match
+        syntax/parse/define
+        (only-in typed/racket/base [U Un])
+        "../units/unit-operations.rkt"
+        "../units/units.rkt"
+        "../measures/measure-struct.rkt"
+        "../measures/measure-types.rkt"
+        "element-struct.rkt"
+        "../untyped-utils.rkt"
+
 
 (define-simple-macro
   (def-elements elements/sym elements/n ->element [Sym num mass] ...)
