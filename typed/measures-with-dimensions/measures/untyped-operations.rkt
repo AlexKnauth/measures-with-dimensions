@@ -1,24 +1,24 @@
-#lang racket/base
+#lang sweet-exp racket/base
 
-(provide m: m+ m- m1/ mexpt m* m*/scalar m*/vector (rename-out [m: m]))
+provide m: m+ m- m1/ mexpt m* m*/scalar m*/vector (rename-out [m: m])
 
-(require (submod "../dimensions/dimension-struct.rkt" untyped)
-         (submod "../dimensions/dimension-operations.rkt" untyped)
-         (submod "../units/unit-struct.rkt" untyped)
-         (submod "../units/unit-operations.rkt" untyped)
-         (submod "measure-struct.rkt" untyped)
-         (submod "0-1-measures.rkt" untyped)
-         (submod "typed-operations-1.rkt" untyped)
-         (only-in typed/racket/base assert : ann)
-         typed/untyped-utils
-         (for-syntax racket/base
-                     syntax/parse
-                     typed/untyped-utils
-                     ))
+require (submod "../dimensions/dimension-struct.rkt" untyped)
+        (submod "../dimensions/dimension-operations.rkt" untyped)
+        (submod "../units/unit-struct.rkt" untyped)
+        (submod "../units/unit-operations.rkt" untyped)
+        (submod "measure-struct.rkt" untyped)
+        (submod "0-1-measures.rkt" untyped)
+        (submod "typed-operations-1.rkt" untyped)
+        (only-in typed/racket/base assert : ann)
+        typed/untyped-utils
+        for-syntax racket/base
+                   syntax/parse
+                   typed/untyped-utils
 
-(module+ test
-  (require rackunit
-           (submod "../units/units.rkt" untyped)))
+
+module+ test
+  require rackunit
+          (submod "../units/units.rkt" untyped)
 
 (begin-for-syntax
   (define-syntax-class mexpr #:description "non-operation expression"

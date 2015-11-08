@@ -1,26 +1,26 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (struct-out dimension)
-         Dimension
-         Dimension?
-         Dimension-M-expt
-         Dimension-L-expt
-         Dimension-T-expt
-         Dimension-Q-expt
-         Dimension-Θ-expt
-         make-dimension
-         make-Dimension
-         Dimensionless-Dimension
-         dimensionless-dimension
-         )
+provide (struct-out dimension)
+        Dimension
+        Dimension?
+        Dimension-M-expt
+        Dimension-L-expt
+        Dimension-T-expt
+        Dimension-Q-expt
+        Dimension-Θ-expt
+        make-dimension
+        make-Dimension
+        Dimensionless-Dimension
+        dimensionless-dimension
 
-(require syntax/parse/define
-         "../preds.rkt"
-         "../untyped-utils.rkt"
-         (for-syntax racket/base
-                     syntax/parse
-                     racket/struct-info
-                     racket/local))
+
+require syntax/parse/define
+        "../preds.rkt"
+        "../untyped-utils.rkt"
+        for-syntax racket/base
+                   syntax/parse
+                   racket/struct-info
+                   racket/local
 
 (define-simple-macro (inst-Int*5 f:expr)
   (inst f Integer Integer Integer Integer Integer))
@@ -85,7 +85,7 @@
   (: write-s : [String -> Void])
   (define (write-s s)
     (void (write-string s out)))
-  (: write-sub : ([String Integer] [(U 0 1 #t #f)] . ->* . Void))
+  (: write-sub : (->* [String Integer] [(U 0 1 #t #f)] Void))
   (define (write-sub str expt [mode mode])
     (cond [(zero? expt) (display 1 out)]
           [(one? expt)  (write-s str)]

@@ -1,18 +1,18 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (all-defined-out))
+provide (all-defined-out)
 
-(require racket/splicing
-         math/bigfloat
-         (except-in racket/list second)
-         "../dimensions/dimension-struct.rkt"
-         "../dimensions/dimension-operations.rkt"
-         "../units/unit-struct.rkt"
-         "../units/unit-operations.rkt"
-         "../vector-operations.rkt"
-         "../preds.rkt"
-         "../untyped-utils.rkt"
-         )
+require racket/splicing
+        math/bigfloat
+        (except-in racket/list second)
+        "../dimensions/dimension-struct.rkt"
+        "../dimensions/dimension-operations.rkt"
+        "../units/unit-struct.rkt"
+        "../units/unit-operations.rkt"
+        "../vector-operations.rkt"
+        "../preds.rkt"
+        "../untyped-utils.rkt"
+
 
 (define-type Sig-Figs (U Positive-Integer +inf.0))
 (define sig-figs? (make-predicate Sig-Figs))
@@ -313,14 +313,14 @@
 
 ;; tests:
 
-(module* test racket/base
-  (require (submod ".." untyped)
-           (submod "../units/units.rkt" untyped))
-  (require rackunit)
+module* test racket/base
+  require (submod ".." untyped)
+          (submod "../units/units.rkt" untyped)
+          rackunit
   (check measure=?
          (make-Measure 1    meter)
          (make-Measure 100  centimeter))
   (check measure=?
          (make-Measure 1    meter)
          (make-Measure 1000 millimeter))
-  )
+

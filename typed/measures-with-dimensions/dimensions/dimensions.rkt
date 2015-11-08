@@ -1,22 +1,22 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (all-defined-out))
+provide (all-defined-out)
 
-(require syntax/parse/define
-         "../preds.rkt"
-         "dimension-struct.rkt"
-         "dimension-operations.rkt"
-         "../untyped-utils.rkt"
-         (for-syntax racket/base
-                     syntax/parse
-                     racket/syntax
-                     racket/match
-                     rackjure/threading
-                     racket/contract/base
-                     racket/contract/region
-                     (for-syntax racket/base
-                                 syntax/parse
-                                 )))
+require syntax/parse/define
+        "../preds.rkt"
+        "dimension-struct.rkt"
+        "dimension-operations.rkt"
+        "../untyped-utils.rkt"
+        for-syntax racket/base
+                   syntax/parse
+                   racket/syntax
+                   racket/match
+                   rackjure/threading
+                   racket/contract/base
+                   racket/contract/region
+                   for-syntax racket/base
+                              syntax/parse
+
 
 (define-simple-macro (def/cast id:id (~literal :) t:expr val:expr)
   (begin

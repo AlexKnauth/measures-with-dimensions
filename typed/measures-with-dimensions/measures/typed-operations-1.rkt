@@ -1,16 +1,16 @@
-#lang typed/racket
+#lang sweet-exp typed/racket
 
-(provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m*)
+provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m*
 
-(require "../dimensions/dimension-struct.rkt"
-         "../dimensions/dimension-operations.rkt"
-         "../units/unit-struct.rkt"
-         "../units/unit-operations.rkt"
-         "measure-struct.rkt"
-         "0-1-measures.rkt"
-         "../vector-operations.rkt"
-         "../preds.rkt"
-         "../untyped-utils.rkt")
+require "../dimensions/dimension-struct.rkt"
+        "../dimensions/dimension-operations.rkt"
+        "../units/unit-struct.rkt"
+        "../units/unit-operations.rkt"
+        "measure-struct.rkt"
+        "0-1-measures.rkt"
+        "../vector-operations.rkt"
+        "../preds.rkt"
+        "../untyped-utils.rkt"
 
 (: measure->real-measure : (All (d) [(Measureof Any (Unitof d)) -> (Measureof Real (Unitof d))]))
 (define (measure->real-measure m)
