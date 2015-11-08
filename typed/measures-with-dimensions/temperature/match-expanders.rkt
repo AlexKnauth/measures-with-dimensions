@@ -1,17 +1,17 @@
-#lang racket/base
+#lang sweet-exp racket/base
 
-(provide kelvin:
-         rankine:
-         celcius:
-         fahrenheit:
-         )
+provide kelvin:
+        rankine:
+        celcius:
+        fahrenheit:
 
-(require racket/match
-         "temperature-functions.rkt"
-         (for-syntax racket/base
-                     syntax/parse
-                     unstable/syntax
-                     ))
+
+require racket/match
+        "temperature-functions.rkt"
+        for-syntax racket/base
+                   syntax/parse
+                   unstable/syntax
+
 
 (define-match-expander kelvin:
   (syntax-parser

@@ -9,6 +9,7 @@
                "math-lib"
                "htdp-lib"
                "unstable-lib"
+               "sweet-exp"
                "predicates"
                "colon-match"
                "scribble-lib"))

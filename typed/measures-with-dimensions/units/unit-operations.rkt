@@ -1,25 +1,25 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (all-defined-out))
+provide (all-defined-out)
 
-(require syntax/parse/define
-         racket/math
-         racket/match
-         racket/local
-         racket/splicing
-         (except-in racket/list second)
-         "unit-struct.rkt"
-         "../dimensions/dimension-struct.rkt"
-         "../dimensions/dimension-operations.rkt"
-         "../preds.rkt"
-         "../untyped-utils.rkt"
-         )
-(require/typed racket/set
-               [#:opaque Mutable-Set set-mutable?]
-               [mutable-set [-> Mutable-Set]]
-               [set-add! [Mutable-Set Unit -> Void]]
-               [set-empty? [Mutable-Set -> Boolean]]
-               [set-first [Mutable-Set -> Unit]])
+require syntax/parse/define
+        racket/math
+        racket/match
+        racket/local
+        racket/splicing
+        (except-in racket/list second)
+        "unit-struct.rkt"
+        "../dimensions/dimension-struct.rkt"
+        "../dimensions/dimension-operations.rkt"
+        "../preds.rkt"
+        "../untyped-utils.rkt"
+
+require/typed racket/set
+              [#:opaque Mutable-Set set-mutable?]
+              [mutable-set [-> Mutable-Set]]
+              [set-add! [Mutable-Set Unit -> Void]]
+              [set-empty? [Mutable-Set -> Boolean]]
+              [set-first [Mutable-Set -> Unit]]
 
 
 (: unit=? (Unitish Unitish * -> Boolean))
@@ -294,13 +294,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(module* test racket/base
-  (require (submod "../dimensions/dimension-struct.rkt" untyped)
-           (submod "unit-struct.rkt" untyped)
-           (submod ".." untyped)
-           rackunit
-           racket/match
-           )
+module* test racket/base
+  require (submod "../dimensions/dimension-struct.rkt" untyped)
+          (submod "unit-struct.rkt" untyped)
+          (submod ".." untyped)
+          rackunit
+          racket/match
   (check-equal? (simplify-unit-name '1-unit) '1-unit)
   (let ([sym (gensym)])
     (check-equal? (simplify-unit-name sym) sym)
@@ -324,4 +323,4 @@
     (check-equal? (unit-name (u/ ab a)) 'b)
     (define a2 (unit 'a 2 dimensionless-dimension))
     (check-equal? (unit-name (u/ a a2)) `(u* ,a (u1/ ,a2))))
-  )
+

@@ -1,22 +1,22 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide make-kelvin
-         make-rankine
-         celsius
-         fahrenheit
-         get-kelvin
-         get-rankine
-         get-celsius
-         get-fahrenheit
-         celsius->fahrenheit
-         fahrenheit->celsius
-         )
+provide make-kelvin
+        make-rankine
+        celsius
+        fahrenheit
+        get-kelvin
+        get-rankine
+        get-celsius
+        get-fahrenheit
+        celsius->fahrenheit
+        fahrenheit->celsius
 
-(require "../units/units.rkt"
-         "../measures/measure-struct.rkt"
-         "../measures/measure-types.rkt"
-         "../untyped-utils.rkt"
-         )
+
+require "../units/units.rkt"
+        "../measures/measure-struct.rkt"
+        "../measures/measure-types.rkt"
+        "../untyped-utils.rkt"
+
 
 (define nonnegative-real? (make-predicate Nonnegative-Real))
 
@@ -91,15 +91,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(module* test racket/base
-  (require (submod ".." untyped)
-           rackunit
-           (submod "../units.rkt" untyped)
-           (submod "../measures.rkt" untyped)
-           )
+module* test racket/base
+  require (submod ".." untyped)
+          rackunit
+          (submod "../units.rkt" untyped)
+          (submod "../measures.rkt" untyped)
   (check-equal? (get-kelvin (m: 0 kelvin)) 0)
   (check-equal? (get-celsius (m: 0 kelvin)) #e-273.15)
   (check-equal? (get-kelvin (celsius 0)) #e273.15)
   (check-equal? (fahrenheit->celsius 32) 0)
   (check-equal? (fahrenheit->celsius 212) 100)
-  )
+

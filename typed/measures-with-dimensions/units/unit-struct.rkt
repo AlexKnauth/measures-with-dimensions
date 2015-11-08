@@ -1,23 +1,23 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (struct-out unit)
-         Unit
-         Unitof
-         Unitish
-         Dimensionless-Unit
-         ->unit
-         make-Unit
-         Unit?
-         Unitish?
-         Unit-name
-         Unit-scalar
-         Unit-dimension
-         1-unit
-         )
+provide (struct-out unit)
+        Unit
+        Unitof
+        Unitish
+        Dimensionless-Unit
+        ->unit
+        make-Unit
+        Unit?
+        Unitish?
+        Unit-name
+        Unit-scalar
+        Unit-dimension
+        1-unit
 
-(require "../dimensions/dimension-struct.rkt"
-         "../preds.rkt"
-         "../untyped-utils.rkt")
+
+require "../dimensions/dimension-struct.rkt"
+        "../preds.rkt"
+        "../untyped-utils.rkt"
 
 (struct: (d) unit ([name : Any] [scalar : Positive-Real] [dimension : d])
   #:transparent

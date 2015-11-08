@@ -1,17 +1,17 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(provide (all-defined-out))
+provide (all-defined-out)
 
-(require syntax/parse/define
-         "../dimensions/dimension-struct.rkt"
-         "../dimensions/dimension-operations.rkt"
-         "../dimensions/dimensions.rkt"
-         "unit-struct.rkt"
-         "unit-operations.rkt"
-         "../preds.rkt"
-         "../exact-tau-pi-eta.rkt"
-         "../untyped-utils.rkt"
-         )
+require syntax/parse/define
+        "../dimensions/dimension-struct.rkt"
+        "../dimensions/dimension-operations.rkt"
+        "../dimensions/dimensions.rkt"
+        "unit-struct.rkt"
+        "unit-operations.rkt"
+        "../preds.rkt"
+        "../exact-tau-pi-eta.rkt"
+        "../untyped-utils.rkt"
+
 
 (: 10^ : (case-> [Zero -> One]
                  [Natural -> Natural]
@@ -390,11 +390,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(module* test racket/base
-  (require rackunit
-           (submod ".." untyped)
-           (submod "../dimensions/dimension-operations.rkt" untyped)
-           (submod "unit-struct.rkt" untyped))
+module* test racket/base
+  require rackunit
+          (submod ".." untyped)
+          (submod "../dimensions/dimension-operations.rkt" untyped)
+          (submod "unit-struct.rkt" untyped)
   (check dimension=? (unit-dimension ideal-gas-constant-unit) (unit-dimension bolzmann-constant-unit))
   (check-= (unit-scalar ideal-gas-constant-unit) (unit-scalar bolzmann-constant-unit) #i1.0e-10)
-  )
+
