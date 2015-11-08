@@ -1,9 +1,9 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(require reprovide/reprovide typed/measures-with-dimensions/untyped-utils)
+require reprovide/reprovide typed/measures-with-dimensions/untyped-utils
 
-(reprovide typed/measures-with-dimensions/temperature/temperature-functions
-           typed/measures-with-dimensions/temperature/match-expanders)
+reprovide typed/measures-with-dimensions/temperature/temperature-functions
+          typed/measures-with-dimensions/temperature/match-expanders
 
 (untyped-module*
  [#:all-from

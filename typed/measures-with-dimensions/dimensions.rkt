@@ -1,11 +1,11 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(require reprovide/reprovide "untyped-utils.rkt")
+require reprovide/reprovide "untyped-utils.rkt"
 
-(reprovide typed/measures-with-dimensions/dimensions/dimension-struct
-           typed/measures-with-dimensions/dimensions/dimension-operations
-           typed/measures-with-dimensions/dimensions/dimensions
-           )
+reprovide typed/measures-with-dimensions/dimensions/dimension-struct
+          typed/measures-with-dimensions/dimensions/dimension-operations
+          typed/measures-with-dimensions/dimensions/dimensions
+
 
 (untyped-module*
  [#:all-from

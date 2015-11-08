@@ -1,12 +1,12 @@
-#lang typed/racket/base
+#lang sweet-exp typed/racket/base
 
-(require reprovide/reprovide typed/measures-with-dimensions/untyped-utils)
+require reprovide/reprovide typed/measures-with-dimensions/untyped-utils
 
-(reprovide typed/measures-with-dimensions/dimensions
-           typed/measures-with-dimensions/units
-           typed/measures-with-dimensions/measures
-           typed/measures-with-dimensions/temperature
-           )
+reprovide typed/measures-with-dimensions/dimensions
+          typed/measures-with-dimensions/units
+          typed/measures-with-dimensions/measures
+          typed/measures-with-dimensions/temperature
+
 
 (untyped-module*
  [#:all-from
