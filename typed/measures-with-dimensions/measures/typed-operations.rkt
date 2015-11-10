@@ -1,16 +1,16 @@
-#lang typed/racket
+#lang sweet-exp typed/racket
 
-(provide (all-from-out "typed-operations-1.rkt" "untyped-operations.rkt"))
+require reprovide/reprovide "../untyped-utils.rkt"
 
-(require "typed-operations-1.rkt"
-         (only-in "untyped-operations.rkt" m: m)
-         "../untyped-utils.rkt")
+reprovide "typed-operations-1.rkt"
+          (only-in "untyped-operations.rkt" m: m)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
- [#:all-from (submod typed/measures-with-dimensions/measures/typed-operations-1 untyped)
-             typed/measures-with-dimensions/measures/untyped-operations]
- )
+ [#:all-from
+  (submod typed/measures-with-dimensions/measures/typed-operations-1 untyped)
+  typed/measures-with-dimensions/measures/untyped-operations
+  ])
 
 
