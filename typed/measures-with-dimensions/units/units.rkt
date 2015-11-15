@@ -304,6 +304,9 @@ define-units/type Power-Unit
   [watt (make-Unit 'watt 1 power-dimension)]
   [kilowatt (kilo watt)]
   [horsepower (u* #e746 watt)]
+  ;; For anyone worrying about solar cells and rover power usage on mars.
+  [pirate-ninja (u/ (u* kilowatt hour) mars-sol)]
+  [milli-pirate-ninja (u/ (u* watt hour) mars-sol)]
 
 
 ;; Energy/Work/Torque:
