@@ -103,6 +103,19 @@ require/typed racket/set
                    (cast (apply / (Unit-scalar u) (map Unit-scalar rst)) Positive-Real)
                    (apply d/ (Unit-dimension u) (map Unit-dimension rst)))))]))
 
+(: u+ : [Unitish Unitish * -> Unit])
+(define (u+ u . rst)
+  (let ([u : Unit (->unit u)]
+        [rst : (Listof Unit) (map ->unit rst)])
+    (define d (Unit-dimension u))
+    (for ([u2 (in-list rst)])
+      (unless (dimension=? d (Unit-dimension u2))
+        (error 'u+ "can't add ~v and ~v because they have different dimensions")))
+    (unit-simplify-name
+     (make-Unit `(u+ ,u ,@rst)
+                (assert (apply + (Unit-scalar u) (map Unit-scalar rst)) positive?)
+                d))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -226,6 +239,7 @@ require/typed racket/set
                                            (u1/ (u* ,@neg-expts)))])]))]))))
 
 (: unit-name->hash : [Any -> (HashTable (U Symbol Unit) Exact-Rational)])
+;; turns a unit name into a hash-table of "base units" with exponents, multiplied together
 (define (unit-name->hash name)
   (: hash : [(U Symbol Unit) Integer -> (HashTable (U Symbol Unit) Exact-Rational)])
   (define (hash a b)
@@ -246,6 +260,7 @@ require/typed racket/set
         [else (error 'simplify-unit-name "bad unit name: ~v" name)]))
 
 (: unit-name->hash/op : [Name/Op -> (HashTable (U Symbol Unit) Exact-Rational)])
+;; a helper function for unit-name->hash that handles the different unit operations
 (define (unit-name->hash/op name)
   (define sym (first name))
   (define args (rest name))
@@ -284,6 +299,10 @@ require/typed racket/set
           (cond [(= n 0) (bad-unit-name)]
                 [(= n 1) (unit-name->hash/op `(u1/ ,(first args)))]
                 [else (unit-name->hash/op `(u* ,(first args) (u1/ (u* ,@(rest args)))))])]
+    [(u+) (define n (length args))
+          (cond [(= n 0) (bad-unit-name)]
+                [(= n 1) (unit-name->hash (first args))]
+                [else (hash `(u+ ,@args) 1)])]
     [else (bad-unit-name)]
     ))
 

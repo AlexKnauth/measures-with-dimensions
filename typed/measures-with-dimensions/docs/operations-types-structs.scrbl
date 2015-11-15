@@ -135,6 +135,7 @@ first.  So @racket[mol]s will be multiplied by approx. 6.02*10^23,
   @defproc[(u1/ [u Unitish]) Unit]
   @defproc[(u/ [u1 Unitish] [u Unitish] ...+) Unit]
   @defproc[(uexpt [u Unitish] [n Exact-Rational]) Unit]
+  @defproc[(u+ [u Unitish] ...+) Unit]
   @defproc[(->unit [u Unitish]) Unit]
   @defproc[(unit-rename [u Unit] [n Any]) Unit]
   @defproc[(unit=? [u1 Unitish] [u Unitish] ...) Boolean]
