@@ -224,6 +224,7 @@ define-units/type Time-Unit
   [microsecond (micro second)]
   [nanosecond (nano second)]
   [planck-time (u* #i5.39106e-44 second)]
+  [mars-sol (u+ (u* 24 hour) (u* 39 minute) (u* #i35.244 second))]
 
 
 ;; Charge:
