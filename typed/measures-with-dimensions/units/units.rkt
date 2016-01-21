@@ -318,7 +318,14 @@ define-units/type Energy-Unit
   [british-thermal-unit (u* #e1055.05585262 joule)]
   [kilowatt-hour (u* kilowatt hour)]
   [electron-volt (u* elementary-charge-unit voltage-dimension)]
+  [megaelectron-volt (mega electron-volt)]
+  [gigaelectron-volt (giga electron-volt)]
 
+;; Mass units derived from energy units divided by c^2
+define-units/type Mass-Unit
+  [electron-volt/c^2  (u/ electron-volt (usqr speed-of-light-unit))]
+  [megaelectron-volt/c^2 (mega electron-volt/c^2)]
+  [gigaeloctron-volt/c^2 (giga electron-volt/c^2)]
 
 ;; Pressure:
 define-units/type Pressure-Unit
