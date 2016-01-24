@@ -1,6 +1,6 @@
 #lang sweet-exp typed/racket
 
-provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m*
+provide m+ m+/lenient m- m1/ mexpt m*/scalar m*/vector m* mabs
 
 require "../dimensions/dimension-struct.rkt"
         "../dimensions/dimension-operations.rkt"
@@ -295,6 +295,17 @@ require "../dimensions/dimension-struct.rkt"
                    (m*/no-special-case n (assert u Unit?))])]
            [else (m*/no-special-case n u)])]
     [args (apply m*/no-special-case args)]))
+
+(: mabs : (All (d) (case-> [-> (Measureof (U Positive-Real Negative-Real) (Unitof d))
+                               (Measureof Positive-Real (Unitof d))]
+                           [-> (Measureof Real (Unitof d))
+                               (Measureof Nonnegative-Real (Unitof d))]
+                           [-> Real-Measure Real-Measure])))
+(define (mabs m)
+  (let ([m (->measure m)])
+    (make-measure (abs (measure-number m))
+                  (measure-unit m)
+                  (measure-sig-figs m))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

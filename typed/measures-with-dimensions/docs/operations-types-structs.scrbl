@@ -21,7 +21,7 @@
            (m: expr-or-op ... : type)]
           #:grammar ([expr-or-op expr op]
                      [op @#,tt{+} @#,tt{-} @#,tt{*} @#,tt{/} @#,tt{^}])]{
-this macro lets you write measures and operations on measures using infix notation with the symbols
+This macro lets you write measures and operations on measures using infix notation with the symbols
 @tt{+}, @tt{-}, @tt{*}, @tt{/}, and @tt{^}.
 
 It is syntactic sugar for using @racket[m+], @racket[m-], @racket[m*], @racket[m1/], and
@@ -63,7 +63,7 @@ the result to be what you want, or using @racket[inst] to instantiate it for a c
 ]}
 
 @defproc[(m- [m Measureish]) Measure]{
-negates a measure.  To do subtraction, either use the @racket[m:] macro or use a pattern like
+Negates a measure.  To do subtraction, either use the @racket[m:] macro or use a pattern like
 @racket[(m+ a (m- b))].
 
 @examples[
@@ -74,16 +74,20 @@ negates a measure.  To do subtraction, either use the @racket[m:] macro or use a
 ]}
 
 @defproc[(m* [m Measureish] ...) Measure]{
-multiplies the measures.
+Multiplies the measures.
 }
 
 @defproc[(m1/ [m Number-Measureish]) Number-Measure]{
-takes the multiplicative inverse of the measure.  To do division, either use the @racket[m:] macro or
+Takes the multiplicative inverse of the measure.  To do division, either use the @racket[m:] macro or
 use a pattern like @racket[(m* a (m1/ b))].
 }
 
 @defproc[(mexpt [m1 Number-Measureish] [m2 Number-Measureish]) Number-Measure]{
-takes @racket[m1] to the exponent of @racket[m2].
+Takes @racket[m1] to the exponent of @racket[m2].
+}
+
+@defproc[(mabs [m Real-Measure]) Real-Measure]{
+Takes the absolute value of @racket[m].
 }
 
 @defproc*[([(convert [m Measure] [u Unitish]) Measure]
@@ -99,7 +103,7 @@ The second form converts the number or vector @racket[n] from @racket[u1] to @ra
 ]}
 
 @defproc[(measure=? [m1 Measureish] [m Measureish] ...) Boolean]{
-returns true if the measures represent the same quantities.
+Returns true if the measures represent the same quantities.
 
 @examples[
   (require typed/racket)
@@ -113,7 +117,7 @@ returns true if the measures represent the same quantities.
 ]}
 
 @defproc[(->measure [m Measureish]) Measure]{
-converts from something "measureish" to a @racket[Measure].
+Converts from something "measureish" to a @racket[Measure].
 }
 
 @deftogether[[
@@ -140,7 +144,7 @@ first.  So @racket[mol]s will be multiplied by approx. 6.02*10^23,
   @defproc[(unit-rename [u Unit] [n Any]) Unit]
   @defproc[(unit=? [u1 Unitish] [u Unitish] ...) Boolean]
 ]]{
-operations on units
+Operations on units
 }
 
 @deftogether[[
@@ -150,7 +154,7 @@ operations on units
   @defproc[(dexpt [d Dimension] [n Exact-Rational]) Dimension]
   @defproc[(dimension=? [d1 Dimension] [d Dimension] ...) Boolean]
 ]]{
-operations on dimensions
+Operations on dimensions
 }
 
 
