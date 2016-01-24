@@ -1,6 +1,6 @@
 #lang typed/racket/base
 
-(provide beta gamma)
+(provide beta gamma gamma/beta)
 
 (require "../measures.rkt"
          "../preds.rkt"
@@ -11,16 +11,19 @@
 (define (beta u)
   (assert (measure->number (m: u / c)) nonnegative-real?))
 
-(: gamma : [Speed -> Positive-Real])
-(define (gamma u)
+(: gamma/beta : [Nonnegative-Real -> Positive-Real])
+(define (gamma/beta β)
   ;; γ = 1 / √[1 - β^2] = 1 / √[(1 + β)*(1 - β)]
-  (define β (beta u))
   (cond
     [(= β 1) +inf.0]
     [(< β 1)
      (assert (/ (sqrt (* (+ 1 β) (- 1 β)))) positive-real?)]
     [else
-     (error 'gamma "expected a speed slower than light, given ~v" u)]))
+     (error 'gamma "expected a speed slower than light, given ~v times that" β)]))
+
+(: gamma : [Speed -> Positive-Real])
+(define (gamma u)
+  (gamma/beta (beta u)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
