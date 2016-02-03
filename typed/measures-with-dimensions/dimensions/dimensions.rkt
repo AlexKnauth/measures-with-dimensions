@@ -179,6 +179,7 @@ require syntax/parse/define
   
   [force-dimension (d* mass-dimension acceleration-dimension)]
   [momentum-dimension (d* mass-dimension velocity-dimension)]
+  [angular-momentum-dimension (d* length-dimension momentum-dimension)]
   
   [energy-dimension (d* mass-dimension (dexpt velocity-dimension 2))]
   [work-dimension energy-dimension]

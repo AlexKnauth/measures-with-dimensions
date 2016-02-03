@@ -61,6 +61,8 @@ require syntax/parse/define
   (Unitof Force-Dimension))
 (define-type Momentum-Unit
   (Unitof Momentum-Dimension))
+(define-type Angular-Momentum-Unit
+  (Unitof Angular-Momentum-Dimension))
 
 (define-type Energy-Unit
   (Unitof Energy-Dimension))

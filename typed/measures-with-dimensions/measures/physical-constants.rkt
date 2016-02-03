@@ -39,6 +39,11 @@ require "../dimensions/dimension-struct.rkt"
 (define k_B
   (measure 1 (unit-rename bolzmann-constant-unit 'k_B) +inf.0))
 
+(: planck-constant : (Measureof Positive-Real Angular-Momentum-Unit))
+(define planck-constant
+  (cast (make-Measure #i6.626070040e-34 (u* joule second))
+        (Measureof Positive-Real Angular-Momentum-Unit)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
