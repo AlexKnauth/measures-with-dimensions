@@ -44,6 +44,12 @@ require "../dimensions/dimension-struct.rkt"
   (cast (make-Measure #i6.626070040e-34 (u* joule second))
         (Measureof Positive-Real Angular-Momentum-Unit)))
 
+(: reduced-planck-constant : (Measureof Positive-Real Angular-Momentum-Unit))
+(define reduced-planck-constant
+  (cast (make-measure (measure-number planck-constant)
+                      (u* joule second (u1/ 2pi-unit)))
+        (Measureof Positive-Real Angular-Momentum-Unit)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (untyped-module*
