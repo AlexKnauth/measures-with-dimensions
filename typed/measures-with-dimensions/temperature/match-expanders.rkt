@@ -2,7 +2,7 @@
 
 provide kelvin:
         rankine:
-        celcius:
+        celsius:
         fahrenheit:
 
 
@@ -25,11 +25,11 @@ require racket/match
      #'(app get-rankine pat)])
   (make-variable-like-transformer #'make-rankine))
 
-(define-match-expander celcius:
+(define-match-expander celsius:
   (syntax-parser
-    [(celcius: pat)
-     #'(app get-celcius pat)])
-  (make-variable-like-transformer #'celcius))
+    [(celsius: pat)
+     #'(app get-celsius pat)])
+  (make-variable-like-transformer #'celsius))
 
 (define-match-expander fahrenheit:
   (syntax-parser
