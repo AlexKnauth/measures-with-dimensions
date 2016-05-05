@@ -327,7 +327,7 @@ define-units/type Energy-Unit
 define-units/type Mass-Unit
   [electron-volt/c^2  (u/ electron-volt (usqr speed-of-light-unit))]
   [megaelectron-volt/c^2 (mega electron-volt/c^2)]
-  [gigaeloctron-volt/c^2 (giga electron-volt/c^2)]
+  [gigaelectron-volt/c^2 (giga electron-volt/c^2)]
 
 ;; Pressure:
 define-units/type Pressure-Unit
