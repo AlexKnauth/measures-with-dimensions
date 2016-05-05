@@ -358,7 +358,7 @@ define-units/type Voltage-Unit
 
 ;; Capacitance:
 define-units/type Capacitance-Unit
-  [farrad (make-Unit 'farrad 1 capacitance-dimension)]
+  [farad (make-Unit 'farad 1 capacitance-dimension)]
 
 
 ;; Current:

@@ -361,7 +361,7 @@ functions for the SI prefixes.
   @deftype[Capacitance-Dimension]
   @deftype[Capacitance-Unit]
   @defthing[capacitance-dimension Capacitance-Dimension]
-  @defthing[farrad Capacitance-Unit]
+  @defthing[farad Capacitance-Unit]
 ]]
 
 @section{Current and Current-Density Units}
