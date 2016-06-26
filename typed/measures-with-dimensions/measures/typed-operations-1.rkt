@@ -40,8 +40,8 @@ require "../dimensions/dimension-struct.rkt"
   (case-lambda
     [() 0-measure]
     [(m1 . rst)
-     (define m1* : Measureish (cast m1 Measureish))
-     (define rst* (cast rst (Listof Measureish)))
+     (define m1* : Measureish (cast (ann m1 Any) Measureish))
+     (define rst* (cast (ann rst Any) (Listof Measureish)))
      (cond [(number? m1)
             (apply (inst m+/lenient Dimensionless-Dimension) (number->measure m1) rst*)]
            [(vector? m1)
@@ -135,7 +135,7 @@ require "../dimensions/dimension-struct.rkt"
   (: vs : (Listof Vec))
   (define vs
     (for/list : (Listof Vec)
-      ([m : Vector-Measure (in-list (cons (cast m1 Vector-Measure) rst))])
+      ([m : Vector-Measure (in-list (cons (cast (ann m1 Any) Vector-Measure) rst))])
       (unless (dimension=? (measure-dimension m) d-Dim)
         (error 'm+ (string-append
                     "can't add two measures with different dimensions" "\n"
