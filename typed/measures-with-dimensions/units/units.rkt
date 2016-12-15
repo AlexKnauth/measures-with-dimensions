@@ -179,6 +179,8 @@ define-units/type Dimensionless-Unit
 define-units/type Mass-Unit
   [kilogram (make-Unit 'kilogram 1 mass-dimension)]
   [gram (make-Unit 'gram 1/1000 mass-dimension)]
+  [milligram (milli gram)]
+  [microgram (micro gram)]
   [pound-mass (u* #e0.45359237 kilogram)]
   [ounce-mass (u/ pound-mass 16)]
   [ton (u* 2000 pound-mass)]
@@ -189,10 +191,13 @@ define-units/type Mass-Unit
 ;; Length:
 define-units/type Length-Unit
   [meter (make-Unit 'meter 1 length-dimension)]
+  [decimeter (deci meter)]
   [centimeter (centi meter)]
   [millimeter (milli meter)]
+  [micrometer (micro meter)]
+  [nanometer  (nano meter)]
+  [picometer  (pico meter)]
   [kilometer (kilo meter)]
-  [decimeter (deci meter)]
   [foot (u* #e30.48 centimeter)]
   [inch (u/ foot 12)]
   [yard (u* foot 3)]
@@ -245,6 +250,11 @@ define-units/type Absolute-Temperature-Unit
 define-units/type Area-Unit
   [square-meter (usqr meter)]
   [square-centimeter (usqr centimeter)]
+  [square-millimeter (usqr millimeter)]
+  [square-micrometer (usqr micrometer)]
+  [square-nanometer  (usqr nanometer)]
+  [square-picometer  (usqr picometer)]
+  [square-kilometer (usqr kilometer)]
   [square-foot (usqr foot)]
   [square-inch (usqr inch)]
   [square-mile (usqr mile)]
