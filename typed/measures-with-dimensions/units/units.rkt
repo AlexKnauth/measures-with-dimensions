@@ -14,22 +14,16 @@ require syntax/parse/define
 
 
 (: 10^ : (case-> [Zero -> One]
-                 [Natural -> Natural]
-                 [Integer -> Exact-Rational]
-                 [Real -> Real]
+                 [Natural -> Positive-Integer]
+                 [Integer -> Positive-Exact-Rational]
+                 [Real -> Nonnegative-Real]
                  [Number -> Number]))
 (define (10^ n)
   (expt 10 n))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ----------------------------------------------------------------------------
 
-
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
+;; Unit Types
 
 (define-type Length-Unit
   (Unitof Length-Dimension))
@@ -118,10 +112,9 @@ require syntax/parse/define
 (define-type Inductance-Unit
   (Unitof Inductance-Dimension))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ----------------------------------------------------------------------------
 
-
-
+;; Unit Prefixes
 
 (define-simple-macro (defprefix prefix:id factor-expr:expr)
   (begin
@@ -157,7 +150,7 @@ require syntax/parse/define
 
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ----------------------------------------------------------------------------
 
 ;; Units:
 (define-simple-macro
@@ -168,7 +161,9 @@ require syntax/parse/define
 ;; Dimensionless-Units:
 define-units/type Dimensionless-Unit
   [thing (make-Unit 'thing 1 dimensionless-dimension)]
-  [mol (make-Unit 'mol (cast (* #i6.02214129 (10^ 23)) Positive-Real) dimensionless-dimension)]
+  [mol (make-Unit 'mol
+                  (cast (* #i6.02214129 (10^ 23)) Positive-Real)
+                  dimensionless-dimension)]
   [radian 1-unit]
   [2pi-unit (u* really-close-to-tau radian)]
   [turn 2pi-unit]
@@ -187,8 +182,8 @@ define-units/type Mass-Unit
   [pound-mass (u* #e0.45359237 kilogram)]
   [ounce-mass (u/ pound-mass 16)]
   [ton (u* 2000 pound-mass)]
-  [atomic-mass-unit (u* #i1.6605402e-27 kilogram)]
-  [planck-mass (u* #i2.17651e-8 kilogram)]
+  [atomic-mass-unit (u* #i1.6605402 (10^ -27) kilogram)]
+  [planck-mass (u* #i2.17651 (10^ -8) kilogram)]
 
 
 ;; Length:
@@ -203,10 +198,10 @@ define-units/type Length-Unit
   [yard (u* foot 3)]
   [mile (u* 5280 foot)]
   [astronomical-unit (u* 149597870700 meter)]
-  [angstrom (u* 1e-10 meter)]
-  [light-year (u* 9.4607304725808e15 meter)]
+  [angstrom (u* (10^ -10) meter)]
+  [light-year (u* 9.4607304725808 (10^ 15) meter)]
   [nautical-mile (u* 1852 meter)]
-  [planck-length (u* #i1.616199e-35 meter)]
+  [planck-length (u* #i1.616199 (10^ -35) meter)]
 
 
 ;; Time:
@@ -287,8 +282,10 @@ define-units/type Velocity-Unit
 
 ;; Acceleration
 define-units/type Acceleration-Unit
-  [meter-per-second-squared (make-Unit 'meter-per-second-squared 1 acceleration-dimension)]
-  [gravitational-acceleration-unit (u* #e9.80665 meter-per-second-squared)]
+  [meter-per-second-squared
+   (make-Unit 'meter-per-second-squared 1 acceleration-dimension)]
+  [gravitational-acceleration-unit
+   (u* #e9.80665 meter-per-second-squared)]
 
 
 ;; Force:
@@ -343,8 +340,10 @@ define-units/type Pressure-Unit
 
 ;; Entropy, Energy per Temperature, and Gas Constants:
 define-units/type Entropy-Unit
-  [ideal-gas-constant-unit (u* #i8.3144621 (u/ (u* pascal cubic-meter) (u* kelvin mol)))]
-  [bolzmann-constant-unit (u* #i1.3806488e-23 (u/ joule kelvin))]
+  [ideal-gas-constant-unit
+   (u* #i8.3144621 (u/ (u* pascal cubic-meter) (u* kelvin mol)))]
+  [bolzmann-constant-unit
+   (u* #i1.3806488e-23 (u/ joule kelvin))]
 
 
 ;; Electric-Field:
@@ -387,27 +386,46 @@ define-units/type Conductivity-Unit
 ;; Magnetic-Field:
 define-units/type Magnetic-Field-Unit
   [tesla (make-Unit 'tesla 1 magnetic-field-dimension)]
-  [gauss (u* 1e-4 tesla)]
+  [gauss (u* (10^ -4) tesla)]
 
 
 ;; Inductance:
 define-units/type Inductance-Unit
   [henry (make-Unit 'henry 1 inductance-dimension)]
 
+;; ----------------------------------------------------------------------------
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Other units
+
+;; Magnetic Permeability
+define-units/type (Unitof (dimension 1 1 0 -2 0))
+  [magnetic-permeability-of-free-space-unit
+   (u* (u* 4 pi-unit (10^ -7))
+       (u* newton (u1/ (usqr ampere))))]
+
+;; Electric Permittivity
+define-units/type (Unitof (dimension -1 -3 2 2 0))
+  [electric-permittivity-of-free-space-unit
+   (u1/ (u* magnetic-permeability-of-free-space-unit
+            (usqr speed-of-light-unit)))]
+
+;; ----------------------------------------------------------------------------
 
 (untyped-module*
  [10^ (Real -> Real)]
  )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ----------------------------------------------------------------------------
 
 module* test racket/base
   require rackunit
           (submod ".." untyped)
           (submod "../dimensions/dimension-operations.rkt" untyped)
           (submod "unit-struct.rkt" untyped)
-  (check dimension=? (unit-dimension ideal-gas-constant-unit) (unit-dimension bolzmann-constant-unit))
-  (check-= (unit-scalar ideal-gas-constant-unit) (unit-scalar bolzmann-constant-unit) #i1.0e-10)
+  (check dimension=?
+         (unit-dimension ideal-gas-constant-unit)
+         (unit-dimension bolzmann-constant-unit))
+  (check-= (unit-scalar ideal-gas-constant-unit)
+           (unit-scalar bolzmann-constant-unit)
+           #i1.0e-10)
 

@@ -2,7 +2,8 @@
 
 provide (all-defined-out)
 
-require "../dimensions/dimension-struct.rkt"
+require racket/math
+        "../dimensions/dimension-struct.rkt"
         "../units/unit-struct.rkt"
         "../units/unit-operations.rkt"
         "../units/units.rkt"
@@ -10,6 +11,9 @@ require "../dimensions/dimension-struct.rkt"
         "measure-types.rkt"
         "../untyped-utils.rkt"
 
+;; ----------------------------------------------------------------------------
+
+;; Gravity
 
 (: g : Acceleration)
 (define g  ; the acceleration due to gravity on earth
@@ -23,13 +27,39 @@ require "../dimensions/dimension-struct.rkt"
                 (u* newton (u/ (usqr meter)
                                (usqr kilogram)))))
 
+;; ----------------------------------------------------------------------------
+
+;; The Speed of Light
+
 (: c : Speed)
 (define c  ; the speed of light in a vacuum
   (measure 1 (unit-rename speed-of-light-unit 'c) +inf.0))
 
+;; ----------------------------------------------------------------------------
+
+;; Electricity and Magnetism
+
 (: elementary-charge : Charge)
 (define elementary-charge
   (measure 1 (unit-rename elementary-charge-unit 'e) +inf.0))
+
+(: electric-permittivity-of-free-space :
+   (Measureof Positive-Real (Unitof (dimension -1 -3 2 2 0))))
+(define electric-permittivity-of-free-space
+  (measure 1
+           (unit-rename electric-permittivity-of-free-space-unit 'ϵ_0)
+           +inf.0))
+
+(: magnetic-permeability-of-free-space :
+   (Measureof Positive-Real (Unitof (dimension 1 1 0 -2 0))))
+(define magnetic-permeability-of-free-space
+  (measure 1
+           (unit-rename magnetic-permeability-of-free-space-unit 'μ_0)
+           +inf.0))
+
+;; ----------------------------------------------------------------------------
+
+;; Thermodynamics
 
 (: R : (Measureof Positive-Real (Unitof (dimension 1 2 -2 0 -1))))
 (define R
@@ -38,6 +68,10 @@ require "../dimensions/dimension-struct.rkt"
 (: k_B : (Measureof Positive-Real (Unitof (dimension 1 2 -2 0 -1))))
 (define k_B
   (measure 1 (unit-rename bolzmann-constant-unit 'k_B) +inf.0))
+
+;; ----------------------------------------------------------------------------
+
+;; Quantum
 
 (: planck-constant : (Measureof Positive-Real Angular-Momentum-Unit))
 (define planck-constant
@@ -50,7 +84,7 @@ require "../dimensions/dimension-struct.rkt"
                       (u* joule second (u1/ 2pi-unit)))
         (Measureof Positive-Real Angular-Momentum-Unit)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ----------------------------------------------------------------------------
 
 (untyped-module*
  )
