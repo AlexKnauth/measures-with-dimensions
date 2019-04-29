@@ -67,7 +67,7 @@ require syntax/parse/define
       (~> id syntax-e symbol->string string-downcase))
     (format-id id "~a" id-str #:source id))
   )
-       
+
 (define-syntax define-dimension
   (lambda (stx)
     (syntax-parse stx
@@ -103,8 +103,8 @@ require syntax/parse/define
     `(dimension 0 0 0 ,n 0))
   (define-dimension-function (Θ^ n)
     `(dimension 0 0 0 0 ,n))
-  
-  
+
+
   (define-dimension-function (dimension-map f . ds)
     (match-define `[(dimension ,mass-expts ,length-expts ,time-expts ,charge-expts ,temp-expts) ...]
       ds)
@@ -113,9 +113,9 @@ require syntax/parse/define
                 ,(apply f time-expts)
                 ,(apply f charge-expts)
                 ,(apply f temp-expts)))
-  
-  
-  
+
+
+
   (define-dimension-function (dexpt d n)
     (define (raise-exponent-error n_0)
       (error 'dexpt (string-append
@@ -132,16 +132,16 @@ require syntax/parse/define
            (cond [(exact-integer? new-expt) new-expt]
                  [else (raise-exponent-error new-expt)])))
        (dimension-map f d)]))
-  
+
   (define-dimension-function (dsqr d)
     (dexpt d 2))
-  
+
   (define-dimension-function (dsqrt d)
     (dexpt d 1/2))
-  
+
   (define-dimension-function (d* . ds)
     (apply dimension-map + ds))
-  
+
   (define-dimension-function (d1/ d)
     (dimension-map - d))
   (define-dimension-function (d/ d1 d2 . ds)
@@ -166,50 +166,50 @@ require syntax/parse/define
   [time-dimension (T^ 1)]
   [charge-dimension (Q^ 1)]
   [temperature-dimension (Θ^ 1)]
-  
+
   [area-dimension (L^ 2)]
   [volume-dimension (L^ 3)]
 
   [mass-density-dimension (d/ mass-dimension volume-dimension)]
   [charge-density-dimension (d/ charge-dimension volume-dimension)]
-  
+
   [velocity-dimension (d/ length-dimension time-dimension)]
   [speed-dimension velocity-dimension]
   [acceleration-dimension (d/ velocity-dimension time-dimension)]
-  
+
   [force-dimension (d* mass-dimension acceleration-dimension)]
   [momentum-dimension (d* mass-dimension velocity-dimension)]
   [angular-momentum-dimension (d* length-dimension momentum-dimension)]
-  
+
   [energy-dimension (d* mass-dimension (dexpt velocity-dimension 2))]
   [work-dimension energy-dimension]
   [torque-dimension work-dimension]
   [power-dimension (d/ energy-dimension time-dimension)]
-  
+
   [pressure-dimension (d/ force-dimension area-dimension)]
-  
+
   [entropy-dimension (d/ energy-dimension temperature-dimension)]
   [heat-capacity-dimension entropy-dimension]
   [specific-heat-dimension (d/ heat-capacity-dimension mass-dimension)]
   [molar-specific-heat-dimension heat-capacity-dimension]
-  
+
   [electric-field-dimension (d/ force-dimension charge-dimension)]
   [electric-potential-dimension (d/ energy-dimension charge-dimension)]
   [voltage-dimension electric-potential-dimension]
   [emf-dimension voltage-dimension]
   [capacitance-dimension (d/ charge-dimension voltage-dimension)]
-  
+
   [current-dimension (d/ charge-dimension time-dimension)]
   [current-density-dimension (d/ current-dimension area-dimension)]
   [resistance-dimension (d/ voltage-dimension current-dimension)]
   [resistivity-dimension (d/ electric-field-dimension current-density-dimension)]
   [conductivity-dimension (d1/ resistivity-dimension)]
-  
+
   [magnetic-field-dimension (d/ force-dimension charge-dimension velocity-dimension)]
-  
+
   [electric-flux-dimension (d* electric-field-dimension area-dimension)]
   [magnetic-flux-dimension (d* magnetic-field-dimension area-dimension)]
-  
+
   [inductance-dimension (d/ emf-dimension (d/ current-dimension time-dimension))]
   )
 
@@ -225,15 +225,15 @@ require syntax/parse/define
            (submod "dimension-struct.rkt" untyped)
            (submod "dimension-operations.rkt" untyped)
            rackunit)
-  
+
   (check-equal? (d* velocity-dimension time-dimension) length-dimension)
   (check-equal? (d* acceleration-dimension time-dimension) velocity-dimension)
-  
+
   (check-equal? (d* mass-dimension acceleration-dimension) force-dimension)
-  
+
   (check-equal? (d* force-dimension length-dimension) energy-dimension)
   (check-equal? (d* mass-dimension (dsqr velocity-dimension)) energy-dimension)
-  
+
   (check-equal? (dsqrt (d* acceleration-dimension length-dimension)) velocity-dimension)
-  
+
   )
