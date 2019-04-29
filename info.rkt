@@ -5,7 +5,7 @@
 (define deps '("base"
                "typed-racket-lib"
                "typed-racket-more"
-               "rackjure"
+               "threading-lib"
                "math-lib"
                "htdp-lib"
                "unstable-lib"

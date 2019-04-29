@@ -11,7 +11,7 @@ require syntax/parse/define
                    syntax/parse
                    racket/syntax
                    racket/match
-                   rackjure/threading
+                   threading
                    racket/contract/base
                    racket/contract/region
                    for-syntax racket/base

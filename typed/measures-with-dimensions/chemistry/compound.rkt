@@ -17,7 +17,7 @@ require racket/match
                    racket/match
                    (only-in colon-match :match define-:match-class)
                    racket/list
-                   rackjure/threading
+                   threading
                    predicates
 
 module+ test
