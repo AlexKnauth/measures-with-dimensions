@@ -5,7 +5,7 @@
 (define deps '("base"
                "typed-racket-lib"
                "typed-racket-more"
-               "threading-lib"
+               "threading"  ; TODO: change to threading-lib when the version exceptions are fixed
                "math-lib"
                "htdp-lib"
                "unstable-lib"
