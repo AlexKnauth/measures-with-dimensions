@@ -22,7 +22,7 @@ require racket/match
                                    (compound-alist comp)))
          (write-string "#<compound:>" out) (void)]
       [(or 0 #f) (display-compound comp out)]
-      [(or 1 #t) (write-string "#<componud:" out)
+      [(or 1 #t) (write-string "#<compound:" out)
                  (display-compound comp out)
                  (write-string ">" out)
                  (void)]))
