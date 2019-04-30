@@ -18,7 +18,8 @@ require racket/match
   #:property prop:custom-write
   (lambda ([comp : Compound] [out : Output-Port] [mode : (Un 0 1 #t #f)])
     (match mode
-      [_ #:when (andmap zero? (map cdr (compound-alist comp)))
+      [_ #:when (andmap zero? (map (inst cdr (Un Element Compound) Natural)
+                                   (compound-alist comp)))
          (write-string "#<compound:>" out) (void)]
       [(or 0 #f) (display-compound comp out)]
       [(or 1 #t) (write-string "#<componud:" out)
