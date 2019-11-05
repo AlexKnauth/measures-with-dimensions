@@ -80,12 +80,21 @@ require syntax/parse/define
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(: dimension-write-proc : [Dimension Output-Port (U 0 1 #t #f) -> Void])
+(: dimension-write-proc :
+   (All (M-Expt L-Expt T-Expt Q-Expt Θ-Expt)
+        [(dimension M-Expt L-Expt T-Expt Q-Expt Θ-Expt)
+         Output-Port
+         (U 0 1 #t #f)
+         ->
+         Void]))
 (define (dimension-write-proc d out mode)
   (: write-s : [String -> Void])
   (define (write-s s)
     (void (write-string s out)))
-  (: write-sub : (->* [String Integer] [(U 0 1 #t #f)] Void))
+  (: zeros? : (->* [] #:rest Any Boolean))
+  (define (zeros? . vs)
+    (andmap zero? vs))
+  (: write-sub : (->* [String Any] [(U 0 1 #t #f)] Void))
   (define (write-sub str expt [mode mode])
     (cond [(zero? expt) (display 1 out)]
           [(one? expt)  (write-s str)]
@@ -97,22 +106,22 @@ require syntax/parse/define
           [else (write-s str)
                 (write-char #\^ out)
                 (display expt out)]))
-  (: display-sub : [String Integer -> Void])
+  (: display-sub : [String Any -> Void])
   (define (display-sub str expt)
     (write-sub str expt #f))
-  (let ([M-expt   : Integer (dimension-M-expt d)]
-        [L-expt : Integer (dimension-L-expt d)]
-        [T-expt   : Integer (dimension-T-expt d)]
-        [Q-expt : Integer (dimension-Q-expt d)]
-        [Θ-expt   : Integer (dimension-Θ-expt d)])
-    (cond [(= 0 M-expt L-expt T-expt Q-expt Θ-expt) (write-s "(d*)")]
-          [(= 0 L-expt T-expt Q-expt Θ-expt) (write-sub "M" M-expt)]
-          [(= 0 M-expt T-expt Q-expt Θ-expt) (write-sub "L" L-expt)]
-          [(= 0 M-expt L-expt Q-expt Θ-expt) (write-sub "T" T-expt)]
-          [(= 0 M-expt L-expt T-expt Θ-expt) (write-sub "C" Q-expt)]
-          [(= 0 M-expt L-expt T-expt Q-expt) (write-sub "Θ" Θ-expt)]
+  (let ([M-expt (dimension-M-expt d)]
+        [L-expt (dimension-L-expt d)]
+        [T-expt (dimension-T-expt d)]
+        [Q-expt (dimension-Q-expt d)]
+        [Θ-expt (dimension-Θ-expt d)])
+    (cond [(zeros? M-expt L-expt T-expt Q-expt Θ-expt) (write-s "(d*)")]
+          [(zeros? L-expt T-expt Q-expt Θ-expt) (write-sub "M" M-expt)]
+          [(zeros? M-expt T-expt Q-expt Θ-expt) (write-sub "L" L-expt)]
+          [(zeros? M-expt L-expt Q-expt Θ-expt) (write-sub "T" T-expt)]
+          [(zeros? M-expt L-expt T-expt Θ-expt) (write-sub "C" Q-expt)]
+          [(zeros? M-expt L-expt T-expt Q-expt) (write-sub "Θ" Θ-expt)]
           [else
-           (: maybe-write-sub : [String Integer -> Void])
+           (: maybe-write-sub : [String Any -> Void])
            (define (maybe-write-sub str expt)
              (cond [(zero? expt) (void)]
                    [else (write-char #\space out)
