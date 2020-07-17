@@ -9,6 +9,7 @@
          (for-syntax racket/base
                      syntax/parse
                      syntax/strip-context
+                     version/utils
                      ))
 
 (define-require-syntax combine-in/priority
@@ -35,6 +36,8 @@
              [#:all-from all-from-module-path:expr ...])
         ...
         )
+       #:with submodup/requnctc
+       (if (version<=? "7.7.0.2" (version)) #'(submod "..") #'(submod ".." ".."))
        (replace-context
         stx
         #'(module* untyped racket/base
@@ -59,7 +62,7 @@
                                         (submod ".." ".."))
                                        id ... id3 ...))
                    stuff ... ...)
-            (submod ".." "..")
+            submodup/requnctc
             [id type] ... [id3 type3] ...)))
        ])))
 
